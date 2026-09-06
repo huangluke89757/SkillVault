@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">SkillVault</title>
+  <!-- Morandi ink-blue background -->
+  <rect width="512" height="512" rx="120" fill="#08141B"/>
+  <!-- Vault grid: three stored skills + one empty slot -->
+  <rect x="100" y="100" width="136" height="136" rx="40" fill="#CCD6CF"/>
+  <rect x="276" y="100" width="136" height="136" rx="40" fill="#4E6E76"/>
+  <rect x="100" y="276" width="136" height="136" rx="40" fill="#8BA6B8"/>
+  <!-- Empty slot: outlined, awaiting the next skill -->
+  <rect x="276" y="276" width="136" height="136" rx="40" fill="none" stroke="#4E6E76" stroke-width="14" stroke-dasharray="34 22" stroke-linecap="round"/>
+</svg>

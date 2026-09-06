@@ -1,0 +1,35 @@
+{
+  "name": "skillvault-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w apps/web",
+    "build": "npm run build -w apps/web",
+    "deploy": "npm run deploy -w apps/web",
+    "preview": "npm run preview -w apps/web"
+  },
+  "optionalDependencies": {
+    "@ast-grep/napi-linux-x64-gnu": "0.40.5",
+    "@rollup/rollup-linux-x64-gnu": "4.59.0",
+    "@tailwindcss/oxide-linux-x64-gnu": "4.1.18",
+    "lightningcss-linux-x64-gnu": "1.30.2"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.11",
+    "commander": "12.1.0",
+    "csv-parse": "5.6.0",
+    "dotenv": "16.6.1",
+    "execa": "9.6.1",
+    "gray-matter": "4.0.3",
+    "octokit": "4.1.4",
+    "p-limit": "5.0.0",
+    "ts-node": "10.9.2",
+    "tsx": "4.21.0",
+    "wrangler": "4.63.0"
+  },
+  "dependencies": {}
+}

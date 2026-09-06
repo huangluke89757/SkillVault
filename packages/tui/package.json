@@ -1,0 +1,25 @@
+{
+  "name": "@skillvault/tui",
+  "version": "0.3.0",
+  "type": "module",
+  "bin": {
+    "skillvault-tui": "bin/skillvault-tui"
+  },
+  "scripts": {
+    "postinstall": "node bin/postinstall.cjs",
+    "dev": "bun --watch run src/index.tsx",
+    "start": "bun run src/index.tsx"
+  },
+  "dependencies": {
+    "@opentui/core": "0.1.90",
+    "@opentui/react": "0.1.90",
+    "gray-matter": "4.0.3"
+  },
+  "peerDependencies": {
+    "react": "19.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huangluke89757/SkillVault"
+  }
+}

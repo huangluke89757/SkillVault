@@ -1,0 +1,750 @@
+0 verbose cli C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node.exe C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node_modules\npm\bin\npm-cli.js
+1 info using npm@10.9.7
+2 info using node@v22.22.2
+3 silly config load:file:C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node_modules\npm\npmrc
+4 silly config load:file:D:\Claude专区\技能库SkillVault\.npmrc
+5 silly config load:file:C:\Users\Sxg\.npmrc
+6 silly config load:file:C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\etc\npmrc
+7 verbose title npm install
+8 verbose argv "install" "--no-audit" "--no-fund" "--cache" "D:/Claude专区/技能库SkillVault/.npm-cache"
+9 verbose logfile logs-max:10 dir:D:\Claude专区\技能库SkillVault\.npm-cache\_logs\2026-09-05T20_54_12_429Z-
+10 verbose logfile D:\Claude专区\技能库SkillVault\.npm-cache\_logs\2026-09-05T20_54_12_429Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 silly idealTree buildDeps
+14 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\7zip-bin' ]
+15 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\adm-zip' ]
+16 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\app-builder-bin' ]
+17 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\argparse' ]
+18 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\app-builder-lib' ]
+19 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\at-least-node' ]
+20 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\base64-js' ]
+21 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\balanced-match' ]
+22 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\bindings' ]
+23 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\bl' ]
+24 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\browserslist' ]
+25 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\buffer-crc32' ]
+26 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\bun-ffi-structs' ]
+27 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\buffer' ]
+28 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\bun-webgpu' ]
+29 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\bun-webgpu-win32-x64' ]
+30 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\cacache' ]
+31 silly reify mark retired [
+31 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\call-bind-apply-helpers'
+31 silly reify ]
+32 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\chalk' ]
+33 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\chromium-pickle-js' ]
+34 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\ci-info' ]
+35 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\cli-cursor' ]
+36 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\cli-spinners' ]
+37 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\cli-truncate' ]
+38 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\clone' ]
+39 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\compare-version' ]
+40 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\combined-stream' ]
+41 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\core-util-is' ]
+42 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\decompress-response' ]
+43 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\crc' ]
+44 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\defaults' ]
+45 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\define-data-property' ]
+46 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\define-properties' ]
+47 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\delayed-stream' ]
+48 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\detect-node' ]
+49 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\dir-compare' ]
+50 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\dotenv-expand' ]
+51 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\dunder-proto' ]
+52 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\electron' ]
+53 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\electron-builder' ]
+54 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\electron-to-chromium' ]
+55 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\electron-updater' ]
+56 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\encoding' ]
+57 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\end-of-stream' ]
+58 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\env-paths' ]
+59 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\err-code' ]
+60 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\es-define-property' ]
+61 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\es-errors' ]
+62 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\es-object-atoms' ]
+63 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\es-set-tostringtag' ]
+64 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\es6-error' ]
+65 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\event-target-shim' ]
+66 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\exif-parser' ]
+67 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\exit-hook' ]
+68 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\expand-template' ]
+69 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\extract-zip' ]
+70 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\extsprintf' ]
+71 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\fast-deep-equal' ]
+72 silly reify mark retired [
+72 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\fast-json-stable-stringify'
+72 silly reify ]
+73 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\fd-slicer' ]
+74 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\file-type' ]
+75 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\file-uri-to-path' ]
+76 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\filelist' ]
+77 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\fs-constants' ]
+78 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\fs-extra' ]
+79 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\fs.realpath' ]
+80 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\function-bind' ]
+81 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\gensync' ]
+82 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\get-intrinsic' ]
+83 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\get-proto' ]
+84 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\gifwrap' ]
+85 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\github-from-package' ]
+86 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\glob' ]
+87 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\global-agent' ]
+88 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\globalthis' ]
+89 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\gopd' ]
+90 silly reify mark retired [
+90 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\has-property-descriptors'
+90 silly reify ]
+91 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\has-symbols' ]
+92 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\has-tostringtag' ]
+93 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\hosted-git-info' ]
+94 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\http-cache-semantics' ]
+95 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\hasown' ]
+96 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\ieee754' ]
+97 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\inflight' ]
+98 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\is-interactive' ]
+99 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\isbot' ]
+100 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\jake' ]
+101 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\json-stringify-safe' ]
+102 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\jsonfile' ]
+103 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\lightningcss' ]
+104 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\lodash.escaperegexp' ]
+105 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\lodash.isequal' ]
+106 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\log-symbols' ]
+107 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\lowercase-keys' ]
+108 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\math-intrinsics' ]
+109 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\mime' ]
+110 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\mime-db' ]
+111 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\mimic-response' ]
+112 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\minimist' ]
+113 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\minipass-sized' ]
+114 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\node-abi' ]
+115 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\node-api-version' ]
+116 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\object-keys' ]
+117 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\omggif' ]
+118 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\once' ]
+119 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\ora' ]
+120 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\p-map' ]
+121 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\parse-bmfont-ascii' ]
+122 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\parse-bmfont-binary' ]
+123 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\path-is-absolute' ]
+124 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\planck' ]
+125 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\pend' ]
+126 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\plist' ]
+127 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\prebuild-install' ]
+128 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\prettier' ]
+129 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\pngjs' ]
+130 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\process' ]
+131 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\progress' ]
+132 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\promise-retry' ]
+133 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\pump' ]
+134 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\react-devtools-core' ]
+135 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\react-reconciler' ]
+136 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\react-refresh' ]
+137 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\read-binary-file-arch' ]
+138 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\restore-cursor' ]
+139 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\rimraf' ]
+140 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\sanitize-filename' ]
+141 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\semver-compare' ]
+142 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\shell-quote' ]
+143 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\socks' ]
+144 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\stat-mode' ]
+145 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\sumchecker' ]
+146 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\tailwindcss' ]
+147 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\tar-stream' ]
+148 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\temp' ]
+149 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\tmp-promise' ]
+150 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\truncate-utf8-bytes' ]
+151 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\tunnel-agent' ]
+152 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\universalify' ]
+153 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\update-browserslist-db' ]
+154 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\utf8-byte-length' ]
+155 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\utif2' ]
+156 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\vite' ]
+157 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\w3c-keyname' ]
+158 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\wcwidth' ]
+159 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\wrappy' ]
+160 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\xml-parse-from-string' ]
+161 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\y18n' ]
+162 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\xmlbuilder' ]
+163 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\yallist' ]
+164 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\yargs' ]
+165 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\yargs-parser' ]
+166 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\yauzl' ]
+167 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\compat-data' ]
+168 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\generator' ]
+169 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\core' ]
+170 silly reify mark retired [
+170 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-compilation-targets'
+170 silly reify ]
+171 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\code-frame' ]
+172 silly reify mark retired [
+172 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-create-class-features-plugin'
+172 silly reify ]
+173 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-globals' ]
+174 silly reify mark retired [
+174 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-module-imports'
+174 silly reify ]
+175 silly reify mark retired [
+175 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-string-parser'
+175 silly reify ]
+176 silly reify mark retired [
+176 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-validator-identifier'
+176 silly reify ]
+177 silly reify mark retired [
+177 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-validator-option'
+177 silly reify ]
+178 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helpers' ]
+179 silly reify mark retired [
+179 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-module-transforms'
+179 silly reify ]
+180 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\parser' ]
+181 silly reify mark retired [
+181 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-syntax-jsx'
+181 silly reify ]
+182 silly reify mark retired [
+182 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-syntax-typescript'
+182 silly reify ]
+183 silly reify mark retired [
+183 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-transform-arrow-functions'
+183 silly reify ]
+184 silly reify mark retired [
+184 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-transform-react-jsx-self'
+184 silly reify ]
+185 silly reify mark retired [
+185 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-transform-react-jsx-source'
+185 silly reify ]
+186 silly reify mark retired [
+186 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-transform-typescript'
+186 silly reify ]
+187 silly reify mark retired [
+187 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-transform-modules-commonjs'
+187 silly reify ]
+188 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\template' ]
+189 silly reify mark retired [
+189 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\preset-typescript'
+189 silly reify ]
+190 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\traverse' ]
+191 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\types' ]
+192 silly reify mark retired [
+192 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@cloudflare\\workerd-windows-64'
+192 silly reify ]
+193 silly reify mark retired [
+193 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\autocomplete'
+193 silly reify ]
+194 silly reify mark retired [
+194 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-angular'
+194 silly reify ]
+195 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\commands' ]
+196 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-css' ]
+197 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-go' ]
+198 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-html' ]
+199 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-cpp' ]
+200 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-java' ]
+201 silly reify mark retired [
+201 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-jinja'
+201 silly reify ]
+202 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-json' ]
+203 silly reify mark retired [
+203 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-javascript'
+203 silly reify ]
+204 silly reify mark retired [
+204 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-liquid'
+204 silly reify ]
+205 silly reify mark retired [
+205 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-markdown'
+205 silly reify ]
+206 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-less' ]
+207 silly reify mark retired [
+207 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-python'
+207 silly reify ]
+208 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-rust' ]
+209 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-php' ]
+210 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-sass' ]
+211 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-sql' ]
+212 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-vue' ]
+213 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-wast' ]
+214 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-xml' ]
+215 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-yaml' ]
+216 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\language' ]
+217 silly reify mark retired [
+217 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\language-data'
+217 silly reify ]
+218 silly reify mark retired [
+218 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\legacy-modes'
+218 silly reify ]
+219 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lint' ]
+220 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\search' ]
+221 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\state' ]
+222 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\view' ]
+223 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@develar\\schema-utils' ]
+224 silly reify mark retired [
+224 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@dimforge\\rapier2d-simd-compat'
+224 silly reify ]
+225 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\asar' ]
+226 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\get' ]
+227 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\fuses' ]
+228 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\notarize' ]
+229 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\osx-sign' ]
+230 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\rebuild' ]
+231 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\universal' ]
+232 silly reify mark retired [
+232 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\windows-sign'
+232 silly reify ]
+233 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@emnapi\\runtime' ]
+234 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@esbuild\\win32-x64' ]
+235 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@img\\sharp-win32-x64' ]
+236 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@isaacs\\cliui' ]
+237 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@isaacs\\fs-minipass' ]
+238 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\core' ]
+239 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\diff' ]
+240 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\file-ops' ]
+241 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\js-bmp' ]
+242 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\js-gif' ]
+243 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\js-jpeg' ]
+244 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\js-tiff' ]
+245 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-blit' ]
+246 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\js-png' ]
+247 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-circle' ]
+248 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-blur' ]
+249 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-contain' ]
+250 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-color' ]
+251 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-cover' ]
+252 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-crop' ]
+253 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-displace' ]
+254 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-dither' ]
+255 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-fisheye' ]
+256 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-flip' ]
+257 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-hash' ]
+258 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-mask' ]
+259 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-print' ]
+260 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-quantize' ]
+261 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-resize' ]
+262 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-rotate' ]
+263 silly reify mark retired [
+263 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-threshold'
+263 silly reify ]
+264 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\types' ]
+265 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\utils' ]
+266 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\common' ]
+267 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\cpp' ]
+268 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\css' ]
+269 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\go' ]
+270 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\highlight' ]
+271 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\html' ]
+272 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\javascript' ]
+273 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\java' ]
+274 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\json' ]
+275 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\lr' ]
+276 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\markdown' ]
+277 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\php' ]
+278 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\python' ]
+279 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\rust' ]
+280 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\sass' ]
+281 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\xml' ]
+282 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\yaml' ]
+283 silly reify mark retired [
+283 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@malept\\flatpak-bundler'
+283 silly reify ]
+284 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@react-router\\dev' ]
+285 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@rolldown\\pluginutils' ]
+286 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@tailwindcss\\node' ]
+287 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@tailwindcss\\postcss' ]
+288 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\adm-zip' ]
+289 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\babel__core' ]
+290 silly reify mark retired [
+290 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\babel__generator'
+290 silly reify ]
+291 silly reify mark retired [
+291 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\babel__template'
+291 silly reify ]
+292 silly reify mark retired [
+292 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\babel__traverse'
+292 silly reify ]
+293 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@vitejs\\plugin-react' ]
+294 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\lru-cache' ]
+295 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\matcher' ]
+296 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\mime-types' ]
+297 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\minipass-collect' ]
+298 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\minipass-flush' ]
+299 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\minipass-pipeline' ]
+300 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\napi-build-utils' ]
+301 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\mkdirp-classic' ]
+302 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\normalize-url' ]
+303 silly reify mark retired [
+303 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\rc',
+303 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bin\\rc',
+303 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bin\\rc.cmd',
+303 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bin\\rc.ps1'
+303 silly reify ]
+304 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\p-cancelable' ]
+305 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\quick-lru' ]
+306 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\resolve-alpn' ]
+307 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\serialize-error' ]
+308 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\simple-get' ]
+309 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\slice-ansi' ]
+310 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@tailwindcss\\oxide' ]
+311 silly reify mark retired [ 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@react-router\\node' ]
+312 silly reify mark retired [
+312 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@react-router\\cloudflare'
+312 silly reify ]
+313 silly reify moves {
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\7zip-bin': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.7zip-bin-4mFem99F',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\adm-zip': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.adm-zip-5pORzSbf',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\app-builder-bin': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.app-builder-bin-ziiSeniX',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\argparse': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.argparse-TT2SkjHd',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\app-builder-lib': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.app-builder-lib-U4AFq5DC',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\at-least-node': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.at-least-node-16GjJ1pV',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\base64-js': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.base64-js-7ZCJuSJX',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\balanced-match': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.balanced-match-R4VhbpRS',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\bindings': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bindings-mk6c6dsa',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\bl': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bl-u5iYpW2r',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\browserslist': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.browserslist-LZXC2ZcG',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\buffer-crc32': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.buffer-crc32-O5C4j9wy',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\bun-ffi-structs': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bun-ffi-structs-Zypod6Bz',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\buffer': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.buffer-szTJzQmE',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\bun-webgpu': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bun-webgpu-ZP1iARSY',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\bun-webgpu-win32-x64': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bun-webgpu-win32-x64-Tvy9hREE',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\cacache': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.cacache-HbdyZmUE',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\call-bind-apply-helpers': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.call-bind-apply-helpers-oj5h7U6A',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\chalk': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.chalk-6K8sqtCs',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\chromium-pickle-js': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.chromium-pickle-js-04BjEtW2',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\ci-info': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.ci-info-Y1f4OBM4',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\cli-cursor': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.cli-cursor-11yK2Yx9',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\cli-spinners': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.cli-spinners-YLaKFbrj',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\cli-truncate': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.cli-truncate-NhjAzRxT',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\clone': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.clone-e6oJp3Ov',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\compare-version': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.compare-version-o8CqBXL9',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\combined-stream': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.combined-stream-NSc9cbKM',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\core-util-is': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.core-util-is-yv9aDH21',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\decompress-response': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.decompress-response-WK9aeWD0',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\crc': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.crc-n7oN7Gc9',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\defaults': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.defaults-0DEAbCM8',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\define-data-property': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.define-data-property-GGHwPaAc',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\define-properties': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.define-properties-zeBGA7oY',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\delayed-stream': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.delayed-stream-6KgkW8eU',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\detect-node': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.detect-node-jtxUen2M',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\dir-compare': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.dir-compare-ox67fnO7',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\dotenv-expand': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.dotenv-expand-OJVVSWA6',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\dunder-proto': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.dunder-proto-UVi0Fl7T',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\electron': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.electron-fe6ymNLI',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\electron-builder': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.electron-builder-X8qKwV7U',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\electron-to-chromium': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.electron-to-chromium-wVgQQwyi',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\electron-updater': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.electron-updater-1c3BftBr',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\encoding': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.encoding-ITD5R03n',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\end-of-stream': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.end-of-stream-h1P3cIea',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\env-paths': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.env-paths-v7YbPHET',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\err-code': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.err-code-wLDtxPSq',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\es-define-property': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.es-define-property-GhP0gdYs',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\es-errors': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.es-errors-NVOJPTNA',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\es-object-atoms': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.es-object-atoms-xY2e2UMJ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\es-set-tostringtag': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.es-set-tostringtag-7gyZekG6',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\es6-error': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.es6-error-ONScJouj',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\event-target-shim': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.event-target-shim-SLRGA7Gy',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\exif-parser': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.exif-parser-8vAg8FPe',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\exit-hook': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.exit-hook-XjZ8zb5F',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\expand-template': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.expand-template-IKE1fanr',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\extract-zip': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.extract-zip-WtJGZzPQ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\extsprintf': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.extsprintf-GJ83iwBM',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\fast-deep-equal': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.fast-deep-equal-njPHVRSC',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\fast-json-stable-stringify': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.fast-json-stable-stringify-uBcmyrcg',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\fd-slicer': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.fd-slicer-ppj6t8nO',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\file-type': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.file-type-UfcQxl3j',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\file-uri-to-path': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.file-uri-to-path-TXMYMUsy',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\filelist': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.filelist-zNKdsYM3',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\fs-constants': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.fs-constants-nEVqaIlF',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\fs-extra': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.fs-extra-9DCxwQGC',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\fs.realpath': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.fs.realpath-ErZ6I5v3',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\function-bind': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.function-bind-jGZnBhMO',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\gensync': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.gensync-6e67vEWs',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\get-intrinsic': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.get-intrinsic-1qLSNcji',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\get-proto': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.get-proto-S5JNbako',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\gifwrap': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.gifwrap-tVBk9kEZ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\github-from-package': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.github-from-package-LBoKzKlS',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\glob': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.glob-VDEsLjdc',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\global-agent': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.global-agent-eONcGaOr',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\globalthis': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.globalthis-6VuC4lRk',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\gopd': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.gopd-qHIRN8tF',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\has-property-descriptors': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.has-property-descriptors-djehhVQG',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\has-symbols': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.has-symbols-BdB5JgA3',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\has-tostringtag': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.has-tostringtag-3DyB6Wpg',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\hosted-git-info': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.hosted-git-info-L7XJWrxR',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\http-cache-semantics': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.http-cache-semantics-mjyaGTCc',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\hasown': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.hasown-OqYIvM07',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\ieee754': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.ieee754-SfQYxTxW',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\inflight': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.inflight-kODIkcP9',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\is-interactive': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.is-interactive-uwpRbOIY',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\isbot': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.isbot-Vn1I2d0f',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\jake': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.jake-fmUgEGBr',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\json-stringify-safe': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.json-stringify-safe-xlheKsoT',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\jsonfile': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.jsonfile-hPADEOv4',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\lightningcss': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.lightningcss-JIobbI5U',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\lodash.escaperegexp': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.lodash.escaperegexp-r7FYz6Ms',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\lodash.isequal': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.lodash.isequal-y8fu5g2R',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\log-symbols': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.log-symbols-T8ecrmMj',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\lowercase-keys': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.lowercase-keys-alvaqVt2',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\math-intrinsics': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.math-intrinsics-Ca1jR1Q9',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\mime': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.mime-ntepxj7p',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\mime-db': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.mime-db-WAZgCY8J',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\mimic-response': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.mimic-response-7gFEB4Be',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\minimist': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.minimist-4gsAa9cE',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\minipass-sized': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.minipass-sized-iIn4DnNI',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\node-abi': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.node-abi-HFTBK5pu',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\node-api-version': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.node-api-version-ng84KpZE',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\object-keys': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.object-keys-ZVW5uMDr',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\omggif': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.omggif-QsoiRA4k',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\once': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.once-Tlb5n8wM',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\ora': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.ora-NYnnYLvp',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\p-map': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.p-map-tJ8losrE',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\parse-bmfont-ascii': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.parse-bmfont-ascii-77VQaVIX',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\parse-bmfont-binary': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.parse-bmfont-binary-KLSmoR0l',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\path-is-absolute': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.path-is-absolute-w6MbTLsF',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\planck': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.planck-vsq5Xx3N',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\pend': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.pend-TYQY84TE',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\plist': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.plist-PLtPEnl5',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\prebuild-install': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.prebuild-install-LDYTPuq5',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\prettier': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.prettier-YBGCv4MS',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\pngjs': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.pngjs-InvvXBmK',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\process': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.process-vqFAA02o',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\progress': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.progress-RjuaXaeM',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\promise-retry': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.promise-retry-7VG3Wxr8',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\pump': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.pump-Q7yiNf5P',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\react-devtools-core': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.react-devtools-core-pP4q39sK',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\react-reconciler': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.react-reconciler-Nk34t6jz',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\react-refresh': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.react-refresh-besR0LtZ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\read-binary-file-arch': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.read-binary-file-arch-3MEb7Qgv',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\restore-cursor': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.restore-cursor-A2VYyokT',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\rimraf': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.rimraf-1iN5g1ol',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\sanitize-filename': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.sanitize-filename-vEGpWzvd',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\semver-compare': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.semver-compare-IHJA02LD',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\shell-quote': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.shell-quote-dW5NrrPp',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\socks': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.socks-xkpfQ4OP',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\stat-mode': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.stat-mode-k8hoaH8H',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\sumchecker': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.sumchecker-SHqU37wp',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\tailwindcss': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.tailwindcss-0JEwDLv2',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\tar-stream': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.tar-stream-0TV71rf2',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\temp': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.temp-f2VuW5r8',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\tmp-promise': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.tmp-promise-lr3OaPGE',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\truncate-utf8-bytes': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.truncate-utf8-bytes-I5wQKu9G',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\tunnel-agent': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.tunnel-agent-hLvl24oH',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\universalify': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.universalify-Il61vm47',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\update-browserslist-db': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.update-browserslist-db-5W7KXJRT',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\utf8-byte-length': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.utf8-byte-length-v2pBfbih',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\utif2': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.utif2-fl9bg6uN',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\vite': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.vite-8FqD9kJR',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\w3c-keyname': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.w3c-keyname-Tba7Xksa',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\wcwidth': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.wcwidth-pBVwJjhI',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\wrappy': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.wrappy-VQVJ6ETX',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\xml-parse-from-string': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.xml-parse-from-string-GKLCFzoM',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\y18n': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.y18n-xJwG8j1E',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\xmlbuilder': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.xmlbuilder-R7lw1BXG',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\yallist': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.yallist-o9w8TR8i',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\yargs': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.yargs-HGQVvLkA',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\yargs-parser': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.yargs-parser-vtD6B3za',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\yauzl': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.yauzl-qX3MrzWG',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\compat-data': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.compat-data-3LGkKwM2',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\generator': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.generator-IOcwFLgH',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\core': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.core-wvdJWdi0',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-compilation-targets': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.helper-compilation-targets-hsYa1vk3',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\code-frame': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.code-frame-Vu02cGOJ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-create-class-features-plugin': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.helper-create-class-features-plugin-sQ5OOraq',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-globals': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.helper-globals-LP8NOtZp',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-module-imports': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.helper-module-imports-kHnqFVOS',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-string-parser': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.helper-string-parser-vJppAwCr',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-validator-identifier': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.helper-validator-identifier-BZLgqUxU',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-validator-option': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.helper-validator-option-LGJcvzAX',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helpers': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.helpers-IlAvDqt3',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\helper-module-transforms': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.helper-module-transforms-xmO11Rf8',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\parser': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.parser-q8vlPDDc',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-syntax-jsx': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.plugin-syntax-jsx-dOQeQzKO',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-syntax-typescript': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.plugin-syntax-typescript-iNVezV9U',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-transform-arrow-functions': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.plugin-transform-arrow-functions-KralibRf',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-transform-react-jsx-self': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.plugin-transform-react-jsx-self-ZR2viTza',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-transform-react-jsx-source': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.plugin-transform-react-jsx-source-RhtQD7m0',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-transform-typescript': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.plugin-transform-typescript-SO1L7ptM',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\plugin-transform-modules-commonjs': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.plugin-transform-modules-commonjs-vfNIhBLG',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\template': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.template-90j9YBgZ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\preset-typescript': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.preset-typescript-SADjuasc',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\traverse': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.traverse-Gvfl85hJ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\types': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@babel\\.types-guQG8vgn',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@cloudflare\\workerd-windows-64': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@cloudflare\\.workerd-windows-64-KviSabU2',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\autocomplete': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.autocomplete-XRP3knkI',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-angular': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-angular-eqBYWhuR',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\commands': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.commands-rQEbw3V8',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-css': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-css-OcSlIvxU',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-go': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-go-ZlmbgGc1',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-html': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-html-zjawzCny',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-cpp': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-cpp-x1v4c5T8',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-java': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-java-xmi3rFho',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-jinja': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-jinja-7eetjmSn',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-json': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-json-ikOLX1Ei',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-javascript': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-javascript-h0N4wxtp',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-liquid': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-liquid-50YZ33is',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-markdown': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-markdown-qfMMiNB1',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-less': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-less-uH4wekQx',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-python': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-python-UXNYIKgz',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-rust': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-rust-hbKgWpGY',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-php': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-php-QHsQTSCV',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-sass': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-sass-5KXDk1WR',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-sql': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-sql-u1cse9IV',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-vue': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-vue-yI2vONWc',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-wast': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-wast-8CTNWVxD',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-xml': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-xml-m8sPo271',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lang-yaml': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lang-yaml-LAdpDOSZ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\language': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.language-jMgp1v43',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\language-data': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.language-data-qpWMPWOQ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\legacy-modes': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.legacy-modes-dtBfwfMF',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\lint': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.lint-h8Rz8niQ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\search': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.search-GwzLUdlQ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\state': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.state-pvhmAdCr',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\view': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@codemirror\\.view-7RkJE99D',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@develar\\schema-utils': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@develar\\.schema-utils-giHqpLd2',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@dimforge\\rapier2d-simd-compat': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@dimforge\\.rapier2d-simd-compat-ew2ky6BP',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\asar': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\.asar-5YRJJFq1',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\get': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\.get-mvqYuTMw',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\fuses': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\.fuses-7fhUX5A9',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\notarize': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\.notarize-pApzMDBr',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\osx-sign': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\.osx-sign-OMKlPaKw',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\rebuild': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\.rebuild-z9qebBQQ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\universal': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\.universal-35VjuHTl',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\windows-sign': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@electron\\.windows-sign-k7PxEgVL',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@emnapi\\runtime': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@emnapi\\.runtime-0AQwj5nQ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@esbuild\\win32-x64': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@esbuild\\.win32-x64-bN54vWFC',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@img\\sharp-win32-x64': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@img\\.sharp-win32-x64-yLHozH03',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@isaacs\\cliui': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@isaacs\\.cliui-MSgNL7OU',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@isaacs\\fs-minipass': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@isaacs\\.fs-minipass-is64uqld',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\core': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.core-ytVrMdN6',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\diff': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.diff-QQF4SC60',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\file-ops': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.file-ops-3qA00Nmq',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\js-bmp': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.js-bmp-2kzNG32i',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\js-gif': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.js-gif-l4yaqmHQ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\js-jpeg': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.js-jpeg-H6yoTfRp',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\js-tiff': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.js-tiff-XqhYAHku',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-blit': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-blit-etpLIMJS',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\js-png': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.js-png-WVBQUF1h',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-circle': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-circle-A7ygPscK',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-blur': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-blur-GhH2qIM7',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-contain': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-contain-DTNInuOd',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-color': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-color-YbOz9EHy',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-cover': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-cover-hn6uQWjJ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-crop': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-crop-F6XT6a9O',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-displace': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-displace-sXAELJo4',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-dither': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-dither-ij97DSKl',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-fisheye': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-fisheye-gncy4i5c',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-flip': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-flip-NoaJqvg8',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-hash': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-hash-nuu4Su0Z',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-mask': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-mask-fT2jcT5R',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-print': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-print-tms1cwtd',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-quantize': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-quantize-I0eDKjSM',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-resize': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-resize-MKX2R020',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-rotate': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-rotate-xuSVb96c',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\plugin-threshold': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.plugin-threshold-bRNluvvD',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\types': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.types-qEiGhKdq',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\utils': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@jimp\\.utils-J1j6WeNi',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\common': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.common-n4iHdXfd',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\cpp': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.cpp-tt61dd9h',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\css': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.css-g86j7RTa',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\go': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.go-kHJc1UPO',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\highlight': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.highlight-Ru9xBI9F',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\html': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.html-0lVecnHc',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\javascript': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.javascript-kVQEsoxY',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\java': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.java-EDRsz9wn',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\json': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.json-bhYAi6Pt',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\lr': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.lr-TbJ9Secv',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\markdown': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.markdown-kvfeV6vW',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\php': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.php-Q8awrEWk',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\python': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.python-T10tPbw1',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\rust': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.rust-79J7GHYa',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\sass': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.sass-19txlaaQ',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\xml': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.xml-westk6ls',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\yaml': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@lezer\\.yaml-THG0Zv7z',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@malept\\flatpak-bundler': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@malept\\.flatpak-bundler-1jgn9boM',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@react-router\\dev': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@react-router\\.dev-rfEYSaSY',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@rolldown\\pluginutils': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@rolldown\\.pluginutils-EdpfhcyB',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@tailwindcss\\node': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@tailwindcss\\.node-Oy0C2JRS',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@tailwindcss\\postcss': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@tailwindcss\\.postcss-D8tg1GRz',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\adm-zip': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\.adm-zip-YJZ4vxJ9',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\babel__core': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\.babel__core-gzhxwfHx',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\babel__generator': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\.babel__generator-A3E8aTpv',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\babel__template': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\.babel__template-THJNU9Ao',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\babel__traverse': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@types\\.babel__traverse-vVRS1i6s',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@vitejs\\plugin-react': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@vitejs\\.plugin-react-zWccql1t',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\lru-cache': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.lru-cache-BfzGTh2u',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\matcher': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.matcher-ej9oCqWA',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\mime-types': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.mime-types-s3f7tV8I',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\minipass-collect': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.minipass-collect-aQMHh0uX',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\minipass-flush': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.minipass-flush-7uwqBnaK',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\minipass-pipeline': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.minipass-pipeline-F76oLoQk',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\napi-build-utils': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.napi-build-utils-rEHyN6dW',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\mkdirp-classic': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.mkdirp-classic-faL13Jlb',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\normalize-url': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.normalize-url-85Icr5y1',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\rc': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.rc-W8qaDpKL',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bin\\rc': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bin\\.rc-jhPqMBvu',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bin\\rc.cmd': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bin\\.rc.cmd-ek1wLX9A',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bin\\rc.ps1': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.bin\\.rc.ps1-MwI7fGQS',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\p-cancelable': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.p-cancelable-G3qr1mUb',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\quick-lru': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.quick-lru-DIPRpGRn',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\resolve-alpn': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.resolve-alpn-wcJYmKYe',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\serialize-error': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.serialize-error-TJAaiJaP',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\simple-get': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.simple-get-KI2AsFNx',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\slice-ansi': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.slice-ansi-sDptzuGK',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@tailwindcss\\oxide': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@tailwindcss\\.oxide-CwDiRThN',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@react-router\\node': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@react-router\\.node-81dlgqJ1',
+313 silly reify   'D:\\Claude专区\\技能库SkillVault\\node_modules\\@react-router\\cloudflare': 'D:\\Claude专区\\技能库SkillVault\\node_modules\\@react-router\\.cloudflare-QzIfseNo'
+313 silly reify }
+314 http fetch GET 200 https://registry.npmjs.org/npm 807ms
+315 verbose stack Error: EPERM: operation not permitted, copyfile 'D:\Claude专区\技能库SkillVault\node_modules\7zip-bin\linux\arm\7za' -> 'D:\Claude专区\技能库SkillVault\node_modules\.7zip-bin-4mFem99F\linux\arm\7za'
+315 verbose stack     at async Object.copyFile (node:internal/fs/promises:621:10)
+315 verbose stack     at async moveFile (C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node_modules\npm\node_modules\@npmcli\fs\lib\move-file.js:42:9)
+315 verbose stack     at async Promise.all (index 0)
+315 verbose stack     at async moveFile (C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node_modules\npm\node_modules\@npmcli\fs\lib\move-file.js:36:9)
+315 verbose stack     at async Promise.all (index 0)
+315 verbose stack     at async moveFile (C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node_modules\npm\node_modules\@npmcli\fs\lib\move-file.js:36:9)
+315 verbose stack     at async Promise.all (index 0)
+315 verbose stack     at async moveFile (C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node_modules\npm\node_modules\@npmcli\fs\lib\move-file.js:36:9)
+315 verbose stack     at async Promise.allSettled (index 0)
+315 verbose stack     at async [reifyPackages] (C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\reify.js:334:11)
+316 error code EPERM
+317 error syscall copyfile
+318 error path D:\Claude专区\技能库SkillVault\node_modules\7zip-bin\linux\arm\7za
+319 error dest D:\Claude专区\技能库SkillVault\node_modules\.7zip-bin-4mFem99F\linux\arm\7za
+320 error errno -4048
+321 error Error: EPERM: operation not permitted, copyfile 'D:\Claude专区\技能库SkillVault\node_modules\7zip-bin\linux\arm\7za' -> 'D:\Claude专区\技能库SkillVault\node_modules\.7zip-bin-4mFem99F\linux\arm\7za'
+321 error     at async Object.copyFile (node:internal/fs/promises:621:10)
+321 error     at async moveFile (C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node_modules\npm\node_modules\@npmcli\fs\lib\move-file.js:42:9)
+321 error     at async Promise.all (index 0)
+321 error     at async moveFile (C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node_modules\npm\node_modules\@npmcli\fs\lib\move-file.js:36:9)
+321 error     at async Promise.all (index 0)
+321 error     at async moveFile (C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node_modules\npm\node_modules\@npmcli\fs\lib\move-file.js:36:9)
+321 error     at async Promise.all (index 0)
+321 error     at async moveFile (C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node_modules\npm\node_modules\@npmcli\fs\lib\move-file.js:36:9)
+321 error     at async Promise.allSettled (index 0)
+321 error     at async [reifyPackages] (C:\Users\Sxg\.workbuddy\binaries\node\versions\22.22.2\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\reify.js:334:11) {
+321 error   errno: -4048,
+321 error   code: 'EPERM',
+321 error   syscall: 'copyfile',
+321 error   path: 'D:\\Claude专区\\技能库SkillVault\\node_modules\\7zip-bin\\linux\\arm\\7za',
+321 error   dest: 'D:\\Claude专区\\技能库SkillVault\\node_modules\\.7zip-bin-4mFem99F\\linux\\arm\\7za'
+321 error }
+322 error
+322 error The operation was rejected by your operating system.
+322 error It's possible that the file was already in use (by a text editor or antivirus),
+322 error or that you lack permissions to access it.
+322 error
+322 error If you believe this might be a permissions issue, please double-check the
+322 error permissions of the file and its containing directories, or try running
+322 error the command again as root/Administrator.
+323 silly unfinished npm timer reify 1788641654832
+324 silly unfinished npm timer reify:retireShallow 1788641655095
+325 verbose cwd D:\Claude专区\技能库SkillVault
+326 verbose os Windows_NT 10.0.26200
+327 verbose node v22.22.2
+328 verbose npm  v10.9.7
+329 notice
+329 notice New major version of npm available! 10.9.7 -> 12.0.2
+329 notice Changelog: https://github.com/npm/cli/releases/tag/v12.0.2
+329 notice To update run: npm install -g npm@12.0.2
+329 notice  { force: true, [Symbol(proc-log.meta)]: true }
+330 verbose exit -4048
+331 verbose code -4048
+332 error A complete log of this run can be found in: D:\Claude专区\技能库SkillVault\.npm-cache\_logs\2026-09-05T20_54_12_429Z-debug-0.log

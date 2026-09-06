@@ -1,0 +1,1 @@
+const e=require("electron");console.log("keys:",Object.keys(e).slice(0,8).join(","));console.log("type app:",typeof e.app);if(e.app){e.app.whenReady().then(()=>{console.log("OK ready");e.app.quit()})}

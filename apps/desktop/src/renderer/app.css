@@ -1,0 +1,1683 @@
+/* finesse · register=product · shell=sidebar-table-drawer · A=warm-neutral-orange · B=system-sans-mono · C=dense-control-surface · D=feedback-only · E=local-first · SOUL=7 SPECTACLE=2 DENSITY=8 */
+@import "tailwindcss";
+
+/* The app toggles dark mode with a `.dark` class, not the OS setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Light mode (fallback) · Morandi ─── */
+:root {
+	--background: #E7EBE6;
+	--foreground: #11212D;
+	--muted: #52666E;
+	--accent: #4E6E76;
+	--accent-soft: rgba(78, 110, 118, 0.12);
+	--accent-contrast: #FFFFFF;
+	--border: rgba(17, 33, 45, 0.12);
+	--border-strong: rgba(17, 33, 45, 0.28);
+	--surface: #F3F5F1;
+	--surface-hover: #DCE2DC;
+	--surface-strong: #C9D0C9;
+	--code-bg: #E0E4DE;
+	--card-bg: #F3F5F1;
+	--card-border: rgba(17, 33, 45, 0.12);
+	--nav-bg: #E7EBE6;
+	--nav-border: rgba(17, 33, 45, 0.12);
+	--agent-a: #D9E2DE;
+	--agent-b: #D8DEE6;
+	--agent-c: #E0E2D4;
+	--agent-d: #D5E3DC;
+	--agent-e: #D7E0E3;
+	--danger: #A6554E;
+	--warning: #A07C3E;
+	--success: #3F7A64;
+	--shadow: 0 18px 60px rgba(17, 33, 45, 0.12);
+	--shadow-lg: 0 30px 90px rgba(17, 33, 45, 0.20);
+	--agent-logo-filter: grayscale(0.2);
+	--font-sora: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+	--font-geist-mono: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+/* ─── Dark mode (default) · Morandi ─── */
+.dark {
+	--background: #08141B;
+	--foreground: #CCD6CF;
+	--muted: #8BA6B8;
+	--accent: #4E6E76;
+	--accent-soft: rgba(78, 110, 118, 0.16);
+	--accent-contrast: #08141B;
+	--border: rgba(139, 166, 184, 0.16);
+	--border-strong: rgba(139, 166, 184, 0.30);
+	--surface: #11212D;
+	--surface-hover: #1A2C36;
+	--surface-strong: #243842;
+	--code-bg: #0E1B25;
+	--card-bg: #11212D;
+	--card-border: rgba(139, 166, 184, 0.16);
+	--nav-bg: #0B1922;
+	--nav-border: rgba(139, 166, 184, 0.16);
+	--agent-a: #17303A;
+	--agent-b: #1E2A40;
+	--agent-c: #22301F;
+	--agent-d: #16302A;
+	--agent-e: #1A2C38;
+	--danger: #C0807A;
+	--warning: #C0A47A;
+	--success: #7FA897;
+	--shadow: 0 18px 60px rgba(3, 9, 13, 0.5);
+	--shadow-lg: 0 30px 90px rgba(3, 9, 13, 0.62);
+	--agent-logo-filter: invert(0.92) brightness(0.95);
+}
+
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-muted: var(--muted);
+	--color-accent: var(--accent);
+	--color-border: var(--border);
+	--color-surface: var(--surface);
+	--color-surface-hover: var(--surface-hover);
+	--color-code-bg: var(--code-bg);
+	--color-card-bg: var(--card-bg);
+	--color-card-border: var(--card-border);
+	--color-nav-bg: var(--nav-bg);
+	--color-nav-border: var(--nav-border);
+	--font-sans: var(--font-sora);
+	--font-mono: var(--font-geist-mono);
+}
+
+html,
+body {
+	overflow-x: clip;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: var(--font-sans), system-ui, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Animations ─── */
+@keyframes fade-in {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+@keyframes slide-down {
+	from {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slide-in-right {
+	from {
+		opacity: 0;
+		transform: translateX(24px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.animate-fade-in {
+	animation: fade-in 1s ease both;
+}
+
+.animate-slide-down {
+	animation: slide-down 0.3s ease both;
+}
+
+.animate-slide-in-right {
+	animation: slide-in-right 0.2s ease both;
+}
+
+.official-tooltip {
+	opacity: 0;
+	transform: translate(-50%, -2px);
+	transition:
+		opacity 120ms ease,
+		transform 120ms ease;
+	transition-delay: 0ms;
+}
+
+.official-badge:hover .official-tooltip {
+	opacity: 1;
+	transform: translate(-50%, 0);
+	transition-delay: 800ms;
+}
+
+/* ─── Markdown prose styles (skill detail page) ─── */
+.skill-prose {
+	line-height: 1.75;
+	color: var(--muted);
+}
+.skill-prose h1,
+.skill-prose h2,
+.skill-prose h3,
+.skill-prose h4 {
+	color: var(--foreground);
+	font-weight: 600;
+	margin-top: 2em;
+	margin-bottom: 0.75em;
+}
+.skill-prose h1 {
+	font-size: 1.5rem;
+}
+.skill-prose h2 {
+	font-size: 1.25rem;
+	border-bottom: 1px solid var(--border);
+	padding-bottom: 0.5em;
+}
+.skill-prose h3 {
+	font-size: 1.1rem;
+}
+.skill-prose p {
+	margin-bottom: 1em;
+}
+.skill-prose a {
+	color: var(--accent);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+.skill-prose a:hover {
+	color: var(--foreground);
+}
+.skill-prose code {
+	font-family: var(--font-geist-mono);
+	font-size: 0.85em;
+	background: var(--code-bg);
+	padding: 0.15em 0.4em;
+	border-radius: 4px;
+	border: 1px solid var(--border);
+}
+.skill-prose pre {
+	background: var(--code-bg);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	padding: 1em 1.25em;
+	overflow-x: auto;
+	margin: 1.5em 0;
+}
+.skill-prose pre code {
+	background: none;
+	border: none;
+	padding: 0;
+	font-size: 0.8rem;
+	line-height: 1.6;
+}
+.skill-prose ul,
+.skill-prose ol {
+	padding-left: 1.5em;
+	margin-bottom: 1em;
+}
+.skill-prose li {
+	margin-bottom: 0.35em;
+}
+.skill-prose ul {
+	list-style-type: disc;
+}
+.skill-prose ol {
+	list-style-type: decimal;
+}
+.skill-prose blockquote {
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	padding: .85em 1em;
+	color: var(--muted);
+	font-style: italic;
+	margin: 1.5em 0;
+}
+.skill-prose table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 1.5em 0;
+}
+.skill-prose th,
+.skill-prose td {
+	border: 1px solid var(--border);
+	padding: 0.5em 0.75em;
+	text-align: left;
+	font-size: 0.875rem;
+}
+.skill-prose th {
+	background: var(--surface-hover);
+	color: var(--foreground);
+	font-weight: 600;
+}
+.skill-prose hr {
+	border: none;
+	border-top: 1px solid var(--border);
+	margin: 2em 0;
+}
+.skill-prose img {
+	max-width: 100%;
+	border-radius: 8px;
+}
+
+/* ─── Scrollbar styling ─── */
+::-webkit-scrollbar {
+	width: 6px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--border);
+	border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--muted);
+}
+
+button,
+a,
+input,
+select {
+	outline: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+	box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--accent);
+}
+
+.skillvault-brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 18px 2px 23px;
+	font-size: 18px;
+	font-weight: 760;
+	letter-spacing: -0.045em;
+}
+
+.skillvault-brand img {
+	width: 30px;
+	height: 30px;
+	border-radius: 8px;
+}
+
+.skillvault-brand > span > span {
+	color: var(--accent);
+}
+
+.skillvault-sidebar {
+	width: 264px;
+	min-width: 264px;
+	height: 100dvh;
+	display: flex;
+	flex-direction: column;
+	background: var(--nav-bg);
+	border-right: 1px solid var(--nav-border);
+	overflow: hidden;
+}
+
+.skillvault-sidebar__scroll {
+	min-height: 0;
+	flex: 1;
+	overflow-y: auto;
+	padding: 0 12px 12px;
+}
+
+.skillvault-nav-section {
+	margin-bottom: 19px;
+}
+
+.skillvault-nav-section h3,
+.skillvault-market-area > p {
+	margin: 0 4px 8px;
+	color: var(--muted);
+	font-family: var(--font-geist-mono);
+	font-size: 10px;
+	font-weight: 650;
+	letter-spacing: .16em;
+	line-height: 1.2;
+	text-transform: uppercase;
+}
+
+.skillvault-nav-section h3 span {
+	float: right;
+	font-family: var(--font-sora);
+	font-weight: 400;
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+.skillvault-library-button,
+.skillvault-secondary-button,
+.skillvault-market-button {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	min-height: 44px;
+	padding: 0 12px;
+	border: 1px solid transparent;
+	border-radius: 10px;
+	color: var(--foreground);
+	font-size: 12px;
+	font-weight: 650;
+	text-align: left;
+	transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.skillvault-library-button.is-active {
+	background: var(--foreground);
+	color: var(--background);
+}
+
+.skillvault-library-button strong {
+	font-family: var(--font-geist-mono);
+	font-size: 21px;
+}
+
+.skillvault-secondary-button {
+	min-height: 34px;
+	color: var(--muted);
+	font-weight: 500;
+}
+
+.skillvault-secondary-button:hover,
+.skillvault-secondary-button.is-active {
+	background: var(--surface-hover);
+	color: var(--foreground);
+}
+
+.skillvault-agent-button {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	width: 100%;
+	min-height: 43px;
+	padding: 6px 10px;
+	border: 1px solid transparent;
+	border-radius: 10px;
+	background: var(--agent-a);
+	color: var(--foreground);
+	font-size: 12px;
+	font-weight: 600;
+	text-align: left;
+	transition: border-color 140ms ease, transform 140ms ease;
+}
+
+.skillvault-agent-button:nth-child(5n + 2) { background: var(--agent-b); }
+.skillvault-agent-button:nth-child(5n + 3) { background: var(--agent-c); }
+.skillvault-agent-button:nth-child(5n + 4) { background: var(--agent-d); }
+.skillvault-agent-button:nth-child(5n + 5) { background: var(--agent-e); }
+
+.skillvault-agent-button:hover,
+.skillvault-agent-button.is-active,
+.skillvault-agent-button.is-drop-target {
+	border-color: var(--accent);
+}
+
+.skillvault-agent-count,
+.skillvault-target-dot {
+	margin-left: auto;
+	font-family: var(--font-geist-mono);
+	font-size: 12px;
+}
+
+.skillvault-agent-count.is-empty {
+	color: var(--muted);
+	font-weight: 500;
+}
+
+.skillvault-target-dot {
+	width: 7px;
+	height: 7px;
+	border: 1px solid var(--muted);
+	border-radius: 50%;
+}
+
+.skillvault-agent-button.is-active .skillvault-target-dot {
+	border-color: var(--accent);
+	background: var(--accent);
+}
+
+.agent-logo {
+	align-items: center;
+	justify-content: center;
+	border: 1px solid var(--border);
+	border-radius: 7px;
+	background: var(--surface);
+	overflow: hidden;
+	box-shadow: 0 1px 2px rgba(139, 166, 184, 0.18);
+}
+
+.agent-logo__image {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	filter: none;
+}
+
+.agent-logo__image--fallback {
+	width: 100%;
+	height: 100%;
+	filter: none;
+}
+
+.agent-logo-row {
+	display: flex;
+	min-width: 0;
+	align-items: center;
+	white-space: nowrap;
+}
+
+.agent-logo-row .agent-logo + .agent-logo {
+	margin-left: 2px;
+}
+
+.skillvault-inline-action {
+	color: var(--accent);
+	font-size: 11px;
+}
+
+.skillvault-market-area {
+	padding: 12px;
+	border-top: 1px solid var(--border);
+}
+
+.skillvault-market-button {
+	background: var(--accent);
+	color: var(--accent-contrast);
+	text-decoration: none;
+}
+
+.skillvault-market-button small {
+	font-family: var(--font-geist-mono);
+	font-size: 10px;
+	font-weight: 500;
+}
+
+.skillvault-utilities {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding-top: 10px;
+}
+
+.skillvault-update-button {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	color: var(--muted);
+	transition: color 120ms ease, background-color 120ms ease;
+}
+
+.skillvault-update-button:hover {
+	background: var(--surface-hover);
+	color: var(--foreground);
+}
+
+.skillvault-update-button.has-update {
+	color: var(--accent);
+}
+
+.skillvault-update-dot {
+	position: absolute;
+	top: 3px;
+	right: 3px;
+	width: 9px;
+	height: 9px;
+	border: 2px solid var(--background);
+	border-radius: 50%;
+	background: var(--accent);
+}
+
+.skillvault-release-notes h1,
+.skillvault-release-notes h2,
+.skillvault-release-notes h3 {
+	margin: 10px 0 4px;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.skillvault-release-notes h1:first-child,
+.skillvault-release-notes h2:first-child,
+.skillvault-release-notes h3:first-child {
+	margin-top: 0;
+}
+
+.skillvault-release-notes p {
+	margin: 6px 0;
+	line-height: 1.6;
+}
+
+.skillvault-release-notes ul,
+.skillvault-release-notes ol {
+	margin: 6px 0;
+	padding-left: 18px;
+	line-height: 1.6;
+}
+
+.skillvault-release-notes code {
+	padding: 1px 5px;
+	border-radius: 4px;
+	background: var(--code-bg);
+	font-family: var(--font-geist-mono);
+	font-size: 11px;
+}
+
+.skillvault-release-notes a {
+	color: var(--accent);
+	text-decoration: underline;
+}
+
+.skillvault-release-notes--compact h1,
+.skillvault-release-notes--compact h2,
+.skillvault-release-notes--compact h3 {
+	padding-top: 10px;
+	border-top: 1px solid var(--border);
+	font-size: 11px;
+}
+
+.skillvault-release-notes--compact li + li {
+	margin-top: 4px;
+}
+
+.skillvault-language {
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	color: var(--muted);
+	font-size: 11px;
+}
+
+.skillvault-local-state {
+	margin-left: auto;
+	color: var(--muted);
+	font-family: var(--font-geist-mono);
+	font-size: 10px;
+}
+
+.skillvault-local-state i {
+	display: inline-block;
+	width: 5px;
+	height: 5px;
+	margin-right: 4px;
+	border-radius: 50%;
+	background: var(--success);
+}
+
+.skillvault-library-panel {
+	position: relative;
+	display: flex;
+	min-width: 0;
+	flex: 1;
+	flex-direction: column;
+	background: var(--background);
+	border-right: 1px solid var(--border);
+}
+
+.skillvault-library-header {
+	padding: 24px 28px 14px;
+	border-bottom: 1px solid var(--border);
+}
+
+.skillvault-library-title-row {
+	display: flex;
+	align-items: flex-start;
+	gap: 24px;
+	margin-bottom: 19px;
+}
+
+.skillvault-library-title-row h1,
+.skillvault-market-header h2 {
+	margin: 0;
+	font-size: clamp(24px, 2.15vw, 34px);
+	font-weight: 780;
+	letter-spacing: -.055em;
+	line-height: .95;
+	overflow-wrap: anywhere;
+}
+
+.skillvault-library-title-row p,
+.skillvault-market-header p {
+	margin: 7px 0 0;
+	color: var(--muted);
+	font-family: var(--font-geist-mono);
+	font-size: 11px;
+}
+
+.skillvault-library-stats {
+	display: flex;
+	gap: 23px;
+	margin-left: auto;
+}
+
+.skillvault-library-stats > span {
+	display: flex;
+	flex-direction: column;
+	color: var(--muted);
+	font-family: var(--font-geist-mono);
+	font-size: 10px;
+	letter-spacing: .12em;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.skillvault-library-stats strong {
+	color: var(--foreground);
+	font-family: var(--font-sora);
+	font-size: 22px;
+	letter-spacing: -.04em;
+}
+
+/* Agent stat: a stack of agent avatars instead of a bare number, so it
+   reads as "apps" rather than another skill counter. */
+.skillvault-library-stats-agents {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	color: var(--muted);
+	font-family: var(--font-geist-mono);
+	font-size: 10px;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+}
+
+.skillvault-library-stats-agents__avatars {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 24px;
+}
+
+.skillvault-library-stats-agents__avatars .agent-logo {
+	border-radius: 50%;
+	border: 2px solid var(--background);
+	background: var(--surface);
+	overflow: hidden;
+}
+
+.skillvault-library-stats-agents__avatars .agent-logo + .agent-logo,
+.skillvault-library-stats-agents__more {
+	margin-left: -8px;
+}
+
+.skillvault-library-stats-agents__avatars .agent-logo__image {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	padding: 3px;
+	box-sizing: border-box;
+}
+
+.skillvault-library-stats-agents__more {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	border: 2px solid var(--background);
+	background: var(--surface-strong);
+	font-size: 8px;
+	letter-spacing: 0;
+}
+
+.skillvault-new-skill {
+	min-height: 34px;
+	padding: 0 12px;
+	border-radius: 8px;
+	background: var(--accent);
+	color: var(--accent-contrast);
+	font-size: 12px;
+	font-weight: 650;
+	white-space: nowrap;
+}
+
+.skillvault-header-actions {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.skillvault-header-action {
+	display: inline-flex;
+	min-height: 34px;
+	align-items: center;
+	gap: 5px;
+	padding: 0 10px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: var(--surface);
+	color: var(--muted);
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+.skillvault-header-action:hover {
+	border-color: var(--accent);
+	color: var(--foreground);
+}
+
+.skillvault-header-action:disabled { opacity: .55; }
+
+.skillvault-refresh-icon.is-spinning {
+	display: inline-block;
+	animation: skillvault-spin 900ms linear infinite;
+}
+
+@keyframes skillvault-spin { to { transform: rotate(360deg); } }
+
+.skillvault-library-tools {
+	display: flex;
+	gap: 10px;
+}
+
+.skillvault-list-meta {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 9px 28px 5px;
+}
+
+.skillvault-table-head {
+	display: grid;
+	grid-template-columns: minmax(170px, 230px) 64px 28px minmax(120px, 160px) 80px minmax(130px, 1fr);
+	gap: 8px;
+	padding: 5px 22px 7px;
+	color: var(--muted);
+	font-family: var(--font-geist-mono);
+	font-size: 10px;
+	letter-spacing: .14em;
+	text-transform: uppercase;
+}
+
+.skillvault-table-head span:nth-child(5) {
+	text-align: center;
+}
+
+.skillvault-skill-row {
+	display: grid;
+	grid-template-columns: minmax(170px, 230px) 64px 28px minmax(120px, 160px) 80px minmax(130px, 1fr);
+	align-items: center;
+	gap: 8px;
+	width: 100%;
+	height: 39px;
+	padding: 0 14px;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	color: var(--muted);
+	text-align: left;
+	transition: background-color 120ms ease, color 120ms ease;
+}
+
+.skillvault-skill-primary {
+	display: flex;
+	min-width: 0;
+	align-items: center;
+	gap: 8px;
+}
+
+.skillvault-row-checkbox {
+	flex: 0 0 auto;
+	cursor: pointer;
+}
+
+.skillvault-row-checkbox:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+}
+
+.skillvault-bulk-action {
+	display: inline-flex;
+	min-height: 30px;
+	align-items: center;
+	gap: 6px;
+	padding: 0 9px;
+	border: 1px solid var(--border);
+	border-radius: 7px;
+	background: var(--surface);
+	color: var(--foreground);
+	font-size: 12px;
+	white-space: nowrap;
+	transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
+}
+
+.skillvault-bulk-action:hover:not(:disabled) {
+	border-color: var(--accent);
+	background: var(--surface-hover);
+}
+
+.skillvault-bulk-action:disabled {
+	opacity: .52;
+	cursor: not-allowed;
+}
+
+.skillvault-bulk-menu {
+	position: absolute;
+	bottom: calc(100% + 6px);
+	left: 0;
+	z-index: 30;
+	width: 230px;
+	max-height: 280px;
+	overflow-y: auto;
+	padding: 6px;
+	border: 1px solid var(--border);
+	border-radius: 10px;
+	background: var(--surface);
+	box-shadow: var(--shadow);
+}
+
+.skillvault-bulk-menu > button {
+	display: grid;
+	grid-template-columns: 22px minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 8px;
+	width: 100%;
+	min-height: 34px;
+	padding: 5px 7px;
+	border-radius: 6px;
+	color: var(--foreground);
+	font-size: 12px;
+	text-align: left;
+}
+
+.skillvault-bulk-menu > button:hover:not(:disabled) { background: var(--surface-hover); }
+.skillvault-bulk-menu > button:disabled { opacity: .46; cursor: not-allowed; }
+.skillvault-bulk-menu > button small { color: var(--muted); font-family: var(--font-geist-mono); }
+
+.skillvault-migration-dialog {
+	width: min(560px, calc(100vw - 40px));
+	max-height: min(760px, calc(100vh - 48px));
+	overflow-y: auto;
+	padding: 20px;
+	border: 1px solid var(--border);
+	border-radius: 16px;
+	background: var(--surface);
+	box-shadow: var(--shadow-lg);
+}
+
+.skillvault-migration-dialog__head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 18px;
+	margin-bottom: 20px;
+}
+
+.skillvault-migration-dialog__head h2 {
+	margin: 0;
+	color: var(--foreground);
+	font-family: var(--font-sora);
+	font-size: 18px;
+	font-weight: 700;
+	letter-spacing: -.025em;
+}
+
+.skillvault-migration-dialog__head p {
+	margin: 5px 0 0;
+	color: var(--muted);
+	font-size: 12px;
+}
+
+.skillvault-migration-dialog__head > button {
+	display: inline-flex;
+	width: 30px;
+	height: 30px;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid var(--border);
+	border-radius: 50%;
+	color: var(--muted);
+	font-size: 18px;
+}
+
+.skillvault-migration-dialog__head > button:hover { color: var(--foreground); border-color: var(--accent); }
+
+.skillvault-migration-section-title {
+	margin-bottom: 9px;
+	color: var(--foreground);
+	font-size: 12px;
+	font-weight: 650;
+}
+
+.skillvault-export-scope-list {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 8px;
+}
+
+.skillvault-export-scope-list button {
+	display: grid;
+	grid-template-columns: 14px minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 9px;
+	min-height: 48px;
+	padding: 0 12px;
+	border: 1px solid var(--border);
+	border-radius: 9px;
+	background: var(--background);
+	color: var(--muted);
+	font-size: 12px;
+	text-align: left;
+}
+
+.skillvault-export-scope-list button i {
+	width: 14px;
+	height: 14px;
+	border: 1px solid var(--border-strong);
+	border-radius: 50%;
+	box-shadow: inset 0 0 0 3px var(--background);
+}
+
+.skillvault-export-scope-list button strong { color: var(--foreground); font-family: var(--font-geist-mono); }
+.skillvault-export-scope-list button.is-selected { border-color: var(--accent); background: var(--accent-soft); color: var(--foreground); }
+.skillvault-export-scope-list button.is-selected i { border-color: var(--accent); background: var(--accent); }
+
+.skillvault-migration-note {
+	margin: 14px 0 0;
+	padding: 10px 12px;
+	border-radius: 8px;
+	background: var(--background);
+	color: var(--muted);
+	font-size: 11.5px;
+	line-height: 1.55;
+}
+
+.skillvault-import-summary {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 82px 82px;
+	gap: 8px;
+	margin-bottom: 14px;
+}
+
+.skillvault-import-summary > div {
+	display: flex;
+	min-height: 58px;
+	flex-direction: column;
+	justify-content: center;
+	padding: 9px 11px;
+	border: 1px solid var(--border);
+	border-radius: 9px;
+	background: var(--background);
+}
+
+.skillvault-import-summary span { color: var(--muted); font-size: 10.5px; }
+.skillvault-import-summary strong { overflow: hidden; color: var(--foreground); font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+.skillvault-import-summary > div:not(:first-child) { align-items: center; }
+.skillvault-import-summary > div:not(:first-child) strong { font-family: var(--font-sora); font-size: 20px; }
+
+.skillvault-migration-agent-groups { display: grid; gap: 8px; }
+.skillvault-migration-agent-group { padding: 9px 10px; border: 1px solid var(--border); border-radius: 9px; background: var(--background); }
+.skillvault-migration-agent-group header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+.skillvault-migration-agent-group header strong { color: var(--foreground); font-size: 11.5px; }
+.skillvault-migration-agent-group header > span { color: var(--muted); font-family: var(--font-geist-mono); font-size: 10px; }
+.skillvault-migration-agent-group > div { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.skillvault-migration-agent-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 7px 4px 4px;
+	border: 1px solid var(--border);
+	border-radius: 7px;
+	background: var(--surface);
+	color: var(--foreground);
+	font-size: 11px;
+}
+
+.skillvault-migration-agent-chip small { color: var(--muted); font-family: var(--font-geist-mono); }
+
+.skillvault-migration-progress {
+	display: flex;
+	min-height: 260px;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 22px 34px;
+}
+
+.skillvault-migration-progress__mark {
+	display: flex;
+	width: 62px;
+	height: 62px;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 18px;
+	border-radius: 16px;
+	background: var(--background);
+}
+
+.skillvault-migration-progress > strong { color: var(--foreground); font-size: 13px; }
+.skillvault-migration-progress > small { max-width: 100%; margin-top: 8px; overflow: hidden; color: var(--muted); font-family: var(--font-geist-mono); font-size: 10.5px; text-overflow: ellipsis; white-space: nowrap; }
+.skillvault-migration-progress__track { width: 100%; height: 7px; margin-top: 20px; overflow: hidden; border-radius: 99px; background: var(--background); }
+.skillvault-migration-progress__track i { display: block; height: 100%; border-radius: inherit; background: var(--accent); transition: width 180ms cubic-bezier(.16, 1, .3, 1); }
+.skillvault-migration-progress__meta { display: flex; width: 100%; justify-content: space-between; margin-top: 7px; color: var(--muted); font-family: var(--font-geist-mono); font-size: 10.5px; }
+
+.skillvault-migration-complete { display: flex; min-height: 240px; align-items: center; flex-direction: column; justify-content: center; text-align: center; }
+.skillvault-migration-complete > span { display: flex; width: 48px; height: 48px; align-items: center; justify-content: center; margin-bottom: 12px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 22px; }
+.skillvault-migration-complete h3 { margin: 0; color: var(--foreground); font-family: var(--font-sora); font-size: 17px; }
+.skillvault-migration-complete > p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+.skillvault-migration-complete code { max-width: 100%; margin-top: 12px; overflow: hidden; padding: 7px 9px; border-radius: 6px; background: var(--background); color: var(--muted); font-size: 10.5px; text-overflow: ellipsis; white-space: nowrap; }
+
+.skillvault-import-result-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; width: 100%; margin-top: 18px; }
+.skillvault-import-result-grid div { display: flex; min-height: 66px; align-items: center; justify-content: center; flex-direction: column; border: 1px solid var(--border); border-radius: 8px; background: var(--background); }
+.skillvault-import-result-grid strong { color: var(--foreground); font-family: var(--font-sora); font-size: 20px; }
+.skillvault-import-result-grid small { color: var(--muted); font-size: 10.5px; }
+.skillvault-migration-complete details { width: 100%; margin-top: 12px; color: var(--muted); font-size: 11px; text-align: left; }
+.skillvault-migration-complete details p { margin: 5px 0; }
+
+.skillvault-migration-dialog__actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 20px;
+	padding-top: 14px;
+	border-top: 1px solid var(--border);
+}
+
+.skillvault-migration-dialog__actions button { min-height: 34px; padding: 0 14px; border-radius: 8px; color: var(--muted); font-size: 12px; }
+.skillvault-migration-dialog__actions button:hover:not(:disabled) { color: var(--foreground); }
+.skillvault-migration-dialog__actions button.is-primary { background: var(--accent); color: var(--accent-contrast); font-weight: 650; }
+.skillvault-migration-dialog__actions button:disabled { opacity: .45; cursor: not-allowed; }
+
+.skillvault-skill-row:hover,
+.skillvault-skill-row.bg-surface-hover {
+	background: var(--surface-hover);
+	color: var(--foreground);
+}
+
+.skillvault-skill-name {
+	min-width: 0;
+	overflow: hidden;
+	font-family: var(--font-geist-mono);
+	font-size: 12px;
+	font-weight: 550;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.skillvault-scope-badge,
+.skillvault-favorite-button,
+.skillvault-row-agents {
+	min-width: 0;
+}
+
+.skillvault-scope-badge { justify-self: start; }
+.skillvault-favorite-button { justify-self: center; }
+.skillvault-row-agents { overflow: visible; }
+.skillvault-category-badge {
+	justify-self: center;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	padding: 3px 10px;
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	background: var(--surface);
+	color: var(--foreground);
+	font-family: var(--font-geist-mono);
+	font-size: 11px;
+	letter-spacing: .08em;
+	white-space: nowrap;
+	transition: border-color 120ms ease;
+}
+
+.skillvault-category-badge .cat-icon {
+	display: inline-flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.skillvault-skill-row:hover .skillvault-category-badge {
+	border-color: color-mix(in srgb, var(--foreground) 30%, transparent);
+}
+
+.skillvault-skill-description {
+	min-width: 0;
+	overflow: hidden;
+	color: var(--muted);
+	font-size: 12px;
+	line-height: 1.35;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.skillvault-detail-panel {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 40;
+	width: min(600px, 48vw);
+	min-width: 460px;
+	font-size: 14px;
+	border-left: 1px solid var(--border);
+	box-shadow: var(--shadow);
+	animation: slide-in-right 180ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.skillvault-detail-panel .skill-prose {
+	font-size: 14.5px;
+	line-height: 1.78;
+}
+
+.skillvault-detail-panel .skill-prose pre code {
+	font-size: 13px;
+}
+
+.skillvault-detail-close {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	color: var(--muted);
+	font-size: 19px;
+}
+
+.skillvault-agent-adapter {
+	margin-top: 15px;
+	padding: 13px;
+	border: 1px solid var(--border);
+	border-radius: 10px;
+	background: var(--surface);
+}
+
+.skillvault-agent-adapter__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.skillvault-agent-adapter__head strong,
+.skillvault-agent-adapter__head span {
+	display: block;
+}
+
+.skillvault-agent-adapter__head strong { font-size: 13px; }
+.skillvault-agent-adapter__head span { margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+.skillvault-agent-adapter__head small { color: var(--accent); font-family: var(--font-geist-mono); }
+
+.skillvault-agent-adapter__grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	align-items: start;
+	gap: 6px;
+}
+
+.skillvault-agent-adapter__item {
+	position: relative;
+	min-width: 0;
+}
+
+.skillvault-agent-adapter__item.has-version-mismatch::after {
+	content: "";
+	position: absolute;
+	top: -3px;
+	right: -3px;
+	width: 10px;
+	height: 10px;
+	border: 2px solid var(--surface);
+	border-radius: 50%;
+	background: var(--warning);
+	pointer-events: none;
+}
+
+.skillvault-agent-adapter__toggle {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	width: 100%;
+	min-width: 0;
+	min-height: 38px;
+	padding: 5px 7px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	color: var(--muted);
+	font-size: 12px;
+	text-align: left;
+	outline: 2px solid transparent;
+	outline-offset: 1px;
+}
+
+.skillvault-agent-adapter__toggle span:not(.agent-logo) {
+	min-width: 0;
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.skillvault-agent-adapter__toggle i {
+	width: 22px;
+	height: 12px;
+	border-radius: 999px;
+	background: var(--surface-strong);
+	position: relative;
+}
+
+.skillvault-agent-adapter__toggle i::after {
+	content: "";
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--surface);
+	transition: transform 120ms ease;
+}
+
+.skillvault-agent-adapter__toggle.is-enabled {
+	border-color: var(--accent);
+	color: var(--foreground);
+}
+
+.skillvault-agent-adapter__toggle.is-enabled i { background: var(--accent); }
+.skillvault-agent-adapter__toggle.is-enabled i::after { transform: translateX(10px); }
+
+.skillvault-agent-adapter__toggle.is-busy {
+	cursor: wait;
+	opacity: .68;
+}
+
+.skillvault-agent-adapter__toggle:focus-visible,
+.skillvault-version-diff button:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+}
+
+.skillvault-agent-adapter__toggle:active,
+.skillvault-version-diff button:active {
+	transform: translateY(1px);
+}
+
+@media (hover: hover) {
+	.skillvault-agent-adapter__toggle:hover { background: var(--surface-hover); }
+	.skillvault-version-diff button:hover { color: var(--foreground); }
+}
+
+.skillvault-version-mismatches {
+	display: grid;
+	gap: 8px;
+	margin-top: 9px;
+}
+
+.skillvault-version-diff {
+	padding: 9px 10px;
+	border-top: 1px solid var(--border);
+	background: color-mix(in srgb, var(--surface-strong) 32%, transparent);
+}
+
+.skillvault-version-diff__head,
+.skillvault-version-diff li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.skillvault-version-diff__head {
+	margin-bottom: 6px;
+	color: var(--foreground);
+	font-size: 11px;
+}
+
+.skillvault-version-diff__head > span {
+	display: flex;
+	align-items: baseline;
+	gap: 7px;
+}
+
+.skillvault-version-diff__head small {
+	color: var(--muted);
+	font-family: inherit;
+}
+
+.skillvault-version-diff button {
+	min-width: 72px;
+	color: var(--muted);
+	font-size: 11px;
+	white-space: nowrap;
+	outline: 2px solid transparent;
+	outline-offset: 1px;
+}
+
+.skillvault-version-diff .skillvault-version-diff__repair { color: var(--accent); }
+
+.skillvault-version-diff button:disabled {
+	cursor: wait;
+	opacity: .5;
+}
+
+.skillvault-version-diff ul {
+	display: grid;
+	gap: 2px;
+}
+
+.skillvault-version-diff li {
+	min-width: 0;
+	padding: 3px 0;
+	color: var(--muted);
+	font-family: var(--font-geist-mono);
+	font-size: 10px;
+}
+
+.skillvault-version-diff li > span {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.skillvault-version-diff small {
+	flex: none;
+	font-family: inherit;
+}
+
+.skillvault-version-diff p {
+	margin-top: 4px;
+	color: var(--muted);
+	font-size: 10px;
+}
+
+.skillvault-version-diff .skillvault-version-diff__explanation {
+	margin-top: 7px;
+	font-size: 11px;
+	line-height: 1.45;
+}
+
+.skillvault-agent-adapter__error {
+	margin-top: 9px;
+	color: var(--danger);
+	font-size: 12px;
+	line-height: 1.45;
+}
+
+.skillvault-back-to-top {
+	position: absolute;
+	right: 18px;
+	bottom: 18px;
+	z-index: 5;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border: 1px solid color-mix(in srgb, var(--foreground) 78%, transparent);
+	border-radius: 50%;
+	background: var(--foreground);
+	box-shadow: 0 10px 28px rgba(3, 9, 13, 0.24);
+	color: var(--background);
+	font-family: var(--font-geist-mono);
+	font-size: 19px;
+	transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+}
+
+.skillvault-back-to-top:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 14px 34px rgba(3, 9, 13, 0.32);
+}
+
+.skillvault-back-to-top:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 3px;
+}
+
+.skillvault-market-install-tasks {
+	position: absolute;
+	right: 18px;
+	bottom: 18px;
+	z-index: 6;
+	display: flex;
+	width: min(340px, calc(100% - 36px));
+	max-height: min(280px, calc(100% - 36px));
+	flex-direction: column;
+	gap: 8px;
+	overflow-y: auto;
+}
+
+.skillvault-market-install-task {
+	display: flex;
+	align-items: center;
+	border: 1px solid color-mix(in srgb, var(--foreground) 24%, transparent);
+	border-radius: 10px;
+	background: var(--surface);
+	box-shadow: 0 10px 28px rgba(3, 9, 13, 0.22);
+}
+
+.skillvault-market-install-task.is-failed {
+	border-color: color-mix(in srgb, var(--danger) 48%, var(--border));
+}
+
+.skillvault-market-install-task > button:first-child {
+	display: flex;
+	min-width: 0;
+	flex: 1;
+	align-items: center;
+	gap: 10px;
+	padding: 11px 12px;
+	color: var(--foreground);
+	text-align: left;
+}
+
+.skillvault-market-install-task__icon {
+	display: inline-flex;
+	width: 20px;
+	flex: 0 0 20px;
+	align-items: center;
+	justify-content: center;
+	color: var(--accent);
+	font-weight: 700;
+}
+
+.skillvault-market-install-task.is-failed .skillvault-market-install-task__icon {
+	color: var(--danger);
+}
+
+.skillvault-market-install-task__body {
+	display: flex;
+	min-width: 0;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.skillvault-market-install-task__body strong,
+.skillvault-market-install-task__body small {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.skillvault-market-install-task__body strong {
+	font-size: 12px;
+	font-weight: 650;
+}
+
+.skillvault-market-install-task__body small {
+	color: var(--muted);
+	font-size: 11px;
+}
+
+.skillvault-market-install-task__dismiss {
+	display: inline-flex;
+	width: 36px;
+	height: 36px;
+	flex: 0 0 36px;
+	align-items: center;
+	justify-content: center;
+	margin-right: 4px;
+	border-radius: 7px;
+	color: var(--muted);
+	font-size: 18px;
+}
+
+.skillvault-market-install-task__dismiss:hover {
+	background: var(--surface-hover);
+	color: var(--foreground);
+}
+
+.skillvault-market-main {
+	position: relative;
+	display: flex;
+	min-width: 0;
+	flex: 1;
+	flex-direction: column;
+	background: var(--background);
+	overflow: hidden;
+}
+
+.skillvault-market-header {
+	padding: 27px 32px 17px;
+}
+
+.skillvault-market-header > p {
+	margin-bottom: 20px;
+}
+
+.skillvault-market-card {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	width: 100%;
+	padding: 12px 14px;
+	/* --border is barely visible against --surface; cards need a stronger line. */
+	border: 1px solid color-mix(in srgb, var(--foreground) 22%, transparent);
+	border-radius: 10px;
+	background: var(--surface);
+	color: var(--foreground);
+	text-align: left;
+	transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+}
+
+.skillvault-market-card:hover {
+	border-color: var(--accent);
+	box-shadow: 0 8px 28px var(--border);
+	transform: translateY(-1px);
+}
+
+.skillvault-market-card__footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	color: var(--muted);
+	font-size: 12px;
+}
+
+.skillvault-market-card__footer strong {
+	color: var(--accent);
+	font-weight: 650;
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+.skillvault-pagination {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 16px;
+	padding: 18px 0 6px;
+}
+
+.skillvault-pagination > button {
+	padding: 6px 14px;
+	border: 1px solid var(--border);
+	border-radius: 7px;
+	background: var(--surface);
+	color: var(--foreground);
+	font-size: 12px;
+	transition: border-color 120ms ease, color 120ms ease, background-color 120ms ease;
+}
+
+.skillvault-pagination > button:hover:not(:disabled) {
+	border-color: var(--accent);
+	color: var(--accent);
+}
+
+.skillvault-pagination > button:disabled {
+	opacity: .4;
+	cursor: default;
+}
+
+.skillvault-pagination__status {
+	display: inline-flex;
+	min-width: 90px;
+	align-items: center;
+	justify-content: center;
+	color: var(--muted);
+	font-family: var(--font-geist-mono);
+	font-size: 12px;
+}
+
+@media (max-width: 1050px) {
+	.skillvault-sidebar { width: 224px; min-width: 224px; }
+	.skillvault-detail-panel { width: 55vw; min-width: 420px; }
+	.skillvault-library-stats { display: none; }
+	.skillvault-table-head,
+	.skillvault-skill-row {
+		grid-template-columns: minmax(140px, 190px) 56px 24px minmax(100px, 140px) 68px minmax(100px, 1fr);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		scroll-behavior: auto !important;
+		animation-duration: 1ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 1ms !important;
+	}
+}
+
+/* ─── Hidden scrollbar (sidebar) ─── */
+.overflow-y-auto {
+	scrollbar-width: none;
+}
+.overflow-y-auto::-webkit-scrollbar {
+	display: none;
+}
+
+/* ─── Smooth theme transition ─── */
+html.transitioning,
+html.transitioning *,
+html.transitioning *::before,
+html.transitioning *::after {
+	transition: background-color 0.3s ease,
+	            color 0.3s ease,
+	            border-color 0.3s ease,
+	            box-shadow 0.3s ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html.transitioning,
+	html.transitioning *,
+	html.transitioning *::before,
+	html.transitioning *::after {
+		transition-duration: 1ms !important;
+	}
+}

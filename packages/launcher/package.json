@@ -1,0 +1,43 @@
+{
+  "name": "skillvault-app",
+  "version": "0.1.0",
+  "description": "Download and install the SkillVault desktop app",
+  "type": "module",
+  "bin": {
+    "skillvault": "bin/skillvault.mjs",
+    "skillvault-app": "bin/skillvault.mjs"
+  },
+  "files": [
+    "bin"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "prepublishOnly": "npm test"
+  },
+  "keywords": [
+    "skillvault",
+    "ai",
+    "agent",
+    "skills",
+    "desktop",
+    "installer"
+  ],
+  "license": "MIT",
+  "author": "huangluke89757",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huangluke89757/SkillVault.git",
+    "directory": "packages/launcher"
+  },
+  "homepage": "https://github.com/huangluke89757/SkillVault#readme",
+  "bugs": {
+    "url": "https://github.com/huangluke89757/SkillVault/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

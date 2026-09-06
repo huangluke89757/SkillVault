@@ -1,0 +1,245 @@
+name: Build and Publish Desktop App
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "desktop-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-15
+            platform: mac
+            arch: arm64
+            artifact: desktop-mac-apple-silicon
+            rollupPackage: "@rollup/rollup-darwin-arm64"
+          - os: macos-15-intel
+            platform: mac
+            arch: x64
+            artifact: desktop-mac-intel
+            rollupPackage: "@rollup/rollup-darwin-x64"
+          - os: ubuntu-latest
+            platform: linux
+            arch: ""
+            artifact: desktop-linux
+            rollupPackage: "@rollup/rollup-linux-x64-gnu"
+          - os: windows-latest
+            platform: win
+            arch: ""
+            artifact: desktop-windows
+            rollupPackage: "@rollup/rollup-win32-x64-msvc"
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install platform Rollup binary
+        shell: bash
+        run: |
+          rollup_version="$(node -p "require('./node_modules/rollup/package.json').version")"
+          npm install --no-save --ignore-scripts --package-lock=false "${{ matrix.rollupPackage }}@${rollup_version}"
+
+      - name: Remove bun.lock to prevent electron-builder from using bun
+        run: rm -f bun.lock
+        shell: bash
+
+      - name: Verify release version
+        if: startsWith(github.ref, 'refs/tags/desktop-v')
+        shell: bash
+        run: |
+          expected_version="${GITHUB_REF_NAME#desktop-v}"
+          package_version="$(node -p "require('./apps/desktop/package.json').version")"
+          test "$expected_version" = "$package_version" || {
+            echo "版本不一致：Tag 为 $expected_version，桌面端 package.json 为 $package_version"
+            exit 1
+          }
+
+      - name: Build and package desktop app
+        shell: bash
+        run: |
+          set -euo pipefail
+          package_args=(--publish never)
+
+          if [[ -n "${{ matrix.arch }}" ]]; then
+            package_args+=("--${{ matrix.arch }}")
+          fi
+
+          # 让 Fork 后的构建与自动更新指向当前仓库，而不是写死上游仓库。
+          package_args+=(
+            "--config.publish.owner=${GITHUB_REPOSITORY_OWNER}"
+            "--config.publish.repo=${GITHUB_REPOSITORY#*/}"
+          )
+
+          if [[ "${{ matrix.platform }}" == "mac" ]]; then
+            if [[ -z "${CSC_LINK:-}" ]]; then
+              echo "未配置 macOS 签名证书，将生成未签名安装包"
+              export CSC_IDENTITY_AUTO_DISCOVERY=false
+              package_args+=(--config.mac.identity=null)
+            fi
+
+            if [[ -z "${APPLE_ID:-}" || -z "${APPLE_APP_SPECIFIC_PASSWORD:-}" || -z "${APPLE_TEAM_ID:-}" ]]; then
+              echo "未配置完整 Apple 公证凭据，本次跳过公证"
+              package_args+=(--config.mac.notarize=false)
+            fi
+          fi
+
+          if [[ "${{ matrix.platform }}" != "mac" ]]; then
+            npm run "package:${{ matrix.platform }}" -w @skillvault/desktop -- "${package_args[@]}"
+            exit 0
+          fi
+
+          max_attempts=3
+          for attempt in $(seq 1 "$max_attempts"); do
+            echo "macOS packaging attempt $attempt/$max_attempts"
+            if npm run "package:${{ matrix.platform }}" -w @skillvault/desktop -- "${package_args[@]}"; then
+              exit 0
+            fi
+
+            if [[ "$attempt" -eq "$max_attempts" ]]; then
+              echo "macOS packaging failed after $max_attempts attempts"
+              exit 1
+            fi
+
+            retry_delay=$((attempt * 30))
+            echo "Retrying macOS packaging after ${retry_delay}s to work around transient notarization/network failures"
+            sleep "$retry_delay"
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # macOS code signing
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          # macOS notarization
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Verify macOS package architecture
+        if: matrix.platform == 'mac'
+        shell: bash
+        run: |
+          set -euo pipefail
+          app_path="$(find apps/desktop/release -type d -name 'SkillVault.app' -print -quit)"
+          test -n "$app_path"
+          native_module="$(find "$app_path" -type f -name 'better_sqlite3.node' -print -quit)"
+          test -n "$native_module"
+
+          file "$app_path/Contents/MacOS/SkillVault"
+          file "$native_module"
+
+          expected_arch="${{ matrix.arch }}"
+          if [[ "$expected_arch" == "x64" ]]; then
+            expected_arch="x86_64"
+          fi
+          file "$app_path/Contents/MacOS/SkillVault" | grep -q "$expected_arch"
+          file "$native_module" | grep -q "$expected_arch"
+
+          test -n "$(find apps/desktop/release -maxdepth 1 -type f -name '*.dmg' -print -quit)"
+          test -n "$(find apps/desktop/release -maxdepth 1 -type f -name '*.zip' -print -quit)"
+
+          if [[ -n "${CSC_LINK:-}" ]]; then
+            codesign --verify --deep --strict --verbose=2 "$app_path"
+            spctl --assess --type execute --verbose=4 "$app_path"
+          fi
+
+          if [[ -n "${APPLE_ID:-}" && -n "${APPLE_APP_SPECIFIC_PASSWORD:-}" && -n "${APPLE_TEAM_ID:-}" ]]; then
+            xcrun stapler validate "$app_path"
+          fi
+        env:
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            apps/desktop/release/*.dmg
+            apps/desktop/release/*.zip
+            apps/desktop/release/*.exe
+            apps/desktop/release/*.AppImage
+            apps/desktop/release/*.deb
+            apps/desktop/release/*.yml
+            apps/desktop/release/*.blockmap
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/desktop-v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Merge macOS update metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#desktop-v}"
+          mapfile -t mac_zips < <(find artifacts -maxdepth 1 -type f -name "SkillVault-${version}-*.zip" | sort)
+          test "${#mac_zips[@]}" -eq 2
+
+          metadata="artifacts/latest-mac.yml"
+          {
+            echo "version: $version"
+            echo "files:"
+            for archive in "${mac_zips[@]}"; do
+              name="$(basename "$archive")"
+              sha512="$(openssl dgst -sha512 -binary "$archive" | base64 -w 0)"
+              size="$(stat -c '%s' "$archive")"
+              echo "  - url: $name"
+              echo "    sha512: $sha512"
+              echo "    size: $size"
+            done
+
+            first_archive="${mac_zips[0]}"
+            echo "path: $(basename "$first_archive")"
+            echo "sha512: $(openssl dgst -sha512 -binary "$first_archive" | base64 -w 0)"
+            echo "releaseDate: '$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')'"
+          } > "$metadata"
+
+      - name: Prepare release notes
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#desktop-v}"
+          notes_file="docs/releases/${GITHUB_REF_NAME}.md"
+          test -f "$notes_file"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "notes_file=$notes_file" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: SkillVault v${{ steps.release.outputs.version }}
+          body_path: ${{ steps.release.outputs.notes_file }}
+          files: |
+            artifacts/*
+          draft: false
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

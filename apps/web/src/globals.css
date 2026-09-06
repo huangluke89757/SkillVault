@@ -1,0 +1,314 @@
+@import "tailwindcss";
+
+/* ─── Light mode (default) — Morandi sage/ink palette ─── */
+:root {
+	--background: #E7EBE6;
+	--foreground: #11212D;
+	--muted: #52666E;
+	--accent: #4E6E76;
+	--border: #CBD3CD;
+	--surface: #F3F5F1;
+	--surface-hover: #DCE2DC;
+	--glow: rgba(17, 33, 45, 0.04);
+	--code-bg: #E0E4DE;
+	--card-bg: #F3F5F1;
+	--card-border: #CBD3CD;
+	--nav-bg: rgba(231, 235, 230, 0.85);
+	--nav-border: rgba(17, 33, 45, 0.08);
+	--font-sora: "Sora", system-ui, sans-serif;
+	--font-geist-mono: "Geist Mono", ui-monospace, monospace;
+}
+
+/* ─── Dark mode — Morandi deep ink-blue palette ─── */
+.dark {
+	--background: #08141B;
+	--foreground: #CCD6CF;
+	--muted: #8BA6B8;
+	--accent: #7C9AA3;
+	--border: #243842;
+	--surface: #11212D;
+	--surface-hover: #1A2C36;
+	--glow: rgba(204, 214, 207, 0.05);
+	--code-bg: #0E1B25;
+	--card-bg: #11212D;
+	--card-border: #243842;
+	--nav-bg: rgba(8, 20, 27, 0.85);
+	--nav-border: rgba(139, 166, 184, 0.1);
+}
+
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-muted: var(--muted);
+	--color-accent: var(--accent);
+	--color-border: var(--border);
+	--color-surface: var(--surface);
+	--color-surface-hover: var(--surface-hover);
+	--color-code-bg: var(--code-bg);
+	--color-card-bg: var(--card-bg);
+	--color-card-border: var(--card-border);
+	--color-nav-bg: var(--nav-bg);
+	--color-nav-border: var(--nav-border);
+	--font-sans: var(--font-sora);
+	--font-mono: var(--font-geist-mono);
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background: var(--background);
+	color: var(--foreground);
+	font-family: var(--font-sans), system-ui, sans-serif;
+	overflow-x: hidden;
+}
+
+/* Noise grain overlay */
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+	pointer-events: none;
+	opacity: 0.025;
+	background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+	background-repeat: repeat;
+	background-size: 256px 256px;
+}
+
+/* ─── Animations ─── */
+@keyframes fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(24px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fade-in {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+@keyframes glow-pulse {
+	0%, 100% { opacity: 0.4; }
+	50% { opacity: 0.7; }
+}
+
+@keyframes subtle-float {
+	0%, 100% { transform: translateY(0px); }
+	50% { transform: translateY(-4px); }
+}
+
+@keyframes slide-down {
+	from {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes typing-cursor {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0; }
+}
+
+.animate-fade-up {
+	animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+	animation: fade-in 1s ease both;
+}
+
+.animate-glow-pulse {
+	animation: glow-pulse 4s ease-in-out infinite;
+}
+
+.animate-subtle-float {
+	animation: subtle-float 6s ease-in-out infinite;
+}
+
+.animate-slide-down {
+	animation: slide-down 0.3s ease both;
+}
+
+/* ─── Slide-in-left (docs mobile sidebar) ─── */
+@keyframes slide-in-left {
+	from {
+		opacity: 0;
+		transform: translateX(-100%);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.animate-slide-in-left {
+	animation: slide-in-left 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ─── Scroll-triggered reveal ─── */
+.reveal {
+	opacity: 0;
+	transform: translateY(20px);
+	transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+	            transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+/* ─── FAQ accordion ─── */
+details summary {
+	cursor: pointer;
+	list-style: none;
+}
+
+details summary::-webkit-details-marker {
+	display: none;
+}
+
+details[open] .faq-icon {
+	transform: rotate(45deg);
+}
+
+.faq-icon {
+	transition: transform 0.2s ease;
+}
+
+/* ─── Markdown prose styles (skill detail page) ─── */
+.skill-prose {
+	line-height: 1.75;
+	color: var(--muted);
+}
+.skill-prose h1,
+.skill-prose h2,
+.skill-prose h3,
+.skill-prose h4 {
+	color: var(--foreground);
+	font-weight: 600;
+	margin-top: 2em;
+	margin-bottom: 0.75em;
+}
+.skill-prose h1 {
+	font-size: 1.5rem;
+}
+.skill-prose h2 {
+	font-size: 1.25rem;
+	border-bottom: 1px solid var(--border);
+	padding-bottom: 0.5em;
+}
+.skill-prose h3 {
+	font-size: 1.1rem;
+}
+.skill-prose p {
+	margin-bottom: 1em;
+}
+.skill-prose a {
+	color: var(--accent);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+.skill-prose a:hover {
+	color: var(--foreground);
+}
+.skill-prose code {
+	font-family: var(--font-geist-mono);
+	font-size: 0.85em;
+	background: var(--code-bg);
+	padding: 0.15em 0.4em;
+	border-radius: 4px;
+	border: 1px solid var(--border);
+}
+.skill-prose pre {
+	background: var(--code-bg);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	padding: 1em 1.25em;
+	overflow-x: auto;
+	margin: 1.5em 0;
+}
+.skill-prose pre code {
+	background: none;
+	border: none;
+	padding: 0;
+	font-size: 0.8rem;
+	line-height: 1.6;
+}
+.skill-prose ul,
+.skill-prose ol {
+	padding-left: 1.5em;
+	margin-bottom: 1em;
+}
+.skill-prose li {
+	margin-bottom: 0.35em;
+}
+.skill-prose ul {
+	list-style-type: disc;
+}
+.skill-prose ol {
+	list-style-type: decimal;
+}
+.skill-prose blockquote {
+	border-left: 3px solid var(--border);
+	padding-left: 1em;
+	color: var(--muted);
+	font-style: italic;
+	margin: 1.5em 0;
+}
+.skill-prose table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 1.5em 0;
+}
+.skill-prose th,
+.skill-prose td {
+	border: 1px solid var(--border);
+	padding: 0.5em 0.75em;
+	text-align: left;
+	font-size: 0.875rem;
+}
+.skill-prose th {
+	background: var(--surface-hover);
+	color: var(--foreground);
+	font-weight: 600;
+}
+.skill-prose hr {
+	border: none;
+	border-top: 1px solid var(--border);
+	margin: 2em 0;
+}
+.skill-prose img {
+	max-width: 100%;
+	border-radius: 8px;
+}
+
+/* ─── Hidden scrollbar (sidebar) ─── */
+.lg\:overflow-y-auto {
+	scrollbar-width: none;
+}
+.lg\:overflow-y-auto::-webkit-scrollbar {
+	display: none;
+}
+
+/* ─── Smooth theme transition ─── */
+html.transitioning,
+html.transitioning *,
+html.transitioning *::before,
+html.transitioning *::after {
+	transition: background-color 0.3s ease,
+	            color 0.3s ease,
+	            border-color 0.3s ease,
+	            box-shadow 0.3s ease !important;
+}

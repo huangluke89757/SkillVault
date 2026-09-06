@@ -1,0 +1,8 @@
+out/
+dist/
+release/
+node_modules/
+
+# Agent skill symlinks (created by SkillVault at runtime)
+.**/skills/
+skills/
