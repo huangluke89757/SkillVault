@@ -11,24 +11,24 @@ import { once } from "node:events";
 const VERSION = "0.1.0";
 const RELEASE_BASE = `https://github.com/huangluke89757/SkillVault/releases/download/desktop-v${VERSION}`;
 
-// sha256 of each release asset. Leave null to skip verification until the
-// checksums are published with the matching release.
+// sha256 of each release asset. Update these together with VERSION whenever a
+// new desktop release is published, otherwise downloads fail verification.
 const TARGETS = {
   "win32-x64": {
-    asset: `SkillVault.Setup.${VERSION}.exe`,
-    sha256: null,
+    asset: `SkillVault-Setup-${VERSION}.exe`,
+    sha256: "81d2439bccefee6cc55546db45699e161244b2fad9b0c164e5c571c47fd5fc88",
   },
   "darwin-arm64": {
     asset: `SkillVault-${VERSION}-arm64.dmg`,
-    sha256: null,
+    sha256: "e251b8cb24689a9378b4dfbba5a4c67367ae208641b637d116ba94edd5304922",
   },
   "darwin-x64": {
     asset: `SkillVault-${VERSION}-x64.dmg`,
-    sha256: null,
+    sha256: "24cef2ee519f2a56072742492e65119da89031eef534c3bb5866fafa09cef0b4",
   },
   "linux-x64": {
     asset: `SkillVault-${VERSION}-x86_64.AppImage`,
-    sha256: null,
+    sha256: "0019717293bf9934a02d9aa4a0df5cc263e57234af72b96cdf62e05534fc9e23",
   },
 };
 

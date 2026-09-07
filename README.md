@@ -123,6 +123,8 @@ SkillVault 将本地 Skill 作为母本统一管理：一个 Skill 只保留一�
 
 ## 下载安装
 
+项目源码与问题反馈：[huangluke89757/SkillVault](https://github.com/huangluke89757/SkillVault)。
+
 前往 [Releases](../../releases/latest) 下载对应平台的安装包：
 
 - Windows：NSIS 安装包
