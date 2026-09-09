@@ -182,7 +182,7 @@ npm run dev --workspace=@skillsgate/desktop
 构建桌面端：
 
 ```bash
-npm run build --workspace=@skillsgate/desktop
+npm run build --workspace=@skillvault/desktop
 ```
 
 项目使用 npm workspaces。桌面端位于 `apps/desktop`，Skill 安装与发现逻辑位于 `packages/cli`。

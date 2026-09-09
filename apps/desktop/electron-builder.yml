@@ -1,5 +1,5 @@
-appId: ai.skillsgate.desktop
-productName: Skillbox
+appId: ai.skillvault.desktop
+productName: SkillVault
 directories:
   output: release
   buildResources: resources
@@ -22,7 +22,7 @@ mac:
   icon: resources/icon.icns
   category: public.app-category.developer-tools
   minimumSystemVersion: "11.0.0"
-  artifactName: "Skillbox-${version}-${arch}.${ext}"
+  artifactName: "SkillVault-${version}-${arch}.${ext}"
   target:
     - dmg
     - zip
@@ -32,7 +32,7 @@ mac:
 
 win:
   icon: resources/icon.ico
-  artifactName: "Skillbox-Setup-${version}.${ext}"
+  artifactName: "SkillVault-Setup-${version}.${ext}"
   target: nsis
 
 nsis:
@@ -49,9 +49,9 @@ linux:
     - AppImage
     - deb
   category: Development
-  artifactName: "Skillbox-${version}-${arch}.${ext}"
+  artifactName: "SkillVault-${version}-${arch}.${ext}"
 
 publish:
   provider: github
-  owner: Renly1994
-  repo: Skillbox
+  owner: huangluke89757
+  repo: SkillVault

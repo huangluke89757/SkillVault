@@ -1,6 +1,6 @@
 {
-  "name": "@skillsgate/desktop",
-  "version": "0.6.7",
+  "name": "@skillvault/desktop",
+  "version": "1.0.0",
   "description": "SkillVault local skill manager",
   "homepage": "https://github.com/huangluke89757/SkillVault",
   "author": "Sultan Valiyev <valiyevsultan@gmail.com>",
