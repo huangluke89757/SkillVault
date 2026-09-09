@@ -7,8 +7,8 @@ export function SkillboxBrand({ compact = false }: { compact?: boolean }) {
   return (
     <div className={`skillbox-brand ${compact ? "skillbox-brand--compact" : ""}`}>
       <img src={skillboxMark} alt="" draggable={false} />
-      <span data-no-localize aria-label="Skillbox">
-        Skill<span>box</span>
+      <span data-no-localize aria-label="SkillVault">
+        Skill<span>Vault</span>
       </span>
     </div>
   )

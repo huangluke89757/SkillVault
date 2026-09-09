@@ -6,6 +6,7 @@ import {
   useRef,
   useCallback,
   useMemo,
+  type ChangeEvent,
 } from "react"
 import { marked } from "marked"
 import { NavLink } from "react-router-dom"
@@ -21,6 +22,12 @@ import {
   type InstalledMarketplaceState,
   type InstallTaskState,
 } from "../lib/marketplace-state"
+import {
+  matchIntent,
+  prewarmIntentModel,
+  type IntentResult,
+  type IntentSkill,
+} from "../lib/intent-matcher"
 
 // ---------------------------------------------------------------------------
 // Types matching the skills.sh response shape
@@ -758,6 +765,347 @@ function BackgroundInstallTasks({
 }
 
 // ---------------------------------------------------------------------------
+// Intent Matching （颠覆版：用户说需求，系统从仓库自动匹配技能）
+// ---------------------------------------------------------------------------
+
+interface IntentMatcherProps {
+  corpus: CatalogSkill[]
+  installedState: InstalledMarketplaceState
+  installTasks: InstallTaskState<SkillInstallProgress>
+  effectiveAgents: string[]
+  onInstall: (source: string, skillId: string, agentNames: string[]) => Promise<void>
+  onOpenDetail: (skill: CatalogSkill) => void
+}
+
+// 单个意图匹配结果卡片：展示匹配度 + 「是什么 / 有什么用 / 怎么用」三段介绍
+// + 一键安装 / 查看详情。介绍默认用元数据生成，可展开拉取 SKILL.md 完整内容。
+const IntentResultCard = memo(function IntentResultCard({
+  result,
+  installedState,
+  installTask,
+  effectiveAgents,
+  onInstall,
+  onOpenDetail,
+}: {
+  result: IntentResult
+  installedState: InstalledMarketplaceState
+  installTask?: SkillInstallProgress
+  effectiveAgents: string[]
+  onInstall: (source: string, skillId: string, agentNames: string[]) => Promise<void>
+  onOpenDetail: (skill: CatalogSkill) => void
+}) {
+  const skill = result.skill as CatalogSkill
+  const installed =
+    isMarketplaceSkillInstalled(installedState, skill) ||
+    installTask?.status === "completed"
+  const installing = installTask?.status === "running"
+  const canInstall = effectiveAgents.length > 0
+
+  const [expanded, setExpanded] = useState(false)
+  const [content, setContent] = useState<string | null>(null)
+  const [loadingContent, setLoadingContent] = useState(false)
+
+  const matchPct = Math.max(0, Math.min(100, Math.round(result.score * 100)))
+
+  async function toggleExpand() {
+    if (!expanded && content === null && !loadingContent) {
+      setLoadingContent(true)
+      try {
+        const text = await electronAPI.fetchSkillContent(skill.source, skill.skillId)
+        setContent(text)
+      } catch {
+        setContent(null)
+      } finally {
+        setLoadingContent(false)
+      }
+    }
+    setExpanded((v) => !v)
+  }
+
+  const rendered = useMemo(
+    () => (content ? renderMarkdown(content) : ""),
+    [content],
+  )
+
+  function handleInstall() {
+    if (!canInstall) return
+    void onInstall(skill.source, skill.skillId, effectiveAgents).catch((err) => {
+      console.error("[intent] install failed", err)
+    })
+  }
+
+  return (
+    <div className="rounded-xl border border-border bg-surface p-4">
+      <div className="flex items-start gap-3">
+        <div
+          className="flex-shrink-0 w-12 h-12 rounded-lg bg-accent/10 text-accent flex items-center justify-center text-[13px] font-bold"
+          title="语义匹配度"
+        >
+          {matchPct}%
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <h3 data-no-localize className="text-[13px] font-semibold text-foreground truncate">
+              {skill.name}
+            </h3>
+            {skill.isOfficial && <OfficialBadge />}
+            {skill.installs > 0 && (
+              <span className="flex-shrink-0 flex items-center gap-1 text-[11px] font-mono text-muted ml-auto">
+                <InstallsIcon />
+                {formatInstalls(skill.installs)}
+              </span>
+            )}
+          </div>
+          <p data-no-localize className="text-[11px] font-mono text-muted mt-0.5 truncate">
+            {skill.source}
+          </p>
+
+          {/* 三段式核心介绍 */}
+          <div className="mt-2 space-y-1 text-[12px] text-foreground/90 leading-relaxed">
+            <p>
+              <b className="text-foreground">是什么：</b>
+              {skill.name} 是来自 {skill.source} 的 Agent 技能（标识 {skill.skillId}）。
+            </p>
+            <p>
+              <b className="text-foreground">有什么用：</b>
+              用于「{skill.skillId}」相关的任务场景，由 SKILL.md 中定义的流程与知识驱动。
+            </p>
+            <p>
+              <b className="text-foreground">怎么用：</b>
+              <code className="font-mono text-[12px] bg-background px-1.5 py-0.5 rounded border border-border">
+                npx skills add {skill.source}
+              </code>
+              ，或点击下方「一键安装」。
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={toggleExpand}
+            className="mt-2 text-[12px] text-accent hover:underline"
+          >
+            {expanded ? "收起完整介绍（SKILL.md）" : "展开完整介绍（SKILL.md）"}
+          </button>
+          {expanded &&
+            (loadingContent ? (
+              <div className="flex items-center py-3">
+                <SpinnerIcon />
+              </div>
+            ) : content ? (
+              <div
+                className="skill-prose text-[12px] mt-2 border-t border-border pt-2"
+                dangerouslySetInnerHTML={{ __html: rendered }}
+              />
+            ) : (
+              <p className="text-[12px] text-muted mt-2">该技能暂无可显示的介绍内容。</p>
+            ))}
+
+          <div className="flex items-center gap-2 mt-3">
+            {installed ? (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium bg-surface-hover text-muted border border-border">
+                <CheckIcon /> 已安装
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={handleInstall}
+                disabled={installing || !canInstall}
+                title={canInstall ? "" : "请先在左侧选择安装目标"}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium bg-foreground text-background hover:opacity-90 transition-opacity disabled:opacity-50"
+              >
+                {installing ? (
+                  <>
+                    <SpinnerIcon /> 安装中…
+                  </>
+                ) : (
+                  <>
+                    <DownloadIcon /> 一键安装
+                  </>
+                )}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => onOpenDetail(skill)}
+              className="px-3 py-1.5 rounded-lg text-[12px] border border-border text-foreground hover:bg-surface-hover transition-colors"
+            >
+              查看详情
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+})
+
+function IntentMatcher({
+  corpus,
+  installedState,
+  installTasks,
+  effectiveAgents,
+  onInstall,
+  onOpenDetail,
+}: IntentMatcherProps) {
+  const [query, setQuery] = useState("")
+  const [image, setImage] = useState<string | null>(null)
+  const [results, setResults] = useState<IntentResult[]>([])
+  const [usedModel, setUsedModel] = useState<boolean | null>(null)
+  const [matching, setMatching] = useState(false)
+  const [hasSearched, setHasSearched] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    void prewarmIntentModel()
+  }, [])
+
+  async function handleMatch() {
+    const q = query.trim()
+    if (!q) return
+    setMatching(true)
+    setError(null)
+    try {
+      const { results, usedModel } = await matchIntent(q, corpus as IntentSkill[], 8)
+      setResults(results)
+      setUsedModel(usedModel)
+      setHasSearched(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err))
+    } finally {
+      setMatching(false)
+    }
+  }
+
+  function onImageChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => setImage(reader.result as string)
+    reader.readAsDataURL(file)
+    e.target.value = ""
+  }
+
+  return (
+    <div className="max-w-3xl mx-auto">
+      <div className="rounded-xl border border-border bg-surface p-5">
+        <h3 className="text-[14px] font-semibold text-foreground">
+          用一句话描述你想要什么，AI 帮你从技能库里挑最匹配的
+        </h3>
+        <p className="text-[12px] text-muted mt-1">
+          例如：「我想给 React 组件写测试」「帮我做一份中式药膳汤谱」「把这段 TypeScript 重构得更干净」。
+        </p>
+
+        <textarea
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleMatch()
+          }}
+          rows={3}
+          placeholder="说需求，不用想技能名…"
+          className="mt-3 w-full resize-none rounded-lg bg-background border border-border px-3 py-2.5 text-[13px] text-foreground placeholder:text-muted focus:outline-none focus:border-accent/40 transition-colors"
+        />
+
+        {/* 图片：辅助参考，不参与语义匹配 */}
+        <div className="mt-3 flex items-center gap-3">
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={onImageChange}
+          />
+          <button
+            type="button"
+            onClick={() => fileRef.current?.click()}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] border border-border text-foreground hover:bg-surface-hover transition-colors"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="9" cy="9" r="2" />
+              <path d="m21 15-3.5-3.5a2 2 0 0 0-2.8 0L6 20" />
+            </svg>
+            添加图片（辅助参考）
+          </button>
+          {image && (
+            <div className="relative">
+              <img
+                src={image}
+                alt="attached"
+                className="h-12 w-12 rounded-md object-cover border border-border"
+              />
+              <button
+                type="button"
+                onClick={() => setImage(null)}
+                className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-foreground text-background text-[10px] leading-none flex items-center justify-center"
+                aria-label="移除图片"
+              >
+                ×
+              </button>
+            </div>
+          )}
+          <span className="text-[11px] text-muted">图片仅作参考，不参与语义匹配</span>
+        </div>
+
+        <div className="mt-4 flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleMatch}
+            disabled={matching || query.trim().length === 0}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-[13px] font-medium bg-foreground text-background hover:opacity-90 transition-opacity disabled:opacity-50"
+          >
+            {matching ? (
+              <>
+                <SpinnerIcon /> 匹配中…
+              </>
+            ) : (
+              "开始匹配"
+            )}
+          </button>
+          {usedModel !== null && hasSearched && (
+            <span className="text-[11px] text-muted">
+              {usedModel ? "语义模型匹配" : "关键词降级匹配（模型不可用）"}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {error && (
+        <p className="text-[12px] text-red-400 mt-3">{error}</p>
+      )}
+
+      {hasSearched && !matching && results.length === 0 && !error && (
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <p className="text-muted text-sm">没有匹配到相关 Skill，换个说法试试？</p>
+        </div>
+      )}
+
+      {results.length > 0 && (
+        <div className="mt-4 space-y-2.5">
+          <p className="text-[12px] uppercase tracking-wider font-medium text-muted">
+            匹配结果（{results.length}）
+          </p>
+          {results.map((r) => {
+            const key = marketplaceKey(r.skill.source, r.skill.skillId)
+            return (
+              <IntentResultCard
+                key={key}
+                result={r}
+                installedState={installedState}
+                installTask={installTasks[key]}
+                effectiveAgents={effectiveAgents}
+                onInstall={onInstall}
+                onOpenDetail={onOpenDetail}
+              />
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Discover (main export)
 // ---------------------------------------------------------------------------
 
@@ -908,19 +1256,20 @@ export function Discover() {
 
   const trimmedQuery = deferredSearchQuery.trim()
   const isSearching = trimmedQuery.length >= 2
+  const effectiveSearching = viewMode === "search" && isSearching
 
   // Auto-search as the user types (debounced). Previously only Enter started
   // a search, and the grid kept showing the previous query's results, which
   // read as "searching the same 30 skills no matter what you type".
   useEffect(() => {
-    if (!isSearching || trimmedQuery === activeQuery) return
+    if (viewMode !== "search" || !isSearching || trimmedQuery === activeQuery) return
     const timer = setTimeout(() => {
       setPage(1)
       fetchSkills(trimmedQuery, 0)
     }, 350)
     return () => clearTimeout(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trimmedQuery, isSearching, activeQuery])
+  }, [trimmedQuery, isSearching, activeQuery, viewMode])
 
   const handleSearchChange = useCallback((value: string) => {
     setSearchQuery(value)
@@ -1090,7 +1439,7 @@ export function Discover() {
   )
 
   const canGoPrev = currentPage > 1
-  const canGoNext = currentPage < totalPages || (isSearching && hasMore)
+  const canGoNext = currentPage < totalPages || (effectiveSearching && hasMore)
   const visibleInstallTasks = Object.values(installTasks)
     .filter((task) => task.status === "running" || task.status === "failed")
     .sort((a, b) => b.updatedAt - a.updatedAt)
@@ -1109,77 +1458,105 @@ export function Discover() {
       <div className="skillbox-market-main">
       {/* Header */}
       <div className="skillbox-market-header">
-        <h2>Skill Market</h2>
-        <p>
-          搜索并安装社区 Skill，数据来源和安装方式保持原样。{" "}
-          {isSearching && visibleSkills.length > 0 && (
-            <span className="font-mono">
-              共 {visibleSkills.length} 项{hasMore ? " · 翻页自动加载更多" : ""}
-            </span>
-          )}
-        </p>
-
-        <div className="relative max-w-2xl">
-          <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-            <SearchIcon size={15} />
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h2>Skill Market</h2>
+            <p>
+              发现 · 信任 · 一键安装：按热榜浏览、按名称/作者搜索，或用自然语言描述需求让 AI 帮你匹配技能。
+            </p>
           </div>
-          <input
-            type="text"
-            placeholder="按名称或关键词搜索（输入即搜）"
-            value={searchQuery}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter") handleSearchSubmit() }}
-            className="w-full pl-9 pr-10 py-2.5 rounded-lg bg-surface border border-border text-[13px] text-foreground placeholder:text-muted focus:outline-none focus:border-accent/40 transition-colors"
-          />
-          {loading && (
-            <div className="absolute inset-y-0 right-3 flex items-center">
-              <SpinnerIcon />
-            </div>
-          )}
-          {searchQuery && !loading && (
+          <div className="flex items-center gap-1 rounded-lg border border-border bg-surface p-1">
             <button
-              onClick={() => handleSearchChange("")}
-              className="absolute inset-y-0 right-3 flex items-center text-muted hover:text-foreground transition-colors"
+              type="button"
+              onClick={() => setViewMode("trending")}
+              className={`px-3 py-1.5 rounded-md text-[12px] font-medium transition-colors ${viewMode === "trending" ? "bg-foreground text-background" : "text-muted hover:text-foreground hover:bg-surface-hover"}`}
             >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
+              热门
             </button>
-          )}
+            <button
+              type="button"
+              onClick={() => setViewMode("search")}
+              className={`px-3 py-1.5 rounded-md text-[12px] font-medium transition-colors ${viewMode === "search" ? "bg-foreground text-background" : "text-muted hover:text-foreground hover:bg-surface-hover"}`}
+            >
+              搜索
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("intent")}
+              className={`px-3 py-1.5 rounded-md text-[12px] font-medium transition-colors ${viewMode === "intent" ? "bg-foreground text-background" : "text-muted hover:text-foreground hover:bg-surface-hover"}`}
+            >
+              意图匹配
+            </button>
+          </div>
         </div>
 
-        {/* Section label + official-only filter */}
-        <div className="mt-3 flex items-center justify-between max-w-2xl">
-          <div className="flex items-center gap-2">
-            <span className="text-[12px] uppercase tracking-wider font-medium text-muted">
-              {isSearching ? "搜索结果" : "热门"}
-            </span>
-            {isSearching && (
-              <span className="text-[12px] text-muted font-mono">
-                {visibleSkills.length} for "{trimmedQuery}"
-              </span>
+        {/* 搜索框：仅搜索 tab */}
+        {viewMode === "search" && (
+          <div className="relative max-w-2xl mt-3">
+            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+              <SearchIcon size={15} />
+            </div>
+            <input
+              type="text"
+              placeholder="按名称或作者搜索（输入即搜）"
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleSearchSubmit() }}
+              className="w-full pl-9 pr-10 py-2.5 rounded-lg bg-surface border border-border text-[13px] text-foreground placeholder:text-muted focus:outline-none focus:border-accent/40 transition-colors"
+            />
+            {loading && (
+              <div className="absolute inset-y-0 right-3 flex items-center">
+                <SpinnerIcon />
+              </div>
+            )}
+            {searchQuery && !loading && (
+              <button
+                onClick={() => handleSearchChange("")}
+                className="absolute inset-y-0 right-3 flex items-center text-muted hover:text-foreground transition-colors"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
             )}
           </div>
-          <label className="flex items-center gap-1.5 text-[12px] text-muted hover:text-foreground transition-colors cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={officialOnly}
-              onChange={(e) => setOfficialOnly(e.target.checked)}
-              className="h-3 w-3 accent-blue-500"
-            />
-            仅官方
-          </label>
-        </div>
+        )}
+
+        {/* Section label + official-only filter：热门/搜索 tab */}
+        {(viewMode === "trending" || viewMode === "search") && (
+          <div className="mt-3 flex items-center justify-between max-w-2xl">
+            <div className="flex items-center gap-2">
+              <span className="text-[12px] uppercase tracking-wider font-medium text-muted">
+                {viewMode === "search" ? (effectiveSearching ? "搜索结果" : "搜索") : "热门"}
+              </span>
+              {effectiveSearching && (
+                <span className="text-[12px] text-muted font-mono">
+                  {visibleSkills.length} for "{trimmedQuery}"
+                </span>
+              )}
+            </div>
+
+            <label className="flex items-center gap-1.5 text-[12px] text-muted hover:text-foreground transition-colors cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={officialOnly}
+                onChange={(e) => setOfficialOnly(e.target.checked)}
+                className="h-3 w-3 accent-blue-500"
+              />
+              仅官方
+            </label>
+          </div>
+        )}
       </div>
 
       {/* Error message */}
@@ -1189,9 +1566,18 @@ export function Discover() {
         </div>
       )}
 
-      {/* Grid */}
+      {/* Grid / Intent Matcher */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-8 pb-8">
-        {!isSearching && isLoadingTrending && visibleSkills.length === 0 ? (
+        {viewMode === "intent" ? (
+          <IntentMatcher
+            corpus={intentCorpus}
+            installedState={installedState}
+            installTasks={installTasks}
+            effectiveAgents={intentAgents}
+            onInstall={handleInstall}
+            onOpenDetail={setSelectedSkill}
+          />
+        ) : !effectiveSearching && isLoadingTrending && visibleSkills.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
               <SpinnerIcon />
@@ -1200,7 +1586,7 @@ export function Discover() {
               </p>
             </div>
           </div>
-        ) : isSearching && loading && visibleSkills.length === 0 ? (
+        ) : effectiveSearching && loading && visibleSkills.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
               <SpinnerIcon />
@@ -1208,6 +1594,24 @@ export function Discover() {
                 正在搜索...
               </p>
             </div>
+          </div>
+        ) : viewMode === "search" && !effectiveSearching ? (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <svg
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="mb-4 text-muted"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <p className="text-muted text-sm">在上方输入技能名称或作者开始搜索</p>
           </div>
         ) : visibleSkills.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -1257,7 +1661,7 @@ export function Discover() {
                 ) : (
                   <>
                     第 {currentPage} / {totalPages}
-                    {isSearching && hasMore && currentPage === totalPages ? "+" : ""} 页
+                    {effectiveSearching && hasMore && currentPage === totalPages ? "+" : ""} 页
                   </>
                 )}
               </span>

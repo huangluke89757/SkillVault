@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="apps/desktop/resources/icon.svg" width="92" height="92" alt="Skillbox" />
+  <img src="apps/desktop/resources/icon.svg" width="92" height="92" alt="SkillVault" />
 </p>
 
-<h1 align="center">Skillbox</h1>
+<h1 align="center">SkillVault</h1>
 
-<p align="center">一个 Skill，只装一次。</p>
+<p align="center">一个 Skill，只装一次；说需求，AI 帮你挑。</p>
 
 <p align="center">
   本地优先、无需账号的 Agent Skill 管理工具。<br />
@@ -19,14 +19,14 @@
 </p>
 
 <p align="center">
-  <img src="docs/images/skillbox-overview.png" width="100%" alt="Skillbox 本地 Skill 管理界面" />
+  <img src="docs/images/skillbox-overview.png" width="100%" alt="SkillVault 本地 Skill 管理界面" />
 </p>
 
-## 为什么需要 Skillbox
+## 为什么需要 SkillVault
 
 同一个 Skill 往往需要分别复制到 Claude Code、Codex CLI、Cursor 等多个 Agent 目录。设备一多、Skill 一多，很快就会出现重复文件、版本不一致和迁移困难。
 
-Skillbox 将本地 Skill 作为母本统一管理：一个 Skill 只保留一份，再按需适配到不同 Agent。所有扫描、编辑、收藏、集合和迁移操作都在本地完成，不依赖用户系统。
+SkillVault 将本地 Skill 作为母本统一管理：一个 Skill 只保留一份，再按需适配到不同 Agent。所有扫描、编辑、收藏、集合和迁移操作都在本地完成，不依赖用户系统。
 
 ## 主要功能
 
@@ -36,23 +36,35 @@ Skillbox 将本地 Skill 作为母本统一管理：一个 Skill 只保留一份
 - **迁移包导入导出**：按全局、项目或选中范围打包，保留原有 Agent 启用关系
 - **导入预处理**：导入前识别缺失或尚未适配的 Agent，避免直接写入无效目录
 - **90,000+ Skill 市场**：沿用现有市场数据与安装逻辑，支持搜索、分页、收藏和指定 Agent 安装
+- **AI 意图匹配市场**：用一句话描述需求，本地语义模型自动从仓库匹配最相关的技能，并给出「是什么 / 有什么用 / 怎么用」介绍与一键安装
 - **离线可用**：已安装 Skill、中文描述和本地管理功能无需联网
 
 <p align="center">
-  <img src="docs/images/skillbox-agent-adaptation.png" width="100%" alt="Skillbox 多 Agent 适配" />
+  <img src="docs/images/skillbox-agent-adaptation.png" width="100%" alt="SkillVault 多 Agent 适配" />
 </p>
 
 <p align="center">
-  <img src="docs/images/skillbox-migration.png" width="100%" alt="Skillbox 导入导出迁移" />
+  <img src="docs/images/skillbox-migration.png" width="100%" alt="SkillVault 导入导出迁移" />
 </p>
 
 <p align="center">
-  <img src="docs/images/skillbox-market.png" width="100%" alt="Skillbox 90,000+ Skill 市场" />
+  <img src="docs/images/skillbox-market.png" width="100%" alt="SkillVault 90,000+ Skill 市场" />
 </p>
+
+## AI 意图匹配市场
+
+除了按名称 / 作者搜索，你也可以用**自然语言**描述需求，由本地语义模型自动从仓库中挑出最相关的技能。
+
+- 打开「发现」页的 **意图匹配** Tab；
+- 用一句话描述你想做的事（例如「帮我写单元测试」「把这段 SQL 优化一下」「生成一个 React 组件」）；
+- 系统返回 Top-K 匹配技能，每张卡片给出「是什么 / 有什么用 / 怎么用」三段介绍与**一键安装**；
+- 模型在本地运行（基于 `Xenova/all-MiniLM-L6-v2`），首次使用会自动下载；无网络或模型不可用时自动降级为关键词匹配，功能不中断。
+
+数据源沿用 [skills.sh](https://www.skills.sh/) 的 `owner/repo` 模型，安装通过 `npx skills add <owner/repo>` 完成。
 
 ## 支持的 Agent
 
-当前内置 42 个 Agent 适配目标。Skillbox 只显示本机实际检测到的 Agent，并使用项目内置的品牌彩色图标。
+当前内置 42 个 Agent 适配目标。SkillVault 只显示本机实际检测到的 Agent，并使用项目内置的品牌彩色图标。
 
 <table>
   <tr>
@@ -123,7 +135,7 @@ Skillbox 将本地 Skill 作为母本统一管理：一个 Skill 只保留一份
   </tr>
 </table>
 
-此外，Skillbox 支持将 `~/.agents/skills` 作为跨 Agent 共用的 **通用 Skill 目录**。
+此外，SkillVault 支持将 `~/.agents/skills` 作为跨 Agent 共用的 **通用 Skill 目录**。
 
 ## 下载安装
 
@@ -136,21 +148,21 @@ Skillbox 将本地 Skill 作为母本统一管理：一个 Skill 只保留一份
 也可以通过 npm 自动识别平台、下载并打开对应安装包：
 
 ```bash
-npx skillbox-app
+npx skillvault-app
 ```
 
 ### macOS 首次安装
 
-当前 macOS 安装包尚未完成 Apple 开发者签名和公证。若首次打开时提示“Skillbox 已损坏，无法打开”，请确认安装包来自本仓库的 [Releases](../../releases/latest)，然后：
+当前 macOS 安装包尚未完成 Apple 开发者签名和公证。若首次打开时提示“SkillVault 已损坏，无法打开”，请确认安装包来自本仓库的 [Releases](../../releases/latest)，然后：
 
-1. 将 `Skillbox.app` 拖入“应用程序”文件夹。
+1. 将 `SkillVault.app` 拖入“应用程序”文件夹。
 2. 打开“终端”，执行：
 
 ```bash
-xattr -dr com.apple.quarantine "/Applications/Skillbox.app"
+xattr -dr com.apple.quarantine "/Applications/SkillVault.app"
 ```
 
-3. 前往“应用程序”，右键点击 Skillbox，选择“打开”。
+3. 前往“应用程序”，右键点击 SkillVault，选择“打开”。
 
 如果系统提示无法验证开发者，也可以前往“系统设置 → 隐私与安全”，点击“仍要打开”，具体可参考 [Apple 官方说明](https://support.apple.com/102445)。该安装包未经 Apple 签名与公证，请勿对非官方来源的文件执行上述命令。完成正式签名后将不再需要此操作。
 
