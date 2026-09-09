@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">SkillVault</title>
+  <rect width="128" height="128" rx="30" fill="#08141B"/>
+  <rect x="25" y="25" width="34" height="34" rx="10" fill="#CCD6CF"/>
+  <rect x="69" y="25" width="34" height="34" rx="10" fill="#4E6E76"/>
+  <rect x="25" y="69" width="34" height="34" rx="10" fill="#8BA6B8"/>
+  <rect x="69" y="69" width="34" height="34" rx="10" fill="none" stroke="#4E6E76" stroke-width="6" stroke-dasharray="8.5 5.5" stroke-linecap="round"/>
+</svg>
