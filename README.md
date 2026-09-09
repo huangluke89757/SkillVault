@@ -62,6 +62,10 @@ SkillVault 将本地 Skill 作为母本统一管理：一个 Skill 只保留一�
 
 数据源沿用 [skills.sh](https://www.skills.sh/) 的 `owner/repo` 模型，安装通过 `npx skills add <owner/repo>` 完成。
 
+<p align="center">
+  <img src="docs/images/skillvault-intent.png" width="100%" alt="SkillVault AI 意图匹配市场：用一句话描述需求，AI 帮你从技能库里挑最匹配的" />
+</p>
+
 ## 支持的 Agent
 
 当前内置 42 个 Agent 适配目标。SkillVault 只显示本机实际检测到的 Agent，并使用项目内置的品牌彩色图标。
