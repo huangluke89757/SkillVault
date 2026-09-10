@@ -12,10 +12,11 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Agent-42-f05408" alt="支持 42 个 Agent" />
-  <img src="https://img.shields.io/badge/Skill%20Market-90%2C000%2B-f05408" alt="90,000+ Skill" />
-  <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-29261f" alt="Windows、macOS、Linux" />
-  <img src="https://img.shields.io/badge/license-MIT-29261f" alt="MIT License" />
+  <img src="https://img.shields.io/badge/version-v1.0.2-4E6E76" alt="SkillVault v1.0.2" />
+  <img src="https://img.shields.io/badge/Agent-42-4E6E76" alt="支持 42 个 Agent" />
+  <img src="https://img.shields.io/badge/Skill%20Market-90%2C000%2B-4E6E76" alt="90,000+ Skill" />
+  <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-11212D" alt="Windows、macOS、Linux" />
+  <img src="https://img.shields.io/badge/license-MIT-11212D" alt="MIT License" />
 </p>
 
 <p align="center">
@@ -141,6 +142,18 @@ SkillVault 将本地 Skill 作为母本统一管理：一个 Skill 只保留一�
 
 此外，SkillVault 支持将 `~/.agents/skills` 作为跨 Agent 共用的 **通用 Skill 目录**。
 
+## 更新日志
+
+### v1.0.2
+
+- 修复「发现」页 SKILL 市场点击后空白的问题（`viewMode` 状态未声明导致渲染即崩溃）
+- 还原品牌 LOGO 与 v0.1.0 莫兰迪配色规范（`--accent:#4E6E76`、`--background:#E7EBE6`），移除开发期暖橙配色
+
+### v1.0.1
+
+- 修复「意图匹配」Tab 崩溃（`intentCorpus` / `intentAgents` 未定义）
+- 修正更新说明指向的错误仓库，并统一用户界面 SkillVault 品牌文案与图标
+
 ## 下载安装
 
 前往 [Releases](../../releases/latest) 下载对应平台的安装包：
@@ -176,7 +189,7 @@ xattr -dr com.apple.quarantine "/Applications/SkillVault.app"
 
 ```bash
 npm install
-npm run dev --workspace=@skillsgate/desktop
+npm run dev --workspace=@skillvault/desktop
 ```
 
 构建桌面端：
