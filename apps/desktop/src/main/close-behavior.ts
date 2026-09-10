@@ -56,32 +56,32 @@ interface CloseStrings {
 function getStrings(): CloseStrings {
   if (app.getLocale().toLowerCase().startsWith("zh")) {
     return {
-      title: "关闭 Skillbox",
+      title: "关闭 SkillVault",
       message: "要最小化到系统托盘，还是直接关闭？",
       detail: "选择“最小化到托盘”后，应用会继续在后台运行，可从托盘图标重新打开。",
       minimize: "最小化到托盘",
       quit: "直接关闭",
       remember: "记住我的选择，以后不再询问",
-      trayShow: "显示 Skillbox",
+      trayShow: "显示 SkillVault",
       trayQuit: "退出",
       activeTitle: "Skill 仍在下载",
       activeMessage: "退出将中断正在进行的下载",
-      activeDetail: "可先最小化到托盘，Skillbox 会继续在后台完成安装。",
+      activeDetail: "可先最小化到托盘，SkillVault 会继续在后台完成安装。",
       quitAnyway: "仍然退出",
     }
   }
   return {
-    title: "Close Skillbox",
+    title: "Close SkillVault",
     message: "Minimize to the system tray, or quit the app?",
     detail: "Minimizing to the tray keeps the app running in the background. You can reopen it from the tray icon.",
     minimize: "Minimize to Tray",
     quit: "Quit",
     remember: "Remember my choice and don't ask again",
-    trayShow: "Show Skillbox",
+    trayShow: "Show SkillVault",
     trayQuit: "Quit",
     activeTitle: "Skill download in progress",
     activeMessage: "Quitting will interrupt the current download",
-    activeDetail: "Minimize to the tray to let Skillbox finish installing in the background.",
+    activeDetail: "Minimize to the tray to let SkillVault finish installing in the background.",
     quitAnyway: "Quit Anyway",
   }
 }
@@ -99,7 +99,7 @@ function ensureTray(win: BrowserWindow, strings: CloseStrings): void {
   const image = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 })
 
   tray = new Tray(image)
-  tray.setToolTip("Skillbox")
+  tray.setToolTip("SkillVault")
   tray.setContextMenu(
     Menu.buildFromTemplate([
       { label: strings.trayShow, click: () => showWindow(win) },

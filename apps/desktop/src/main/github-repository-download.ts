@@ -62,7 +62,7 @@ async function fetchBufferWithRetry(
     try {
       resetInactivityTimer()
       const response = await fetchImpl(url, {
-        headers: { "User-Agent": "Skillbox", ...headers },
+        headers: { "User-Agent": "SkillVault", ...headers },
         signal: controller.signal,
       })
       if (!response.ok) {
@@ -137,7 +137,7 @@ export async function downloadGitHubSkillFiles(
     {
       headers: {
         Accept: "application/vnd.github+json",
-        "User-Agent": "Skillbox",
+        "User-Agent": "SkillVault",
       },
       signal: AbortSignal.timeout(45_000),
     },

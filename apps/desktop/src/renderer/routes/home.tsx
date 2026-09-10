@@ -1203,8 +1203,8 @@ function BulkDeleteDialog({
         </h2>
         <p id="bulk-delete-description" className="text-[12px] leading-5 text-muted mb-5">
           {canRemoveFromSelectedAgent
-            ? `只取消 ${selectedAgent} 适配不会删除 Skill 文件。选择删除时，这些 Skill 会从 Skillbox 中移除，文件会进入系统回收站。`
-            : "删除后，这些 Skill 会从 Skillbox 中移除，文件会进入系统回收站。"}
+            ? `只取消 ${selectedAgent} 适配不会删除 Skill 文件。选择删除时，这些 Skill 会从 SkillVault 中移除，文件会进入系统回收站。`
+            : "删除后，这些 Skill 会从 SkillVault 中移除，文件会进入系统回收站。"}
         </p>
         {error && (
           <p role="alert" className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-[12px] text-red-600">
@@ -1543,7 +1543,7 @@ function RemoveSkillDialog({ skill, onClose, onRemoveAll }: RemoveSkillDialogPro
           删除“{skill.name}”？
         </h2>
         <p id="remove-skill-description" className="text-[12px] leading-5 text-muted mb-4">
-          删除后，这个 Skill 会从 Skillbox 中移除，文件会进入系统回收站。
+          删除后，这个 Skill 会从 SkillVault 中移除，文件会进入系统回收站。
         </p>
 
         <div className="mb-4 rounded-lg border border-border bg-background px-3 py-2.5">

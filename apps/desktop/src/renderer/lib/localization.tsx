@@ -396,8 +396,8 @@ const zhToEn: Record<string, string> = {
   "批量收藏失败": "Bulk favorite failed",
   // Scan sources dialog
   自定义扫描目录: "Custom scan folders",
-  "添加本地文件夹后，Skillbox 会扫描其中的 SKILL.md 和项目级 Agent 目录。":
-    "After adding local folders, Skillbox scans them for SKILL.md files and project-level agent directories.",
+  "添加本地文件夹后，SkillVault 会扫描其中的 SKILL.md 和项目级 Agent 目录。":
+    "After adding local folders, SkillVault scans them for SKILL.md files and project-level agent directories.",
   添加: "Add",
   "暂无自定义目录，Agent 的默认目录仍会自动扫描。":
     "No custom folders yet; default agent directories are still scanned.",
@@ -478,7 +478,7 @@ function translateZhToEnDynamic(source: string): string | null {
     [/^当前版本 (.+) → 新版本 (.+)$/, (current, next) => `Current ${current} → new ${next}`],
     [/^发现新版本 (.+)，正在后台下载…$/, (version) => `Version ${version} found, downloading in the background…`],
     [/^正在下载 (.+)…$/, (version) => `Downloading ${version}…`],
-    [/^正在下载 Skillbox (.+)…$/, (version) => `Downloading Skillbox ${version}…`],
+    [/^正在下载 SkillVault (.+)…$/, (version) => `Downloading SkillVault ${version}…`],
     [/^下载中 (\d+)%$/, (percent) => `Downloading ${percent}%`],
     [/^发布于 (.+) · 当前版本 (.+)$/, (date, version) => `Released ${date} · Current ${version}`],
     [/^(.+) 已准备就绪，可立即下载。$/, (version) => `${version} is ready to download.`],

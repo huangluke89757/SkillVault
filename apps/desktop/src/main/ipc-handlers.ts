@@ -1692,7 +1692,7 @@ function parseTrending(html: string): TrendingSkill[] {
 async function fetchTrending(): Promise<TrendingSkill[]> {
   const res = await marketFetch(SKILLS_SH_TRENDING_URL, {
     headers: {
-      "User-Agent": "SkillsGate (+https://github.com/skillsgate/skillsgate)",
+      "User-Agent": "SkillVault (+https://github.com/huangluke89757/SkillVault)",
     },
   })
   if (!res.ok) {
@@ -2223,7 +2223,7 @@ export function registerIpcHandlers(): void {
             {
               headers: {
                 Accept: "application/vnd.github.raw+json",
-                "User-Agent": "Skillbox",
+                "User-Agent": "SkillVault",
               },
             },
           )
@@ -2244,7 +2244,7 @@ export function registerIpcHandlers(): void {
           {
             headers: {
               Accept: "application/vnd.github+json",
-              "User-Agent": "Skillbox",
+              "User-Agent": "SkillVault",
             },
           },
         )
@@ -2272,7 +2272,7 @@ export function registerIpcHandlers(): void {
               {
                 headers: {
                   Accept: "application/vnd.github.raw+json",
-                  "User-Agent": "Skillbox",
+                  "User-Agent": "SkillVault",
                 },
               },
             )
@@ -3159,7 +3159,7 @@ Add your skill instructions here.
     } | null> => {
       try {
         const res = await fetch(
-          "https://api.github.com/repos/Renly1994/Skillbox/releases/latest",
+          "https://api.github.com/repos/huangluke89757/SkillVault/releases/latest",
           { headers: { Accept: "application/vnd.github+json" } },
         )
         if (!res.ok) throw new Error(`GitHub API HTTP ${res.status}`)

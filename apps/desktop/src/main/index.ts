@@ -28,7 +28,7 @@ for (const stream of [process.stdout, process.stderr]) {
 }
 process.on("uncaughtException", (error: NodeJS.ErrnoException) => {
   if (error.code === "EPIPE") return
-  dialog.showErrorBox("Skillbox", String(error.stack || error))
+  dialog.showErrorBox("SkillVault", String(error.stack || error))
   app.exit(1)
 })
 
@@ -77,7 +77,7 @@ function createWindow(): void {
     minWidth: 900,
     minHeight: 600,
     show: false,
-    title: "Skillbox",
+    title: "SkillVault",
     icon,
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.js"),
@@ -179,7 +179,7 @@ app.whenReady().then(() => {
     console.error("Failed to register IPC handlers:", err)
     const isChinese = app.getLocale().toLowerCase().startsWith("zh")
     dialog.showErrorBox(
-      isChinese ? "Skillbox 启动失败" : "Skillbox failed to start",
+      isChinese ? "SkillVault 启动失败" : "SkillVault failed to start",
       (isChinese
         ? "无法加载必需的原生模块，请尝试重新安装应用。\n\n"
         : "A required native module could not be loaded. Try reinstalling the app.\n\n") + String(err),

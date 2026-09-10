@@ -1570,10 +1570,10 @@ export function Discover() {
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-8 pb-8">
         {viewMode === "intent" ? (
           <IntentMatcher
-            corpus={intentCorpus}
+            corpus={trending}
             installedState={installedState}
             installTasks={installTasks}
-            effectiveAgents={intentAgents}
+            effectiveAgents={marketTargets}
             onInstall={handleInstall}
             onOpenDetail={setSelectedSkill}
           />

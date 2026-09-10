@@ -116,14 +116,14 @@ export function UpdateNotifier() {
   const releaseUrl =
     notes?.url ||
     (targetVersion
-      ? `https://github.com/Renly1994/Skillbox/releases/tag/desktop-v${targetVersion}`
-      : "https://github.com/Renly1994/Skillbox/releases")
+      ? `https://github.com/huangluke89757/SkillVault/releases/tag/v${targetVersion}`
+      : "https://github.com/huangluke89757/SkillVault/releases")
   const publishedAt = notes?.publishedAt ? formatPublishedAt(notes.publishedAt) : ""
   const releaseTitle = notes?.name || "更可靠地发现并同步 Skill"
 
   const handleCopyUpdateRequest = async () => {
     if (!targetVersion) return
-    const prompt = `请把本机已安装的 Skillbox 更新至 ${versionText(targetVersion)}。当前对话无需位于 Skillbox 项目目录，请直接从官方 Release 下载并安装：${releaseUrl}。更新时保留现有 Skill、Agent 适配关系和独立副本；完成后启动 Skillbox，确认版本为 ${versionText(targetVersion)} 且原有数据仍在。`
+    const prompt = `请把本机已安装的 SkillVault 更新至 ${versionText(targetVersion)}。当前对话无需位于 SkillVault 项目目录，请直接从官方 Release 下载并安装：${releaseUrl}。更新时保留现有 Skill、Agent 适配关系和独立副本；完成后启动 SkillVault，确认版本为 ${versionText(targetVersion)} 且原有数据仍在。`
     const copied = await copyText(prompt)
     setCopyStatus(copied ? "success" : "error")
     window.setTimeout(() => setCopyStatus("idle"), 1800)
@@ -181,7 +181,7 @@ export function UpdateNotifier() {
               <div>
                 <p className="text-[11px] font-semibold text-accent">版本更新</p>
                 <h2 id="skillbox-update-title" className="mt-2 text-[21px] font-semibold leading-tight text-foreground">
-                  Skillbox {versionText(targetVersion) || "更新"}
+                  SkillVault {versionText(targetVersion) || "更新"}
                 </h2>
                 <p className="mt-1.5 text-[11px] text-muted">
                   {publishedAt ? `发布于 ${publishedAt} · ` : ""}当前版本 {versionText(appVersion) || "…"}
@@ -221,7 +221,7 @@ export function UpdateNotifier() {
               {state?.status === "downloading" ? (
                 <div>
                   <div className="flex items-center justify-between gap-3 text-[11px]">
-                    <span className="text-foreground">正在下载 Skillbox {versionText(targetVersion)}…</span>
+                    <span className="text-foreground">正在下载 SkillVault {versionText(targetVersion)}…</span>
                     <span className="whitespace-nowrap text-muted">{Math.round(state.progressPercent ?? 0)}%</span>
                   </div>
                   <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-hover">

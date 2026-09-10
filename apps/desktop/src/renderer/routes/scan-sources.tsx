@@ -49,7 +49,7 @@ export function ScanSourcesDialog({
           <div>
             <h2 className="text-[16px] font-semibold text-foreground">自定义扫描目录</h2>
             <p className="mt-1 text-[12px] leading-5 text-muted">
-              添加本地文件夹后，Skillbox 会扫描其中的 SKILL.md 和项目级 Agent 目录。
+              添加本地文件夹后，SkillVault 会扫描其中的 SKILL.md 和项目级 Agent 目录。
             </p>
           </div>
           <button onClick={onClose} className="skillbox-detail-close" aria-label="关闭">×</button>
