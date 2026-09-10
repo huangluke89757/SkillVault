@@ -1132,6 +1132,9 @@ export function Discover() {
   const [officialOnly, setOfficialOnly] = useState(false)
   const [page, setPage] = useState(1)
   const [showBackToTop, setShowBackToTop] = useState(false)
+  const [viewMode, setViewMode] = useState<"trending" | "search" | "intent">(
+    "trending",
+  )
 
   // The skills.sh API honors `limit` but ignores offset/page/cursor, so a
   // bigger local result set means re-requesting from the top with a larger
