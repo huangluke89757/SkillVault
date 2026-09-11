@@ -20,8 +20,9 @@
 </p>
 
 <p align="center">
-  <img src="docs/images/skillbox-overview.png" width="100%" alt="SkillVault 本地 Skill 管理界面" />
+  <img src="docs/images/skillbox-overview.png" width="100%" alt="SkillVault 本地 Skill 管理界面：左侧 Agent 列表，主区域展示全部技能与适配状态" />
 </p>
+<p align="center"><sub>本地 Skill 管理界面：左侧按 Agent 筛选已适配 Skill，主区域展示全部本地 Skill 与 Agent 启用状态；顶部工具栏提供导入、导出、添加目录、新建 Skill 等入口。</sub></p>
 
 ## 为什么需要 SkillVault
 
@@ -41,16 +42,9 @@ SkillVault 将本地 Skill 作为母本统一管理：一个 Skill 只保留一�
 - **离线可用**：已安装 Skill、中文描述和本地管理功能无需联网
 
 <p align="center">
-  <img src="docs/images/skillbox-agent-adaptation.png" width="100%" alt="SkillVault 多 Agent 适配" />
+  <img src="docs/images/skillbox-market.png" width="100%" alt="SkillVault 90,000+ Skill 市场：按热榜浏览、搜索与自然语言意图匹配" />
 </p>
-
-<p align="center">
-  <img src="docs/images/skillbox-migration.png" width="100%" alt="SkillVault 导入导出迁移" />
-</p>
-
-<p align="center">
-  <img src="docs/images/skillbox-market.png" width="100%" alt="SkillVault 90,000+ Skill 市场" />
-</p>
+<p align="center"><sub>Skill 市场：支持按热榜浏览、按名称 / 作者搜索，以及自然语言意图匹配，一键安装到指定 Agent。</sub></p>
 
 ## AI 意图匹配市场
 
