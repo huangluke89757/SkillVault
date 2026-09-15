@@ -1558,6 +1558,47 @@ select:focus-visible {
 	margin-bottom: 20px;
 }
 
+/* 分类快捷筛选 Tab：常驻置顶，横向可滚，不挤压右侧「仅官方」 */
+.skillbox-category-tabs {
+	position: sticky;
+	top: 0;
+	z-index: 5;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 16px;
+	overflow-x: auto;
+	scrollbar-width: none;
+}
+
+.skillbox-category-tabs::-webkit-scrollbar {
+	display: none;
+}
+
+.skillbox-category-tab {
+	flex: none;
+	padding: 5px 12px;
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	background: var(--surface);
+	color: var(--muted);
+	font-size: 12px;
+	line-height: 1.4;
+	transition: border-color 120ms ease, color 120ms ease, background-color 120ms ease;
+}
+
+.skillbox-category-tab:hover {
+	color: var(--foreground);
+	border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.skillbox-category-tab.is-active {
+	background: var(--foreground);
+	border-color: var(--foreground);
+	color: var(--background);
+}
+
+
 .skillbox-market-card {
 	display: flex;
 	flex-direction: column;

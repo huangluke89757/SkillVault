@@ -41,6 +41,8 @@ interface CatalogSkill {
   source: string
   // Only present in trending data; live search results omit it.
   isOfficial?: boolean
+  // Category for quick-filter tabs (e.g. "开发", "写作", "设计", "数据", "效率").
+  category?: string
 }
 
 // ---------------------------------------------------------------------------
@@ -52,6 +54,38 @@ function formatInstalls(installs: number): string {
     return `${(installs / 1000).toFixed(1).replace(/\.0$/, "")}k`
   }
   return String(installs)
+}
+
+// 分类快捷筛选（Tab）：上游数据没有 category 字段，用一张关键词表轻量归类（YAGNI）
+const CATEGORIES = ["全部", "开发", "写作", "设计", "数据", "效率", "其他"]
+
+const CATEGORY_KEYWORDS: Array<[string, RegExp]> = [
+  ["设计", /design|ui|ux|figma|css|style|theme|icon|logo|poster|illustrat|banner|image|video|font/i],
+  ["写作", /writ|blog|post|copy|translat|markdown|essay|story|content|doc|editor|prose/i],
+  ["数据", /analy|excel|sheet|chart|report|metric|stat|finance|market|quant|dashboard|sql|dataset/i],
+  ["开发", /code|dev|git|test|debug|api|react|vue|node|python|rust|java|typescript|script|shell|docker|deploy|build|cli/i],
+  ["效率", /productiv|task|todo|note|calendar|email|meeting|auto|workflow|search|summar|remind|organiz/i],
+]
+
+function categorize(skill: CatalogSkill): string {
+  if (skill.category) return skill.category
+  const hay = `${skill.name} ${skill.id} ${skill.source}`
+  for (const [name, re] of CATEGORY_KEYWORDS) if (re.test(hay)) return name
+  return "其他"
+}
+
+// 提示词用法：给单个技能生成一句可直接粘贴进对话的指令
+function skillPrompt(skill: CatalogSkill, lang: "zh" | "en" = "zh"): string {
+  return lang === "zh"
+    ? `请使用技能 ${skill.skillId}（来自 ${skill.source}）帮我完成下面的任务：\n`
+    : `Using the skill ${skill.skillId} (from ${skill.source}), help me with the following task:\n`
+}
+
+// 组合用法：把 Top-N 技能串成一条协作指令
+function comboPrompt(skills: CatalogSkill[]): string {
+  if (skills.length === 0) return ""
+  const chain = skills.map((s) => s.skillId).join(" → ")
+  return `请依次协作使用以下技能：${chain}\n先说明每个技能负责哪一步，然后开始执行我的任务：\n`
 }
 
 // Configure marked for synchronous rendering
@@ -266,6 +300,29 @@ function InstallsIcon() {
       <polyline points="7 10 12 15 17 10" />
       <line x1="12" y1="15" x2="12" y2="3" />
     </svg>
+  )
+}
+
+// 一键复制：写剪贴板 + 1.5s 成功态反馈（无第三方依赖，YAGNI）
+function CopyButton({ text, label = "复制" }: { text: string; label?: string }) {
+  const [copied, setCopied] = useState(false)
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        void navigator.clipboard
+          ?.writeText(text)
+          .then(() => {
+            setCopied(true)
+            setTimeout(() => setCopied(false), 1500)
+          })
+          .catch(() => undefined)
+      }}
+      className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] border border-border text-muted hover:text-foreground hover:border-accent/40 transition-colors"
+    >
+      {copied && <CheckIcon />}
+      {copied ? "已复制" : label}
+    </button>
   )
 }
 
@@ -510,6 +567,8 @@ function DetailPanel({
   installTask,
 }: DetailPanelProps) {
   const [selectedAgents, setSelectedAgents] = useState<string[]>([])
+  // 详情介绍语言：中英双语切换，默认中文
+  const [lang, setLang] = useState<"zh" | "en">("zh")
   const cacheKey = `${skill.source}:${skill.skillId}`
   const [content, setContent] = useState<string | null>(
     getCachedContent(cacheKey) ?? null,
@@ -616,6 +675,19 @@ function DetailPanel({
               {skill.name}
             </h2>
           </div>
+          {/* 中英双语切换（默认中文） */}
+          <div className="flex items-center gap-0.5 rounded-lg border border-border bg-surface p-0.5">
+            {(["zh", "en"] as const).map((l) => (
+              <button
+                key={l}
+                type="button"
+                onClick={() => setLang(l)}
+                className={`px-2 py-1 rounded-md text-[11px] font-medium transition-colors ${lang === l ? "bg-foreground text-background" : "text-muted hover:text-foreground"}`}
+              >
+                {l === "zh" ? "中文" : "EN"}
+              </button>
+            ))}
+          </div>
           <a
             href={githubUrl}
             target="_blank"
@@ -636,7 +708,8 @@ function DetailPanel({
               </span>
               {skill.installs > 0 && (
                 <span className="flex items-center gap-1 text-[12px] font-mono text-muted">
-                  <InstallsIcon /> {formatInstalls(skill.installs)} installs
+                  <InstallsIcon /> {formatInstalls(skill.installs)}{" "}
+                  {lang === "zh" ? "次安装" : "installs"}
                 </span>
               )}
             </div>
@@ -645,7 +718,7 @@ function DetailPanel({
             <div className="flex items-center gap-3 mb-4">
               {installed ? (
                 <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-medium bg-surface-hover text-muted border border-border">
-                  <CheckIcon /> Installed
+                  <CheckIcon /> {lang === "zh" ? "已安装" : "Installed"}
                 </span>
               ) : (
                 <button
@@ -655,11 +728,11 @@ function DetailPanel({
                 >
                   {installing ? (
                     <>
-                      <SpinnerIcon /> Installing...
+                      <SpinnerIcon /> {lang === "zh" ? "安装中…" : "Installing..."}
                     </>
                   ) : (
                     <>
-                      <DownloadIcon /> Install
+                      <DownloadIcon /> {lang === "zh" ? "一键安装" : "Install"}
                     </>
                   )}
                 </button>
@@ -694,6 +767,57 @@ function DetailPanel({
             )}
           </div>
 
+          {/* 技能介绍：中英双语可切换（默认中文），提示词可直接复制 */}
+          <div className="mb-5 space-y-1 text-[12px] leading-relaxed text-foreground/90">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="text-[12px] font-medium text-foreground">
+                {lang === "zh" ? "技能介绍" : "About this skill"}
+              </span>
+              <span className="ml-auto">
+                <CopyButton
+                  text={skillPrompt(skill, lang)}
+                  label={lang === "zh" ? "复制提示词" : "Copy prompt"}
+                />
+              </span>
+            </div>
+            {lang === "zh" ? (
+              <>
+                <p>
+                  <b className="text-foreground">是什么：</b>
+                  {skill.name} 是来自 {skill.source} 的 Agent 技能（标识{" "}
+                  {skill.skillId}）。
+                </p>
+                <p>
+                  <b className="text-foreground">有什么用：</b>
+                  面向「{skill.skillId}」相关场景，由 SKILL.md 中定义的流程与知识驱动。
+                </p>
+                <p>
+                  <b className="text-foreground">怎么用：</b>
+                  把上方提示词粘进对话，或点「一键安装」后用{" "}
+                  <code className="font-mono">npx skills add {skill.source}</code> 引入。
+                </p>
+              </>
+            ) : (
+              <>
+                <p>
+                  <b className="text-foreground">What it is: </b>
+                  {skill.name} is an Agent skill from {skill.source} (id{" "}
+                  {skill.skillId}).
+                </p>
+                <p>
+                  <b className="text-foreground">What it does: </b>
+                  Handles tasks around "{skill.skillId}", driven by the workflow and
+                  knowledge defined in its SKILL.md.
+                </p>
+                <p>
+                  <b className="text-foreground">How to use: </b>
+                  Paste the prompt above into your chat, or install it and run{" "}
+                  <code className="font-mono">npx skills add {skill.source}</code>.
+                </p>
+              </>
+            )}
+          </div>
+
           <hr className="border-border mb-5" />
 
           {/* Markdown content */}
@@ -708,7 +832,7 @@ function DetailPanel({
             />
           ) : (
             <p className="text-sm text-muted">
-              Skill content not available.
+              {lang === "zh" ? "该技能暂无可显示的介绍内容。" : "Skill content not available."}
             </p>
           )}
         </div>
@@ -900,6 +1024,19 @@ const IntentResultCard = memo(function IntentResultCard({
               <p className="text-[12px] text-muted mt-2">该技能暂无可显示的介绍内容。</p>
             ))}
 
+          {/* 提示词用法：单技能也能直接复制粘贴使用 */}
+          <div className="mt-3 rounded-lg border border-border bg-background p-2.5">
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-medium text-muted">提示词用法</span>
+              <span className="ml-auto">
+                <CopyButton text={skillPrompt(skill)} />
+              </span>
+            </div>
+            <pre className="mt-1.5 whitespace-pre-wrap break-words font-mono text-[11px] text-foreground/80">
+              {skillPrompt(skill)}
+            </pre>
+          </div>
+
           <div className="flex items-center gap-2 mt-3">
             {installed ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium bg-surface-hover text-muted border border-border">
@@ -984,6 +1121,9 @@ function IntentMatcher({
     reader.readAsDataURL(file)
     e.target.value = ""
   }
+
+  // 组合方案：取匹配度最高的前 3 个技能串成一条协作流程
+  const comboSkills = results.slice(0, 3).map((r) => r.skill as CatalogSkill)
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -1082,6 +1222,37 @@ function IntentMatcher({
 
       {results.length > 0 && (
         <div className="mt-4 space-y-2.5">
+          {/* 组合方案：Top-N 技能串成一条协作流程，可整段复制 */}
+          {results.length > 1 && (
+            <div className="rounded-xl border border-border bg-background p-3">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[12px] font-medium text-foreground">组合方案</span>
+                <span className="text-[11px] text-muted">
+                  按顺序串起前 {comboSkills.length} 个技能，一步到位
+                </span>
+                <span className="ml-auto">
+                  <CopyButton text={comboPrompt(comboSkills)} label="复制组合提示词" />
+                </span>
+              </div>
+              <div className="mt-2 flex items-center gap-1.5 flex-wrap">
+                {comboSkills.map((s, i) => (
+                  <span key={s.id} className="flex items-center gap-1.5">
+                    {i > 0 && <span className="text-[11px] text-muted">→</span>}
+                    <span
+                      data-no-localize
+                      className="px-2 py-0.5 rounded-md border border-border bg-surface text-[11px] text-foreground"
+                    >
+                      {s.name}
+                    </span>
+                  </span>
+                ))}
+              </div>
+              <pre className="mt-2 whitespace-pre-wrap break-words font-mono text-[11px] text-foreground/80">
+                {comboPrompt(comboSkills)}
+              </pre>
+            </div>
+          )}
+
           <p className="text-[12px] uppercase tracking-wider font-medium text-muted">
             匹配结果（{results.length}）
           </p>
@@ -1109,6 +1280,28 @@ function IntentMatcher({
 // Discover (main export)
 // ---------------------------------------------------------------------------
 
+const EmptyHint = memo(function EmptyHint({ text }: { text: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-20 text-center">
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="mb-4 text-muted"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <p className="text-muted text-sm">{text}</p>
+    </div>
+  )
+})
+
 export function Discover() {
   const [skills, setSkills] = useState<CatalogSkill[]>([])
   const [loading, setLoading] = useState(false)
@@ -1132,9 +1325,10 @@ export function Discover() {
   const [officialOnly, setOfficialOnly] = useState(false)
   const [page, setPage] = useState(1)
   const [showBackToTop, setShowBackToTop] = useState(false)
-  const [viewMode, setViewMode] = useState<"trending" | "search" | "intent">(
-    "trending",
-  )
+  // 搜索视图开关：true = 应用内全屏搜索结果视图（方案 A，installs 倒序）
+  const [showSearchView, setShowSearchView] = useState(false)
+  // 分类 Tab 筛选：与官方筛选 / 侧边 install targets / 搜索 完全解耦（独立状态）
+  const [activeCategory, setActiveCategory] = useState("all")
 
   // The skills.sh API honors `limit` but ignores offset/page/cursor, so a
   // bigger local result set means re-requesting from the top with a larger
@@ -1259,33 +1453,42 @@ export function Discover() {
 
   const trimmedQuery = deferredSearchQuery.trim()
   const isSearching = trimmedQuery.length >= 2
-  const effectiveSearching = viewMode === "search" && isSearching
+  // 全屏搜索结果视图（方案 A）：有 ≥2 字符查询即进入
+  const effectiveSearching = showSearchView && isSearching
 
-  // Auto-search as the user types (debounced). Previously only Enter started
-  // a search, and the grid kept showing the previous query's results, which
-  // read as "searching the same 30 skills no matter what you type".
+  // Auto-search as the user types (debounced).
   useEffect(() => {
-    if (viewMode !== "search" || !isSearching || trimmedQuery === activeQuery) return
+    if (!showSearchView || !isSearching || trimmedQuery === activeQuery) return
     const timer = setTimeout(() => {
       setPage(1)
       fetchSkills(trimmedQuery, 0)
     }, 350)
     return () => clearTimeout(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trimmedQuery, isSearching, activeQuery, viewMode])
+  }, [trimmedQuery, isSearching, activeQuery, showSearchView])
 
   const handleSearchChange = useCallback((value: string) => {
     setSearchQuery(value)
+    // 输入即进入全屏搜索视图；清空则返回主视图
+    setShowSearchView(value.trim().length >= 2)
   }, [])
 
   const handleSearchSubmit = useCallback(() => {
     const q = searchQuery.trim()
-    if (q.length >= 2 && q !== activeQuery) {
-      setPage(1)
-      fetchSkills(q, 0)
+    if (q.length >= 2) {
+      setShowSearchView(true)
+      if (q !== activeQuery) {
+        setPage(1)
+        fetchSkills(q, 0)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, activeQuery])
+
+  const handleExitSearch = useCallback(() => {
+    setShowSearchView(false)
+    setSearchQuery("")
+  }, [])
 
   // Back-to-top visibility
   useEffect(() => {
@@ -1411,8 +1614,26 @@ export function Discover() {
       merged = [...fromTrending, ...fromSearch]
     }
 
-    return officialOnly ? merged.filter((s) => s.isOfficial) : merged
-  }, [isSearching, officialOnly, skills, trending, trimmedQuery, activeQuery])
+    // 搜索结果按安装量倒序（方案 A：全屏搜索结果视图）
+    if (isSearching) merged = [...merged].sort((a, b) => b.installs - a.installs)
+
+    if (officialOnly) merged = merged.filter((s) => s.isOfficial)
+
+    // 分类 Tab：只作用于当前列表，与官方筛选 / 侧边 install targets / 搜索互相独立
+    if (activeCategory !== "全部") {
+      merged = merged.filter((s) => categorize(s) === activeCategory)
+    }
+
+    return merged
+  }, [
+    isSearching,
+    officialOnly,
+    activeCategory,
+    skills,
+    trending,
+    trimmedQuery,
+    activeQuery,
+  ])
 
   const totalPages = Math.max(1, Math.ceil(visibleSkills.length / PAGE_SIZE))
   const currentPage = Math.min(page, totalPages)
@@ -1450,6 +1671,49 @@ export function Discover() {
     ? installTasks[marketplaceKey(selectedSkill.source, selectedSkill.skillId)]
     : undefined
 
+  // 结果网格 + 分页：全屏搜索结果视图与热门排行共用同一份渲染逻辑
+  const resultsGrid = (
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2.5">
+        {pageSkills.map((skill) => (
+          <SkillCard
+            key={skill.id}
+            skill={skill}
+            onSelect={setSelectedSkill}
+            installedState={installedState}
+          />
+        ))}
+      </div>
+
+      <div className="skillbox-pagination">
+        <button
+          type="button"
+          disabled={!canGoPrev}
+          onClick={() => goToPage(currentPage - 1)}
+        >
+          ‹ 上一页
+        </button>
+        <span className="skillbox-pagination__status">
+          {loadingMore ? (
+            <SpinnerIcon />
+          ) : (
+            <>
+              第 {currentPage} / {totalPages}
+              {effectiveSearching && hasMore && currentPage === totalPages ? "+" : ""} 页
+            </>
+          )}
+        </span>
+        <button
+          type="button"
+          disabled={!canGoNext || loadingMore}
+          onClick={() => goToPage(currentPage + 1)}
+        >
+          下一页 ›
+        </button>
+      </div>
+    </>
+  )
+
   return (
     <div className="flex h-full min-w-0">
       <MarketSidebar
@@ -1465,101 +1729,81 @@ export function Discover() {
           <div>
             <h2>Skill Market</h2>
             <p>
-              发现 · 信任 · 一键安装：按热榜浏览、按名称/作者搜索，或用自然语言描述需求让 AI 帮你匹配技能。
+              发现 · 信任 · 一键安装：上方用自然语言做意图匹配，下方看热门排行，右上角随时搜索。
             </p>
           </div>
-          <div className="flex items-center gap-1 rounded-lg border border-border bg-surface p-1">
-            <button
-              type="button"
-              onClick={() => setViewMode("trending")}
-              className={`px-3 py-1.5 rounded-md text-[12px] font-medium transition-colors ${viewMode === "trending" ? "bg-foreground text-background" : "text-muted hover:text-foreground hover:bg-surface-hover"}`}
-            >
-              热门
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode("search")}
-              className={`px-3 py-1.5 rounded-md text-[12px] font-medium transition-colors ${viewMode === "search" ? "bg-foreground text-background" : "text-muted hover:text-foreground hover:bg-surface-hover"}`}
-            >
-              搜索
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode("intent")}
-              className={`px-3 py-1.5 rounded-md text-[12px] font-medium transition-colors ${viewMode === "intent" ? "bg-foreground text-background" : "text-muted hover:text-foreground hover:bg-surface-hover"}`}
-            >
-              意图匹配
-            </button>
-          </div>
-        </div>
 
-        {/* 搜索框：仅搜索 tab */}
-        {viewMode === "search" && (
-          <div className="relative max-w-2xl mt-3">
+          {/* 搜索入口：常驻右上角输入框（输入 ≥2 字即进入全屏搜索结果视图） */}
+          <div className="relative w-[320px] max-w-full">
             <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
               <SearchIcon size={15} />
             </div>
             <input
               type="text"
-              placeholder="按名称或作者搜索（输入即搜）"
+              placeholder="搜索技能（名称 / 作者）"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") handleSearchSubmit() }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSearchSubmit()
+                if (e.key === "Escape") handleExitSearch()
+              }}
               className="w-full pl-9 pr-10 py-2.5 rounded-lg bg-surface border border-border text-[13px] text-foreground placeholder:text-muted focus:outline-none focus:border-accent/40 transition-colors"
             />
-            {loading && (
-              <div className="absolute inset-y-0 right-3 flex items-center">
+            <div className="absolute inset-y-0 right-3 flex items-center">
+              {loading ? (
                 <SpinnerIcon />
-              </div>
-            )}
-            {searchQuery && !loading && (
-              <button
-                onClick={() => handleSearchChange("")}
-                className="absolute inset-y-0 right-3 flex items-center text-muted hover:text-foreground transition-colors"
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+              ) : showSearchView || searchQuery ? (
+                <button
+                  type="button"
+                  onClick={handleExitSearch}
+                  aria-label="退出搜索"
+                  className="text-muted hover:text-foreground transition-colors"
                 >
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* Section label + official-only filter：热门/搜索 tab */}
-        {(viewMode === "trending" || viewMode === "search") && (
-          <div className="mt-3 flex items-center justify-between max-w-2xl">
-            <div className="flex items-center gap-2">
-              <span className="text-[12px] uppercase tracking-wider font-medium text-muted">
-                {viewMode === "search" ? (effectiveSearching ? "搜索结果" : "搜索") : "热门"}
-              </span>
-              {effectiveSearching && (
-                <span className="text-[12px] text-muted font-mono">
-                  {visibleSkills.length} for "{trimmedQuery}"
-                </span>
-              )}
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              ) : null}
             </div>
-
-            <label className="flex items-center gap-1.5 text-[12px] text-muted hover:text-foreground transition-colors cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={officialOnly}
-                onChange={(e) => setOfficialOnly(e.target.checked)}
-                className="h-3 w-3 accent-blue-500"
-              />
-              仅官方
-            </label>
           </div>
-        )}
+        </div>
+
+        {/* 分类快捷筛选（Tab）：常驻置顶；与「仅官方」、侧边 install targets、搜索互相独立 */}
+        <div className="skillbox-category-tabs">
+          {CATEGORIES.map((c) => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => {
+                setActiveCategory(c)
+                setPage(1)
+              }}
+              className={`skillbox-category-tab${activeCategory === c ? " is-active" : ""}`}
+            >
+              {c}
+            </button>
+          ))}
+
+          <label className="ml-auto flex items-center gap-1.5 text-[12px] text-muted hover:text-foreground transition-colors cursor-pointer select-none whitespace-nowrap">
+            <input
+              type="checkbox"
+              checked={officialOnly}
+              onChange={(e) => setOfficialOnly(e.target.checked)}
+              className="h-3 w-3 accent-blue-500"
+            />
+            仅官方
+          </label>
+        </div>
       </div>
 
       {/* Error message */}
@@ -1569,112 +1813,61 @@ export function Discover() {
         </div>
       )}
 
-      {/* Grid / Intent Matcher */}
+      {/* 主区域：搜索时切全屏搜索结果视图；否则「上意图匹配 + 下热门排行」一屏同页 */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-8 pb-8">
-        {viewMode === "intent" ? (
-          <IntentMatcher
-            corpus={trending}
-            installedState={installedState}
-            installTasks={installTasks}
-            effectiveAgents={marketTargets}
-            onInstall={handleInstall}
-            onOpenDetail={setSelectedSkill}
-          />
-        ) : !effectiveSearching && isLoadingTrending && visibleSkills.length === 0 ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="text-center">
-              <SpinnerIcon />
-              <p className="text-muted text-[12px] mt-3">
-                正在载入热门技能...
+        {showSearchView ? (
+          <div className="pt-4">
+            {effectiveSearching && (
+              <p className="text-[12px] text-muted mb-3">
+                搜索结果 {visibleSkills.length} 条 · 按安装量排序
               </p>
-            </div>
-          </div>
-        ) : effectiveSearching && loading && visibleSkills.length === 0 ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="text-center">
-              <SpinnerIcon />
-              <p className="text-muted text-[12px] mt-3">
-                正在搜索...
-              </p>
-            </div>
-          </div>
-        ) : viewMode === "search" && !effectiveSearching ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="mb-4 text-muted"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <p className="text-muted text-sm">在上方输入技能名称或作者开始搜索</p>
-          </div>
-        ) : visibleSkills.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="mb-4 text-muted"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <p className="text-muted text-sm">
-              没有找到相关 Skill{trimmedQuery ? `："${trimmedQuery}"` : ""}
-            </p>
+            )}
+            {loading && visibleSkills.length === 0 ? (
+              <div className="flex items-center justify-center py-20">
+                <div className="text-center">
+                  <SpinnerIcon />
+                  <p className="text-muted text-[12px] mt-3">正在搜索...</p>
+                </div>
+              </div>
+            ) : !effectiveSearching ? (
+              <EmptyHint text="输入技能名称或作者开始搜索（至少 2 个字）" />
+            ) : visibleSkills.length === 0 ? (
+              <EmptyHint text={`没有找到相关 Skill："${trimmedQuery}"`} />
+            ) : (
+              resultsGrid
+            )}
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2.5">
-              {pageSkills.map((skill) => (
-                <SkillCard
-                  key={skill.id}
-                  skill={skill}
-                  onSelect={setSelectedSkill}
-                  installedState={installedState}
-                />
-              ))}
+            {/* 上：意图匹配 */}
+            <div className="pt-4">
+              <IntentMatcher
+                corpus={trending}
+                installedState={installedState}
+                installTasks={installTasks}
+                effectiveAgents={marketTargets}
+                onInstall={handleInstall}
+                onOpenDetail={setSelectedSkill}
+              />
             </div>
 
-            {/* Pagination */}
-            <div className="skillbox-pagination">
-              <button
-                type="button"
-                disabled={!canGoPrev}
-                onClick={() => goToPage(currentPage - 1)}
-              >
-                ‹ 上一页
-              </button>
-              <span className="skillbox-pagination__status">
-                {loadingMore ? (
-                  <SpinnerIcon />
-                ) : (
-                  <>
-                    第 {currentPage} / {totalPages}
-                    {effectiveSearching && hasMore && currentPage === totalPages ? "+" : ""} 页
-                  </>
-                )}
-              </span>
-              <button
-                type="button"
-                disabled={!canGoNext || loadingMore}
-                onClick={() => goToPage(currentPage + 1)}
-              >
-                下一页 ›
-              </button>
+            {/* 下：热门排行 */}
+            <div className="mt-10">
+              <p className="text-[12px] uppercase tracking-wider font-medium text-muted mb-3">
+                热门排行{activeCategory !== "全部" ? ` · ${activeCategory}` : ""}
+              </p>
+              {isLoadingTrending && visibleSkills.length === 0 ? (
+                <div className="flex items-center justify-center py-20">
+                  <div className="text-center">
+                    <SpinnerIcon />
+                    <p className="text-muted text-[12px] mt-3">正在载入热门技能...</p>
+                  </div>
+                </div>
+              ) : visibleSkills.length === 0 ? (
+                <EmptyHint text="没有找到相关 Skill" />
+              ) : (
+                resultsGrid
+              )}
             </div>
           </>
         )}
