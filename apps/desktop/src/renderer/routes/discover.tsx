@@ -1329,7 +1329,8 @@ export function Discover() {
   // 搜索视图开关：true = 应用内全屏搜索结果视图（方案 A，installs 倒序）
   const [showSearchView, setShowSearchView] = useState(false)
   // 分类 Tab 筛选：与官方筛选 / 侧边 install targets / 搜索 完全解耦（独立状态）
-  const [activeCategory, setActiveCategory] = useState("all")
+  // 取值与 CATEGORIES[0] 保持一致，否则过滤条件永远成立、列表会被清空
+  const [activeCategory, setActiveCategory] = useState(CATEGORIES[0])
 
   // The skills.sh API honors `limit` but ignores offset/page/cursor, so a
   // bigger local result set means re-requesting from the top with a larger
