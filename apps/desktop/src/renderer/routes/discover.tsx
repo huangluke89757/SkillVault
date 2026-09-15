@@ -7,6 +7,7 @@ import {
   useCallback,
   useMemo,
   type ChangeEvent,
+  type ReactNode,
 } from "react"
 import { marked } from "marked"
 import { NavLink } from "react-router-dom"
@@ -321,7 +322,7 @@ function CopyButton({ text, label = "复制" }: { text: string; label?: string }
       className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] border border-border text-muted hover:text-foreground hover:border-accent/40 transition-colors"
     >
       {copied && <CheckIcon />}
-      {copied ? "已复制" : label}
+      {label}
     </button>
   )
 }
@@ -708,8 +709,7 @@ function DetailPanel({
               </span>
               {skill.installs > 0 && (
                 <span className="flex items-center gap-1 text-[12px] font-mono text-muted">
-                  <InstallsIcon /> {formatInstalls(skill.installs)}{" "}
-                  {lang === "zh" ? "次安装" : "installs"}
+                  <InstallsIcon /> {formatInstalls(skill.installs)} installs
                 </span>
               )}
             </div>
@@ -718,7 +718,7 @@ function DetailPanel({
             <div className="flex items-center gap-3 mb-4">
               {installed ? (
                 <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-medium bg-surface-hover text-muted border border-border">
-                  <CheckIcon /> {lang === "zh" ? "已安装" : "Installed"}
+                  <CheckIcon /> Installed
                 </span>
               ) : (
                 <button
@@ -728,11 +728,11 @@ function DetailPanel({
                 >
                   {installing ? (
                     <>
-                      <SpinnerIcon /> {lang === "zh" ? "安装中…" : "Installing..."}
+                      <SpinnerIcon /> Installing...
                     </>
                   ) : (
                     <>
-                      <DownloadIcon /> {lang === "zh" ? "一键安装" : "Install"}
+                      <DownloadIcon /> Install
                     </>
                   )}
                 </button>
@@ -767,8 +767,11 @@ function DetailPanel({
             )}
           </div>
 
-          {/* 技能介绍：中英双语可切换（默认中文），提示词可直接复制 */}
-          <div className="mb-5 space-y-1 text-[12px] leading-relaxed text-foreground/90">
+          {/* 技能介绍：中英双语可切换（默认中文）；data-no-localize 使本块不被全局语言层覆盖 */}
+          <div
+            data-no-localize
+            className="mb-5 space-y-1 text-[12px] leading-relaxed text-foreground/90"
+          >
             <div className="flex items-center gap-2 mb-1.5">
               <span className="text-[12px] font-medium text-foreground">
                 {lang === "zh" ? "技能介绍" : "About this skill"}
@@ -832,7 +835,7 @@ function DetailPanel({
             />
           ) : (
             <p className="text-sm text-muted">
-              {lang === "zh" ? "该技能暂无可显示的介绍内容。" : "Skill content not available."}
+              Skill content not available.
             </p>
           )}
         </div>
@@ -1227,9 +1230,7 @@ function IntentMatcher({
             <div className="rounded-xl border border-border bg-background p-3">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-[12px] font-medium text-foreground">组合方案</span>
-                <span className="text-[11px] text-muted">
-                  按顺序串起前 {comboSkills.length} 个技能，一步到位
-                </span>
+                <span className="text-[11px] text-muted">按顺序串成一条协作流程</span>
                 <span className="ml-auto">
                   <CopyButton text={comboPrompt(comboSkills)} label="复制组合提示词" />
                 </span>
@@ -1280,7 +1281,7 @@ function IntentMatcher({
 // Discover (main export)
 // ---------------------------------------------------------------------------
 
-const EmptyHint = memo(function EmptyHint({ text }: { text: string }) {
+const EmptyHint = memo(function EmptyHint({ children }: { children: ReactNode }) {
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
       <svg
@@ -1297,7 +1298,7 @@ const EmptyHint = memo(function EmptyHint({ text }: { text: string }) {
         <circle cx="11" cy="11" r="8" />
         <line x1="21" y1="21" x2="16.65" y2="16.65" />
       </svg>
-      <p className="text-muted text-sm">{text}</p>
+      <p className="text-muted text-sm">{children}</p>
     </div>
   )
 })
@@ -1818,9 +1819,7 @@ export function Discover() {
         {showSearchView ? (
           <div className="pt-4">
             {effectiveSearching && (
-              <p className="text-[12px] text-muted mb-3">
-                搜索结果 {visibleSkills.length} 条 · 按安装量排序
-              </p>
+              <p className="text-[12px] text-muted mb-3">搜索结果 · 按安装量排序</p>
             )}
             {loading && visibleSkills.length === 0 ? (
               <div className="flex items-center justify-center py-20">
@@ -1830,9 +1829,11 @@ export function Discover() {
                 </div>
               </div>
             ) : !effectiveSearching ? (
-              <EmptyHint text="输入技能名称或作者开始搜索（至少 2 个字）" />
+              <EmptyHint>输入技能名称或作者开始搜索（至少 2 个字）</EmptyHint>
             ) : visibleSkills.length === 0 ? (
-              <EmptyHint text={`没有找到相关 Skill："${trimmedQuery}"`} />
+              <EmptyHint>
+                没有找到相关 Skill{trimmedQuery ? `："${trimmedQuery}"` : ""}
+              </EmptyHint>
             ) : (
               resultsGrid
             )}
@@ -1854,7 +1855,7 @@ export function Discover() {
             {/* 下：热门排行 */}
             <div className="mt-10">
               <p className="text-[12px] uppercase tracking-wider font-medium text-muted mb-3">
-                热门排行{activeCategory !== "全部" ? ` · ${activeCategory}` : ""}
+                热门排行
               </p>
               {isLoadingTrending && visibleSkills.length === 0 ? (
                 <div className="flex items-center justify-center py-20">
@@ -1864,7 +1865,7 @@ export function Discover() {
                   </div>
                 </div>
               ) : visibleSkills.length === 0 ? (
-                <EmptyHint text="没有找到相关 Skill" />
+                <EmptyHint>没有找到相关 Skill</EmptyHint>
               ) : (
                 resultsGrid
               )}
