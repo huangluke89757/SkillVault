@@ -18,7 +18,10 @@ import {
   getSkillListAgentNames,
 } from "../lib/skill-agent-bindings"
 import { useLocalization } from "../lib/localization"
-import { SkillEditor, type SkillEditorHandle } from "../components/skill-editor"
+// 编辑器按需加载：CodeMirror 体积大，只在真正进入编辑时拉取（不进启动包）
+import type { SkillEditorHandle } from "../components/skill-editor"
+
+type SkillEditorComponent = typeof import("../components/skill-editor").SkillEditor
 import { AgentLogo, AgentLogoRow } from "../components/agent-logo"
 import { SidebarUtilities, SkillboxBrand } from "../components/skillbox-brand"
 import { ScanSourcesDialog } from "./scan-sources"
@@ -1638,6 +1641,8 @@ function RightPanel({
   const [bindingError, setBindingError] = useState<string | null>(null)
   const [showBackToTop, setShowBackToTop] = useState(false)
   const editorRef = useRef<SkillEditorHandle | null>(null)
+  // 懒加载进来的编辑器组件（null = 尚未拉取 CodeMirror）
+  const [SkillEditorComp, setSkillEditorComp] = useState<SkillEditorComponent | null>(null)
   const panelRef = useRef<HTMLDivElement | null>(null)
   const detailScrollRef = useRef<HTMLDivElement | null>(null)
   const skillAgentsKey = skill ? getAdaptedAgentNames(skill).join("\0") : ""
@@ -1668,6 +1673,20 @@ function RightPanel({
   useEffect(() => {
     setBoundAgents(skill ? getAdaptedAgentNames(skill) : [])
   }, [skill?.canonicalPath, skillAgentsKey])
+
+  // 进入编辑才拉取 CodeMirror，避免它进入启动加载路径
+  useEffect(() => {
+    if (!editMode || SkillEditorComp) return
+    let cancelled = false
+    import("../components/skill-editor")
+      .then((module) => {
+        if (!cancelled) setSkillEditorComp(() => module.SkillEditor)
+      })
+      .catch(() => undefined)
+    return () => {
+      cancelled = true
+    }
+  }, [editMode, SkillEditorComp])
 
   useEffect(() => {
     if (!skill) return
@@ -1899,12 +1918,18 @@ function RightPanel({
           </div>
         </div>
         <div className="flex-1 min-h-0">
-          <SkillEditor
-            ref={editorRef}
-            content={content ?? ""}
-            onSave={handleSave}
-            fullBleed
-          />
+          {SkillEditorComp ? (
+            <SkillEditorComp
+              ref={editorRef}
+              content={content ?? ""}
+              onSave={handleSave}
+              fullBleed
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center text-[12px] text-muted">
+              编辑器加载中…
+            </div>
+          )}
         </div>
       </div>
     )

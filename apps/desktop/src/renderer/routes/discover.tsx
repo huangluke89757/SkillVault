@@ -29,6 +29,18 @@ import {
   type IntentResult,
   type IntentSkill,
 } from "../lib/intent-matcher"
+import {
+  genCliCommand,
+  genInstallPrompt,
+  genZipUrl,
+} from "../lib/install-prompt"
+
+// 市场技能收藏键：复用本地收藏表，加命名空间前缀避免与本地技能名冲突
+const MARKET_FAVORITE_PREFIX = "market:"
+
+function marketFavoriteKey(source: string, skillId: string): string {
+  return `${MARKET_FAVORITE_PREFIX}${source}/${skillId}`
+}
 
 // ---------------------------------------------------------------------------
 // Types matching the skills.sh response shape
@@ -304,6 +316,24 @@ function InstallsIcon() {
   )
 }
 
+// 收藏图标：仅出现在技能详情弹窗（列表卡片不放，避免噪音）
+function FavoriteIcon({ active }: { active: boolean }) {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill={active ? "currentColor" : "none"}
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21.2l7.7-7.7 1.1-1.1a5.5 5.5 0 0 0 0-7.8Z" />
+    </svg>
+  )
+}
+
 // 一键复制：写剪贴板 + 1.5s 成功态反馈（无第三方依赖，YAGNI）
 function CopyButton({ text, label = "复制" }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false)
@@ -335,19 +365,30 @@ interface SkillCardProps {
   skill: CatalogSkill
   onSelect: (skill: CatalogSkill) => void
   installedState: InstalledMarketplaceState
+  // 已选安装目标的展示名，用于生成「带目标」的安装口令
+  favoriteAgents: string[]
 }
 
 const SkillCard = memo(function SkillCard({
   skill,
   onSelect,
   installedState,
+  favoriteAgents,
 }: SkillCardProps) {
   const isInstalled = isMarketplaceSkillInstalled(installedState, skill)
 
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={() => onSelect(skill)}
-      className="skillbox-market-card"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault()
+          onSelect(skill)
+        }
+      }}
+      className="skillbox-market-card cursor-pointer"
     >
       {/* Name + installs row */}
       <div className="flex items-center gap-2">
@@ -371,9 +412,20 @@ const SkillCard = memo(function SkillCard({
       {/* Source + affordance row (single compact line) */}
       <div className="skillbox-market-card__footer">
         <span data-no-localize className="truncate font-mono">{skill.source}</span>
+        {/* 复制口令：不触发进入详情 */}
+        <span
+          className="flex-shrink-0"
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
+          <CopyButton
+            text={genInstallPrompt(skill, favoriteAgents)}
+            label="复制口令"
+          />
+        </span>
         <strong>详情 →</strong>
       </div>
-    </button>
+    </div>
   )
 })
 
@@ -554,6 +606,8 @@ interface DetailPanelProps {
   cacheContent: (key: string, content: string | null) => void
   onInstall: (source: string, skillId: string, agentNames: string[]) => Promise<void>
   installTask?: SkillInstallProgress
+  favorite: boolean
+  onToggleFavorite: (skill: CatalogSkill) => void
 }
 
 function DetailPanel({
@@ -566,6 +620,8 @@ function DetailPanel({
   cacheContent,
   onInstall,
   installTask,
+  favorite,
+  onToggleFavorite,
 }: DetailPanelProps) {
   const [selectedAgents, setSelectedAgents] = useState<string[]>([])
   // 详情介绍语言：中英双语切换，默认中文
@@ -625,6 +681,14 @@ function DetailPanel({
     () => (content ? renderMarkdown(content) : ""),
     [content],
   )
+
+  // 三通道安装文本：口令随所选 Agent 动态生成（选中谁，口令里就写谁）
+  const selectedAgentNames = availableAgents
+    .filter((agent) => selectedAgents.includes(agent.name))
+    .map((agent) => agent.displayName)
+  const installPrompt = genInstallPrompt(skill, selectedAgentNames)
+  const cliCommand = genCliCommand(skill)
+  const zipUrl = genZipUrl(skill)
 
   function handleInstall() {
     if (!skill.source) return
@@ -689,6 +753,21 @@ function DetailPanel({
               </button>
             ))}
           </div>
+          {/* 收藏：仅在技能详情页提供 */}
+          <button
+            type="button"
+            onClick={() => onToggleFavorite(skill)}
+            aria-pressed={favorite}
+            aria-label={favorite ? "取消收藏" : "收藏该技能"}
+            title={favorite ? "取消收藏" : "收藏该技能"}
+            className={`p-1.5 rounded-md border transition-colors ${
+              favorite
+                ? "border-accent/50 text-accent bg-accent/10"
+                : "border-border text-muted hover:text-foreground"
+            }`}
+          >
+            <FavoriteIcon active={favorite} />
+          </button>
           <a
             href={githubUrl}
             target="_blank"
@@ -737,10 +816,6 @@ function DetailPanel({
                   )}
                 </button>
               )}
-
-              <code className="text-[12px] font-mono text-muted bg-surface px-2.5 py-1.5 rounded border border-border">
-                $ npx skills add {skill.source}
-              </code>
             </div>
 
             {!installed && availableAgents.length > 0 && (
@@ -752,6 +827,68 @@ function DetailPanel({
                 disabled={installing}
               />
             )}
+
+            {/* 三通道安装：本机直装为主，口令 / CLI / Zip 为次（融合方案 1） */}
+            <div className="mt-4 pt-3 border-t border-border">
+              <p className="text-[12px] font-medium text-foreground mb-2">
+                更多安装方式
+              </p>
+
+              {/* ① 复制安装口令（推荐）：发给任意 Agent 即可自助安装 */}
+              <div className="rounded-lg border border-border bg-surface p-2.5 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-[12px] font-medium text-accent">
+                    ① 复制安装口令
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-accent/10 text-accent">
+                    推荐
+                  </span>
+                  <span className="ml-auto">
+                    <CopyButton text={installPrompt} label="复制口令" />
+                  </span>
+                </div>
+                <pre className="mt-1.5 whitespace-pre-wrap break-words font-mono text-[11px] text-foreground/80">
+                  {installPrompt}
+                </pre>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                {/* ② CLI 命令 */}
+                <div className="rounded-lg border border-border bg-surface p-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[12px] font-medium text-foreground">
+                      ② CLI 命令
+                    </span>
+                    <span className="ml-auto">
+                      <CopyButton text={cliCommand} label="复制命令" />
+                    </span>
+                  </div>
+                  <pre className="mt-1.5 whitespace-pre-wrap break-words font-mono text-[11px] text-foreground/80">
+                    {cliCommand}
+                  </pre>
+                </div>
+
+                {/* ③ Zip 兜底 */}
+                <div className="rounded-lg border border-border bg-surface p-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[12px] font-medium text-foreground">
+                      ③ 下载 Zip 包
+                    </span>
+                    <a
+                      href={zipUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-auto flex-shrink-0 inline-flex items-center px-2 py-1 rounded-md text-[11px] border border-border text-muted hover:text-foreground hover:border-accent/40 transition-colors"
+                    >
+                      下载
+                    </a>
+                  </div>
+                  <p className="mt-1.5 text-[11px] text-muted">
+                    手动解压兜底，脱离应用可用
+                  </p>
+                </div>
+              </div>
+            </div>
 
             {installError && (
               <p className="text-[12px] text-red-400 mt-3">{installError}</p>
@@ -1331,6 +1468,8 @@ export function Discover() {
   // 分类 Tab 筛选：与官方筛选 / 侧边 install targets / 搜索 完全解耦（独立状态）
   // 取值与 CATEGORIES[0] 保持一致，否则过滤条件永远成立、列表会被清空
   const [activeCategory, setActiveCategory] = useState(CATEGORIES[0])
+  // 市场技能收藏：键为 market:<source>/<skillId>，复用本地收藏表
+  const [favoriteKeys, setFavoriteKeys] = useState<Set<string>>(() => new Set())
 
   // The skills.sh API honors `limit` but ignores offset/page/cursor, so a
   // bigger local result set means re-requesting from the top with a larger
@@ -1393,6 +1532,18 @@ export function Discover() {
         setAvailableAgents([])
         setMarketTargets([])
       })
+  }, [])
+
+  // 载入市场技能收藏（只取 market: 前缀，本地技能收藏不受影响）
+  useEffect(() => {
+    electronAPI
+      .favoritesList()
+      .then((names) => {
+        setFavoriteKeys(
+          new Set(names.filter((n) => n.startsWith(MARKET_FAVORITE_PREFIX))),
+        )
+      })
+      .catch(() => {})
   }, [])
 
   // Load the trending list once on mount so an idle Discover lands on a
@@ -1596,6 +1747,30 @@ export function Discover() {
     })
   }, [])
 
+  const toggleFavorite = useCallback((skill: CatalogSkill) => {
+    const key = marketFavoriteKey(skill.source, skill.skillId)
+    void electronAPI
+      .favoritesToggle(key)
+      .then((isFavorited) => {
+        setFavoriteKeys((current) => {
+          const next = new Set(current)
+          if (isFavorited) next.add(key)
+          else next.delete(key)
+          return next
+        })
+      })
+      .catch(() => {})
+  }, [])
+
+  // 已选安装目标的展示名：卡片「复制口令」用它生成带目标的口令
+  const marketTargetNames = useMemo(
+    () =>
+      availableAgents
+        .filter((agent) => marketTargets.includes(agent.name))
+        .map((agent) => agent.displayName),
+    [availableAgents, marketTargets],
+  )
+
   // The skills shown, before pagination:
   //  - query < 2 chars: the cached/scraped trending list (ranked).
   //  - query >= 2 chars: trending matches first, then live search results
@@ -1683,6 +1858,7 @@ export function Discover() {
             skill={skill}
             onSelect={setSelectedSkill}
             installedState={installedState}
+            favoriteAgents={marketTargetNames}
           />
         ))}
       </div>
@@ -1905,6 +2081,10 @@ export function Discover() {
           cacheContent={cacheContent}
           onInstall={handleInstall}
           installTask={selectedInstallTask}
+          favorite={favoriteKeys.has(
+            marketFavoriteKey(selectedSkill.source, selectedSkill.skillId),
+          )}
+          onToggleFavorite={toggleFavorite}
         />
       )}
       </div>

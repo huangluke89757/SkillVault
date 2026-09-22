@@ -1,8 +1,12 @@
 import { Suspense, lazy } from "react"
 import { HashRouter, Navigate, Routes, Route } from "react-router-dom"
 import { UpdateBanner } from "./components/update-banner"
-import { Home } from "./routes/home"
 
+// 路由级懒加载：Home 体积大（react-window / marked / 编辑器），
+// 拆出主包后首屏只需加载框架层，CodeMirror 等重依赖按需再取。
+const Home = lazy(() =>
+  import("./routes/home").then((module) => ({ default: module.Home })),
+)
 const Discover = lazy(() =>
   import("./routes/discover").then((module) => ({ default: module.Discover })),
 )

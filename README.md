@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v1.1.0-4E6E76" alt="SkillVault v1.1.0" />
+  <img src="https://img.shields.io/badge/version-v1.2.0-4E6E76" alt="SkillVault v1.2.0" />
   <img src="https://img.shields.io/badge/Agent-42-4E6E76" alt="支持 42 个 Agent" />
   <img src="https://img.shields.io/badge/Skill%20Market-90%2C000%2B-4E6E76" alt="90,000+ Skill" />
   <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-11212D" alt="Windows、macOS、Linux" />
@@ -40,6 +40,8 @@ SkillVault 将本地 Skill 作为母本统一管理：一个 Skill 只保留一�
 - **90,000+ Skill 市场**：意图匹配与热门排行**同屏浏览**，右上角常驻搜索框（输入即进入全屏搜索结果，按安装量排序）；分类 Tab 快捷筛选，支持分页与指定 Agent 安装
 - **AI 意图匹配市场**：用一句话描述需求，本地语义模型自动从仓库匹配最相关的技能，给出「是什么 / 有什么用 / 怎么用」介绍，并生成 Top-3 **技能组合方案**
 - **提示词一键复制**：单个技能与组合方案都附带可直接粘贴的提示词，复制即用
+- **三通道安装**：列表卡片一键「复制安装口令」，粘给任意 Agent 即可自助安装；详情弹窗提供「本机直装 / 复制安装口令 / CLI 命令 / Zip 包」四类入口，口令会带上你选中的目标 Agent
+- **市场技能收藏**：技能详情页支持一键收藏，状态写入本地数据库，重启后保留
 - **离线可用**：已安装 Skill、中文描述和本地管理功能无需联网
 
 <p align="center">
@@ -140,6 +142,14 @@ SkillVault 将本地 Skill 作为母本统一管理：一个 Skill 只保留一�
 此外，SkillVault 支持将 `~/.agents/skills` 作为跨 Agent 共用的 **通用 Skill 目录**。
 
 ## 更新日志
+
+### v1.2.0
+
+- 安装方式升级：列表卡片新增「**复制安装口令**」，一句话交给任意 Agent 自助安装（口令自动带上所选目标 Agent）
+- 技能详情弹窗新增**三通道安装面板**：本机 symlink 直装为主，另有「复制安装口令（推荐）/ CLI 命令 / 下载 Zip 包」三类次通道
+- 新增**市场技能收藏**：详情页右上角心形按钮一键收藏，复用本地收藏库持久化，与本地 Skill 收藏互不干扰
+- Web 端体积重构：Home 路由与 CodeMirror 编辑器改为按需加载，主包 **1.90 MB → 0.64 MB**，CodeMirror（0.98 MB）仅在进入编辑时加载
+- 建立版本规范：每次升级产出独立版本 PRD 与发布清单，存放于 `releases/<version>/`
 
 ### v1.1.0
 
