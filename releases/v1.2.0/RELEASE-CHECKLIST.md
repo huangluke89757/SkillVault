@@ -36,6 +36,8 @@
 - [x] `gh release create v1.2.0 --target <完整 40 位 SHA>`（短 SHA 会 422）
 - [x] 上传资产：`SkillVault-Setup-1.2.0.exe`、`.blockmap`、`latest.yml`（缺 latest.yml 则自动更新失效）
 - [x] `gh release view v1.2.0` 核对三资产（exe 86.06 MB / blockmap / latest.yml）
+- [x] **本机同步升级**：`bash scripts/install-local.sh 1.2.0`（静默原地覆盖 `D:\SkillVault`）
+- [x] 校验：`D:\SkillVault\resources\app.asar` 内 1.2.0 命中、1.1.0 归零，新功能字符串（复制口令 / 更多安装方式 / market:）存在
 
 ## 四、发布后验证
 

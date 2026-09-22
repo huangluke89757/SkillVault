@@ -129,3 +129,8 @@ apps/web/*.tsbuildinfo
 .claude/
 .venv/
 .finesse/
+
+# 发版工具脚本需要入库（本机同步升级用）
+!/scripts/
+/scripts/*
+!/scripts/install-local.sh
