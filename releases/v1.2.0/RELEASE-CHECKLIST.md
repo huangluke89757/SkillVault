@@ -25,14 +25,17 @@
 | `transformers-*.js` | 1,391.24 kB | 1,391.24 kB | 持平（语义模型，仍按需） |
 | `discover-*.js` | 73.75 kB | 81.03 kB | +7 kB（新增口令与收藏 UI） |
 | 启动加载合计 | 1,978 kB | 约 890 kB | **-55%** |
+| 安装包 `SkillVault-Setup` | 86.1 MB | 86.06 MB | 持平 |
+
+> 说明：安装包的 ~80 MB 来自 Electron 运行时本身，前端可优化空间有限。本版收益在**启动加载量**（下载/解析字节下降 55%），安装包字节数持平，未引入新增重依赖。
 
 ## 三、打包与发版
 
-- [ ] `npm run package:win`（输出到 `release-120`，避免默认 `release/` 句柄占用）
-- [ ] `git commit` + `git push`（git/curl 常被网关拦截，改用 `gh` CLI 通道）
-- [ ] `gh release create v1.2.0 --target <完整 40 位 SHA>`（短 SHA 会 422）
-- [ ] 上传资产：`SkillVault-Setup-1.2.0.exe`、`.blockmap`、`latest.yml`（缺 latest.yml 则自动更新失效）
-- [ ] `gh release view v1.2.0` 核对三资产
+- [x] `npm run package:win`（输出到 `release-120`，避免默认 `release/` 句柄占用）
+- [x] `git commit` + `git push`（git/curl 常被网关拦截，改用 `gh` CLI 通道）
+- [x] `gh release create v1.2.0 --target <完整 40 位 SHA>`（短 SHA 会 422）
+- [x] 上传资产：`SkillVault-Setup-1.2.0.exe`、`.blockmap`、`latest.yml`（缺 latest.yml 则自动更新失效）
+- [x] `gh release view v1.2.0` 核对三资产（exe 86.06 MB / blockmap / latest.yml）
 
 ## 四、发布后验证
 
@@ -50,6 +53,7 @@
 
 ## 六、遗留项
 
+- **运行时冒烟未执行**：本会话环境无法拉起 Electron GUI 进程，第四节验证项需安装后手动过一遍（构建 + `tsc --noEmit` 已通过）
 - README 截图仍为 v1.1.0 实拍（收藏按钮、三通道面板未入镜），下一版刷新
 - Zip 链接按 `main` 默认分支推断，非 main 仓库会 404
 - 深链协议 `skillvault://` 待 v1.3
