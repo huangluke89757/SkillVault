@@ -34,6 +34,13 @@ import {
   genInstallPrompt,
   genZipUrl,
 } from "../lib/install-prompt"
+import {
+  extractIntro,
+  hashKey,
+  loadCachedIntroZh,
+  looksChinese,
+  saveIntroZhCache,
+} from "../lib/skill-intro"
 
 // 市场技能收藏键：复用本地收藏表，加命名空间前缀避免与本地技能名冲突
 const MARKET_FAVORITE_PREFIX = "market:"
@@ -334,6 +341,81 @@ function FavoriteIcon({ active }: { active: boolean }) {
   )
 }
 
+function StarIcon() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      stroke="none"
+      aria-hidden="true"
+    >
+      <path d="M12 2l2.9 6.6 7.1.7-5.4 4.8 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.3l7.1-.7L12 2z" />
+    </svg>
+  )
+}
+
+// GitHub Stars 徽章：点击直达原仓库；localStorage TTL 缓存，避免打爆匿名 API 限额
+const STARS_CACHE_PREFIX = "gh-stars:"
+const STARS_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000
+
+function readStarsCache(source: string): number | null {
+  try {
+    const raw = localStorage.getItem(STARS_CACHE_PREFIX + source)
+    if (!raw) return null
+    const parsed = JSON.parse(raw) as { stars: number; at: number }
+    if (!parsed?.stars || Date.now() - parsed.at > STARS_CACHE_TTL_MS) return null
+    return parsed.stars
+  } catch {
+    return null
+  }
+}
+
+function GithubStars({ source, url }: { source: string; url: string }) {
+  const [stars, setStars] = useState<number | null>(() => readStarsCache(source))
+
+  useEffect(() => {
+    if (readStarsCache(source) !== null) return
+    let cancelled = false
+    fetch(`https://api.github.com/repos/${source}`, {
+      headers: { Accept: "application/vnd.github+json" },
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { stargazers_count?: number } | null) => {
+        if (cancelled || !data || typeof data.stargazers_count !== "number") return
+        try {
+          localStorage.setItem(
+            STARS_CACHE_PREFIX + source,
+            JSON.stringify({ stars: data.stargazers_count, at: Date.now() }),
+          )
+        } catch {
+          // 存储异常静默忽略
+        }
+        setStars(data.stargazers_count)
+      })
+      .catch(() => {
+        // 拉不到就不展示，不影响其他模块
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [source])
+
+  if (stars === null) return null
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      title="打开 GitHub 原仓库"
+      className="flex items-center gap-1 text-[12px] font-mono text-muted hover:text-foreground transition-colors"
+    >
+      <StarIcon /> {formatInstalls(stars)}
+    </a>
+  )
+}
+
 // 一键复制：写剪贴板 + 1.5s 成功态反馈（无第三方依赖，YAGNI）
 function CopyButton({ text, label = "复制" }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false)
@@ -626,6 +708,11 @@ function DetailPanel({
   const [selectedAgents, setSelectedAgents] = useState<string[]>([])
   // 详情介绍语言：中英双语切换，默认中文
   const [lang, setLang] = useState<"zh" | "en">("zh")
+  // 中文简介：SKILL.md 标题+描述的机翻结果（idle 未尝试 / loading / ready / failed）
+  const [intro, setIntro] = useState<{
+    status: "idle" | "loading" | "ready" | "failed"
+    text?: string
+  }>({ status: "idle" })
   const cacheKey = `${skill.source}:${skill.skillId}`
   const [content, setContent] = useState<string | null>(
     getCachedContent(cacheKey) ?? null,
@@ -676,6 +763,55 @@ function DetailPanel({
       installTask?.agentNames.length ? installTask.agentNames : defaultAgents,
     )
   }, [defaultAgents, installTask?.key, skill.skillId])
+
+  // 切换技能时重置简介翻译状态
+  useEffect(() => {
+    setIntro({ status: "idle" })
+  }, [skill.source, skill.skillId])
+
+  // 中文模式拉取简介译文：本地缓存优先，未命中走主进程机翻（学 ColaSkill 的汉化呈现）
+  useEffect(() => {
+    if (lang !== "zh" || !content || intro.status !== "idle") return
+    const introInfo = extractIntro(content, skill.name)
+    if (!introInfo) {
+      setIntro({ status: "failed" })
+      return
+    }
+    if (looksChinese(introInfo.description)) {
+      setIntro({
+        status: "ready",
+        text: `${introInfo.name}\n${introInfo.description}`,
+      })
+      return
+    }
+    const introCacheKey = hashKey(
+      `${skill.source}/${skill.skillId}:${introInfo.description}`,
+    )
+    const cached = loadCachedIntroZh(introCacheKey)
+    if (cached) {
+      setIntro({ status: "ready", text: cached })
+      return
+    }
+    let cancelled = false
+    setIntro({ status: "loading" })
+    electronAPI
+      .translateText(`${introInfo.name}\n${introInfo.description}`)
+      .then((zh) => {
+        if (cancelled) return
+        if (zh) {
+          saveIntroZhCache(introCacheKey, zh)
+          setIntro({ status: "ready", text: zh })
+        } else {
+          setIntro({ status: "failed" })
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setIntro({ status: "failed" })
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [content, intro.status, lang, skill.name, skill.skillId, skill.source])
 
   const renderedContent = useMemo(
     () => (content ? renderMarkdown(content) : ""),
@@ -782,6 +918,35 @@ function DetailPanel({
         <div className="flex-1 overflow-y-auto px-6 py-5">
           {/* Meta */}
           <div className="mb-5">
+            {/* 创作者与 GitHub Stars（学 ColaSkill：头像 + @作者 + 星标，点击直达原仓库） */}
+            <div className="flex items-center gap-3 mb-2 flex-wrap">
+              <a
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="打开 GitHub 原仓库"
+                className="flex items-center gap-1.5 group"
+              >
+                <img
+                  src={`https://github.com/${skill.source.split("/")[0]}.png?size=48`}
+                  alt=""
+                  loading="lazy"
+                  className="w-5 h-5 rounded-full border border-border"
+                  onError={(e) => {
+                    ;(e.target as HTMLImageElement).style.visibility = "hidden"
+                  }}
+                />
+                <span
+                  data-no-localize
+                  className="text-[12px] text-muted group-hover:text-foreground transition-colors"
+                >
+                  @{skill.source.split("/")[0]}
+                </span>
+              </a>
+              <span className="ml-auto">
+                <GithubStars source={skill.source} url={githubUrl} />
+              </span>
+            </div>
             <div className="flex items-center gap-3 mb-3">
               <span data-no-localize className="text-[12px] font-mono text-muted">
                 {skill.source}
@@ -936,6 +1101,28 @@ function DetailPanel({
                   把上方提示词粘进对话，或点「一键安装」后用{" "}
                   <code className="font-mono">npx skills add {skill.source}</code> 引入。
                 </p>
+                {/* 中文简介：SKILL.md 原文机翻（学 ColaSkill 的汉化呈现，标注机翻以示区分） */}
+                <div className="mt-2 rounded-lg border border-border bg-surface p-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[12px] font-medium text-foreground">
+                      中文简介
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-hover text-muted">
+                      机翻
+                    </span>
+                    {intro.status === "loading" && <SpinnerIcon />}
+                  </div>
+                  {intro.status === "ready" && intro.text && (
+                    <p className="mt-1.5 whitespace-pre-wrap text-[12px] leading-relaxed text-foreground/90">
+                      {intro.text}
+                    </p>
+                  )}
+                  {intro.status === "failed" && (
+                    <p className="mt-1.5 text-[11px] text-muted">
+                      暂时无法翻译（网络受限）；可切到 EN 查看英文原文。
+                    </p>
+                  )}
+                </div>
               </>
             ) : (
               <>

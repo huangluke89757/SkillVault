@@ -48,3 +48,22 @@
 
 ## Open Questions
 - 自举文档 `install/*.md` 暂无托管，本期口令先指向 GitHub 仓库 raw 说明（后续可换 Pages）。
+
+---
+
+# Implementation Plan: SkillVault v1.3.0（详情页汉化 + 创作者标记，对标 ColaSkill）
+
+## Overview
+学 ColaSkill 详情页的汉化呈现与创作者/Stars 标记，改造 SkillVault 技能详情页；全部原有模块保留。
+
+## Architecture Decisions
+- 翻译走主进程 `net.fetch`（跟随系统代理、绕开渲染层 CORS/CSP），端点链 MyMemory → Google gtx 降级，进程内 LRU。
+- Stars 渲染层直取 api.github.com（CSP/CORS 均放行），localStorage 缓存 7 天。
+- 简介提取：front matter name/description 逐行解析，兜底正文首段；译文 localStorage 缓存 30 天。
+
+## Task List (v1.3.0)
+- [x] Task 1: 主进程翻译服务 translate-service.ts + IPC skills:translate-text + preload 暴露
+- [x] Task 2: renderer lib skill-intro.ts（提取 + 缓存 + 中文判定）
+- [x] Task 3: DetailPanel 中文简介卡片（含加载/失败态）
+- [x] Task 4: 创作者行（头像 + @作者）+ GithubStars 徽章
+- [x] Task 5: 版本 1.3.0 + README + PRD/清单

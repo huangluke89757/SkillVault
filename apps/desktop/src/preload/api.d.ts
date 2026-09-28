@@ -316,6 +316,9 @@ declare global {
     favoritesToggle: (name: string) => Promise<boolean>
     favoritesAddMany: (names: string[]) => Promise<string[]>
 
+    // Marketplace skill intro translation (en -> zh); null = 翻译不可用
+    translateText: (text: string) => Promise<string | null>
+
     updatesGetState: () => Promise<UpdateState>
     updatesCheck: () => Promise<UpdateState>
     updatesDownload: () => Promise<UpdateState>

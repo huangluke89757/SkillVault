@@ -10,6 +10,7 @@ import { SettingsStore } from "./db/settings"
 import { RemoteServerStore } from "./db/servers"
 import { RemoteSkillStore } from "./db/skills"
 import { FavoritesStore } from "./db/favorites"
+import { translateToZh } from "./translate-service"
 import { loadCachedSkills, saveCachedSkills } from "./db/skills-cache"
 import {
   loadTrendingCache,
@@ -2283,6 +2284,17 @@ export function registerIpcHandlers(): void {
         // Preview is optional; installation still has its own fallbacks.
       }
       return null
+    },
+  )
+
+  // 技能介绍英译中（详情页「中文简介」），走主进程 net.fetch 以跟随系统代理
+  ipcMain.handle(
+    "skills:translate-text",
+    (_event, text: string): Promise<string | null> => {
+      if (typeof text !== "string" || text.length > 20_000) {
+        return Promise.resolve(null)
+      }
+      return translateToZh(text)
     },
   )
 

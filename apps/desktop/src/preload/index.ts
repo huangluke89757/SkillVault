@@ -142,6 +142,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
   favoritesAddMany: (names: string[]) =>
     ipcRenderer.invoke("favorites:add-many", names),
 
+  // Marketplace skill intro translation (en -> zh, via main process)
+  translateText: (text: string) =>
+    ipcRenderer.invoke("skills:translate-text", text),
+
   // Updates
   updatesGetState: () => ipcRenderer.invoke("updates:get-state"),
   updatesCheck: () => ipcRenderer.invoke("updates:check"),

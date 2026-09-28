@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v1.2.0-4E6E76" alt="SkillVault v1.2.0" />
+  <img src="https://img.shields.io/badge/version-v1.3.0-4E6E76" alt="SkillVault v1.3.0" />
   <img src="https://img.shields.io/badge/Agent-42-4E6E76" alt="支持 42 个 Agent" />
   <img src="https://img.shields.io/badge/Skill%20Market-90%2C000%2B-4E6E76" alt="90,000+ Skill" />
   <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-11212D" alt="Windows、macOS、Linux" />
@@ -40,6 +40,7 @@ SkillVault 将本地 Skill 作为母本统一管理：一个 Skill 只保留一�
 - **90,000+ Skill 市场**：意图匹配与热门排行**同屏浏览**，右上角常驻搜索框（输入即进入全屏搜索结果，按安装量排序）；分类 Tab 快捷筛选，支持分页与指定 Agent 安装
 - **AI 意图匹配市场**：用一句话描述需求，本地语义模型自动从仓库匹配最相关的技能，给出「是什么 / 有什么用 / 怎么用」介绍，并生成 Top-3 **技能组合方案**
 - **提示词一键复制**：单个技能与组合方案都附带可直接粘贴的提示词，复制即用
+- **介绍汉化与创作者标记**：详情页自动把 SKILL.md 的标题与描述英译中（标注「机翻」，30 天本地缓存）；创作者头像 + @作者 + GitHub Stars 一键直达原仓库
 - **三通道安装**：列表卡片一键「复制安装口令」，粘给任意 Agent 即可自助安装；详情弹窗提供「本机直装 / 复制安装口令 / CLI 命令 / Zip 包」四类入口，口令会带上你选中的目标 Agent
 - **市场技能收藏**：技能详情页支持一键收藏，状态写入本地数据库，重启后保留
 - **离线可用**：已安装 Skill、中文描述和本地管理功能无需联网
@@ -142,6 +143,14 @@ SkillVault 将本地 Skill 作为母本统一管理：一个 Skill 只保留一�
 此外，SkillVault 支持将 `~/.agents/skills` 作为跨 Agent 共用的 **通用 Skill 目录**。
 
 ## 更新日志
+
+### v1.3.0
+
+- 技能详情页新增「**中文简介**」：自动提取 SKILL.md 的标题与描述并英译中（标注「机翻」），网络不可用时回退提示、可切 EN 看原文；译文本地缓存 30 天
+- 详情页新增**创作者标记**：GitHub 头像 + @作者，点击直达原仓库
+- 详情页新增 **GitHub Stars** 星标展示（7 天缓存），点击直达原仓库
+- 翻译服务走主进程 `net.fetch`（跟随系统代理，端点链 MyMemory → Google gtx 降级），不受渲染层 CSP 限制
+- 原有模块全部保留：意图匹配 / 三通道安装 / 收藏 / 中英切换 / 组合方案等
 
 ### v1.2.0
 

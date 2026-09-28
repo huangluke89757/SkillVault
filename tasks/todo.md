@@ -140,3 +140,25 @@
 - [ ] `gh release view v1.2.0` 可见三资产
 
 **Dependencies:** Task 7
+
+---
+
+# SkillVault v1.3.0（2026-09-28）
+
+## Task 1: 主进程翻译服务（M）[x]
+- translate-service.ts：分块（≤400 字符句读切分）+ 端点链降级 + LRU 500
+- IPC "skills:translate-text"（>20000 字符直接拒绝）
+
+## Task 2: 渲染层提取与缓存（S）[x]
+- skill-intro.ts：extractIntro / loadCachedIntroZh / saveIntroZhCache / looksChinese
+
+## Task 3: 中文简介卡片（M）[x]
+- zh 模式展示；标注「机翻」；失败提示可切 EN；切技能重置状态
+
+## Task 4: 创作者 + Stars（S）[x]
+- 创作者行：github avatar + @owner，点击直达原仓库
+- GithubStars：TTL 7 天缓存，失败不展示
+
+## Task 5: 发版（S）
+- [x] 版本 1.3.0 / README / PRD / 清单
+- [ ] 打包 release-130 → gh release → 本机同步安装
