@@ -33,14 +33,8 @@
 - [x] `gh release create v1.3.0 --target 9170d819063186689b11ec87fba7e7e53fdde584`
 - [x] 上传资产：exe（86.07 MB）/ blockmap / latest.yml
 - [x] `gh release view v1.3.0` 核对三资产
-- [ ] **本机同步升级**：本次会话沙箱拦截了安装器启动（Bash / PowerShell 均被拒），需手工执行一步：
-
-```bash
-"D:\卢克先生WorkBuddy专区\Skillbox\skillbox-src\apps\desktop\release-130\SkillVault-Setup-1.3.0.exe" /S /D=D:\SkillVault
-```
-
-> 或者：打开 SkillVault，应用内自动更新（latest.yml 已发布）会提示升级到 v1.3.0，点确认即可。
-- [ ] 校验：`D:\SkillVault\resources\app.asar` 内 1.3.0 命中、1.2.0 归零，新功能字符串（中文简介 / 机翻）存在
+- [x] **本机同步升级**：已执行（从 `release-130` 目录内运行 `./SkillVault-Setup-1.3.0.exe /S /D=D:\SkillVault` 成功；直接用绝对路径调用会返回 127，需先 `cd` 进目录）
+- [x] 校验：`D:\SkillVault\resources\app.asar` 内 1.3.0 命中、1.2.0 归零；新功能字符串（中文简介 / 机翻 / gh-stars / translate-text）均存在；exe 时间戳 09-29 02:55
 
 ## 四、发布后验证（需人工）
 
