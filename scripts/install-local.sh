@@ -26,7 +26,12 @@ if tasklist 2>/dev/null | grep -qi "skillvault.exe"; then
 fi
 
 echo "安装 $INSTALLER → $TARGET"
-"$INSTALLER" /S "/D=${TARGET}"
+# 注意：必须先 cd 进安装包所在目录再用相对路径调用，
+# 直接用绝对路径调用安装器会返回 127（无法执行）。
+INSTALL_DIR="$(dirname "$INSTALLER")"
+INSTALL_FILE="$(basename "$INSTALLER")"
+cd "$INSTALL_DIR" || exit 1
+"./$INSTALL_FILE" /S "/D=${TARGET}"
 
 echo "校验："
 grep -c "$VERSION" "${TARGET}/resources/app.asar" || true
