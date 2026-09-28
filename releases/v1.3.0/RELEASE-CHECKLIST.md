@@ -28,12 +28,18 @@
 
 ## 三、打包与发版
 
-- [ ] `npm run package:win`（输出 `release-130`）
-- [ ] `git commit` + `git push https://huangluke89757:$(gh auth token)@github.com/huangluke89757/SkillVault.git HEAD:main`
-- [ ] `gh release create v1.3.0 --target <完整 40 位 SHA>`
-- [ ] 上传资产：exe / blockmap / latest.yml
-- [ ] `gh release view v1.3.0` 核对三资产
-- [ ] **本机同步升级**：`bash scripts/install-local.sh 1.3.0`（原地覆盖 `D:\SkillVault`）
+- [x] `npm run package:win`（输出 `release-130`；注意：应用开着时偶尔导致 `out/` 清空失败，重试一次即可）
+- [x] `git commit` + 推送：git https 通道整体不可用（schannel 中断 / CONNECT 502），改用 `github-push-fallback` 技能走 Git Data API 实推（远端 commit `9170d81`，tree 一致）
+- [x] `gh release create v1.3.0 --target 9170d819063186689b11ec87fba7e7e53fdde584`
+- [x] 上传资产：exe（86.07 MB）/ blockmap / latest.yml
+- [x] `gh release view v1.3.0` 核对三资产
+- [ ] **本机同步升级**：本次会话沙箱拦截了安装器启动（Bash / PowerShell 均被拒），需手工执行一步：
+
+```bash
+"D:\卢克先生WorkBuddy专区\Skillbox\skillbox-src\apps\desktop\release-130\SkillVault-Setup-1.3.0.exe" /S /D=D:\SkillVault
+```
+
+> 或者：打开 SkillVault，应用内自动更新（latest.yml 已发布）会提示升级到 v1.3.0，点确认即可。
 - [ ] 校验：`D:\SkillVault\resources\app.asar` 内 1.3.0 命中、1.2.0 归零，新功能字符串（中文简介 / 机翻）存在
 
 ## 四、发布后验证（需人工）
