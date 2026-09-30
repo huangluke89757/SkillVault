@@ -26,13 +26,13 @@
 
 ## 三、打包与发版
 
-- [ ] `npm run package:win`（输出 `release-131`；应用开着可能导致 out/ 清空失败，重试即可）
-- [ ] 提交 + 推送（git https 通道不稳，走 `github-push-fallback` 的 Git Data API）
-- [ ] `gh release create v1.3.1 --target <完整 40 位 SHA>`
-- [ ] 上传资产：exe / blockmap / latest.yml
-- [ ] `gh release view v1.3.1` 核对三资产
-- [ ] **本机同步升级**：`cd release-131 && ./SkillVault-Setup-1.3.1.exe /S /D=D:\SkillVault`（必须先进目录，绝对路径返回 127）
-- [ ] 校验：`D:\SkillVault\resources\app.asar` 内 1.3.1 命中、1.3.0 归零
+- [x] 打包 `release-131`（应用开着时 `npm run package:win` 常在清空 out/ 失败；改为先单独 `npx electron-vite build` 重试，再直接 `npx electron-builder --win -c.directories.output=release-131` 跳过重建）
+- [x] 提交 + 推送（git https 通道不通，走 `github-push-fallback` 的 Git Data API；远端 commit `a44face`，tree 一致）
+- [x] `gh release create v1.3.1 --target a44face87d78f1c2aa13e57568f7ab1482fff3b8`
+- [x] 上传资产：exe（86.07 MB）/ blockmap / latest.yml
+- [x] `gh release view v1.3.1` 核对三资产
+- [x] **本机同步升级**：已执行（先 `taskkill /F /IM SkillVault.exe`，再 `cd release-131 && ./SkillVault-Setup-1.3.1.exe /S /D=D:\SkillVault`）
+- [x] 校验：`D:\SkillVault\resources\app.asar` 内 1.3.1 命中、1.3.0 归零，「翻译中」字符串存在
 
 ## 四、发布后验证（需人工）
 
