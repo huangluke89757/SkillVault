@@ -10,7 +10,10 @@ const marketFetch = net.fetch.bind(net) as unknown as typeof fetch
 
 const CHUNK_LIMIT = 400
 const CACHE_LIMIT = 500
-const REQUEST_TIMEOUT_MS = 10_000
+// 实测：MyMemory 冷启动 ~3.3s / 热请求 ~1.1s；超时给 8s 足够，
+// 不再保留不可达的兜底端点（实测 Google gtx 在本机不通，留着只会让用户白等 10s）。
+const REQUEST_TIMEOUT_MS = 8_000
+const CONCURRENCY = 3
 
 const cache = new Map<string, string>()
 
@@ -37,7 +40,7 @@ function chunkText(text: string): string[] {
 }
 
 async function translateChunk(text: string): Promise<string | null> {
-  // 端点 1：MyMemory（免费匿名；q 限 500 字节，输入为英文原文，400 字符内安全）
+  // MyMemory：免费匿名端点，q 限 500 字节（输入为英文原文，400 字符内安全）
   try {
     const url =
       "https://api.mymemory.translated.net/get?q=" +
@@ -52,37 +55,34 @@ async function translateChunk(text: string): Promise<string | null> {
         responseData?: { translatedText?: string }
       }
       const out = data.responseData?.translatedText?.trim()
-      // 429 = 配额超限，换下一端点
+      // 429 = 配额超限；带 WARNING 前缀说明未真正翻译
       if (out && data.responseStatus !== 429 && !/^MYMEMORY WARNING/i.test(out)) {
         return out
       }
     }
   } catch {
-    // 降级到下一端点
-  }
-
-  // 端点 2：Google gtx（非官方免费接口）
-  try {
-    const url =
-      "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=" +
-      encodeURIComponent(text)
-    const res = await marketFetch(url, {
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-    })
-    if (res.ok) {
-      const data = (await res.json()) as unknown
-      if (Array.isArray(data) && Array.isArray(data[0])) {
-        const joined = (data[0] as unknown[])
-          .map((seg) => (Array.isArray(seg) ? String(seg[0] ?? "") : ""))
-          .join("")
-        if (joined.trim()) return joined.trim()
-      }
-    }
-  } catch {
-    // 全部端点失败，交由调用方降级
+    // 失败由调用方降级
   }
 
   return null
+}
+
+/** 有限并发执行，避免多块串行拖慢整体耗时 */
+async function mapWithConcurrency<T, R>(
+  items: T[],
+  limit: number,
+  worker: (item: T) => Promise<R>,
+): Promise<R[]> {
+  const results = new Array<R>(items.length)
+  let cursor = 0
+  const runners = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (cursor < items.length) {
+      const index = cursor++
+      results[index] = await worker(items[index])
+    }
+  })
+  await Promise.all(runners)
+  return results
 }
 
 /** 英译中；任何一块失败返回 null，由调用方回退展示原文 */
@@ -94,14 +94,11 @@ export async function translateToZh(text: string): Promise<string | null> {
   if (cached) return cached
 
   const chunks = chunkText(input)
-  const out: string[] = []
-  for (const chunk of chunks) {
-    const translated = await translateChunk(chunk)
-    if (!translated) return null
-    out.push(translated)
-  }
+  // 并发请求：简介通常 1 块，长文本最多 3 块同时进行，避免串行叠加耗时
+  const translatedChunks = await mapWithConcurrency(chunks, CONCURRENCY, translateChunk)
+  if (translatedChunks.some((part) => !part)) return null
 
-  const result = out.join("\n").trim()
+  const result = translatedChunks.join("\n").trim()
   if (!result) return null
 
   if (cache.size >= CACHE_LIMIT) {

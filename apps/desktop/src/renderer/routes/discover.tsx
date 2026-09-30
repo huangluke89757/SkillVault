@@ -709,9 +709,11 @@ function DetailPanel({
   // 详情介绍语言：中英双语切换，默认中文
   const [lang, setLang] = useState<"zh" | "en">("zh")
   // 中文简介：SKILL.md 标题+描述的机翻结果（idle 未尝试 / loading / ready / failed）
+  // text = 中文译文；source = 英文原文（译文未就绪时先垫底，避免卡片空白等待）
   const [intro, setIntro] = useState<{
     status: "idle" | "loading" | "ready" | "failed"
     text?: string
+    source?: string
   }>({ status: "idle" })
   const cacheKey = `${skill.source}:${skill.skillId}`
   const [content, setContent] = useState<string | null>(
@@ -777,11 +779,10 @@ function DetailPanel({
       setIntro({ status: "failed" })
       return
     }
+    const introSource = `${introInfo.name}\n${introInfo.description}`
+
     if (looksChinese(introInfo.description)) {
-      setIntro({
-        status: "ready",
-        text: `${introInfo.name}\n${introInfo.description}`,
-      })
+      setIntro({ status: "ready", text: introSource, source: introSource })
       return
     }
     const introCacheKey = hashKey(
@@ -789,24 +790,25 @@ function DetailPanel({
     )
     const cached = loadCachedIntroZh(introCacheKey)
     if (cached) {
-      setIntro({ status: "ready", text: cached })
+      setIntro({ status: "ready", text: cached, source: introSource })
       return
     }
     let cancelled = false
-    setIntro({ status: "loading" })
+    // 先把英文原文铺上，译文到了再替换（感知上不再空等）
+    setIntro({ status: "loading", source: introSource })
     electronAPI
-      .translateText(`${introInfo.name}\n${introInfo.description}`)
+      .translateText(introSource)
       .then((zh) => {
         if (cancelled) return
         if (zh) {
           saveIntroZhCache(introCacheKey, zh)
-          setIntro({ status: "ready", text: zh })
+          setIntro({ status: "ready", text: zh, source: introSource })
         } else {
-          setIntro({ status: "failed" })
+          setIntro({ status: "failed", source: introSource })
         }
       })
       .catch(() => {
-        if (!cancelled) setIntro({ status: "failed" })
+        if (!cancelled) setIntro({ status: "failed", source: introSource })
       })
     return () => {
       cancelled = true
@@ -1110,17 +1112,29 @@ function DetailPanel({
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-hover text-muted">
                       机翻
                     </span>
-                    {intro.status === "loading" && <SpinnerIcon />}
+                    {intro.status === "loading" && (
+                      <span className="flex items-center gap-1 text-[10px] text-muted">
+                        <SpinnerIcon /> 翻译中
+                      </span>
+                    )}
                   </div>
                   {intro.status === "ready" && intro.text && (
                     <p className="mt-1.5 whitespace-pre-wrap text-[12px] leading-relaxed text-foreground/90">
                       {intro.text}
                     </p>
                   )}
-                  {intro.status === "failed" && (
-                    <p className="mt-1.5 text-[11px] text-muted">
-                      暂时无法翻译（网络受限）；可切到 EN 查看英文原文。
-                    </p>
+                  {/* 译文未就绪时先显示英文原文，不让卡片空着 */}
+                  {intro.status !== "ready" && intro.source && (
+                    <>
+                      <p className="mt-1.5 whitespace-pre-wrap text-[12px] leading-relaxed text-muted">
+                        {intro.source}
+                      </p>
+                      <p className="mt-1 text-[10px] text-muted/80">
+                        {intro.status === "loading"
+                          ? "英文原文，译文生成后自动替换"
+                          : "英文原文（翻译暂不可用）"}
+                      </p>
+                    </>
                   )}
                 </div>
               </>

@@ -38,6 +38,22 @@ function parseFrontMatterField(frontMatter: string, field: string): string | nul
   return joined || null
 }
 
+// 简介只取前 ~300 字符：翻译耗时与长度成正比，够用即可（按句断开，避免半句）
+const INTRO_MAX_CHARS = 300
+
+function truncateAtSentence(text: string, limit: number): string {
+  const clean = text.replace(/\s+/g, " ").trim()
+  if (clean.length <= limit) return clean
+  const window = clean.slice(0, limit)
+  const cut = Math.max(
+    window.lastIndexOf(". "),
+    window.lastIndexOf("! "),
+    window.lastIndexOf("? "),
+    window.lastIndexOf("。"),
+  )
+  return (cut >= limit * 0.4 ? window.slice(0, cut + 1) : window.trimEnd() + "…").trim()
+}
+
 /** 从 SKILL.md 提取名称与描述；失败返回 null */
 export function extractIntro(content: string, fallbackName: string): SkillIntro | null {
   if (!content) return null
@@ -71,7 +87,7 @@ export function extractIntro(content: string, fallbackName: string): SkillIntro 
     if (paragraph) description = paragraph.replace(/\s+/g, " ")
   }
 
-  description = description.slice(0, 1200).trim()
+  description = truncateAtSentence(description, INTRO_MAX_CHARS)
   if (!description) return null
   return { name, description }
 }
