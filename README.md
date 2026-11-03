@@ -4,7 +4,7 @@
 
 <h1 align="center">SkillVault</h1>
 
-<p align="center">一个 Skill，只装一次；说需求，AI 帮你挑。</p>
+<p align="center">一个 Skill 只装一次；说需求，AI 帮你挑。</p>
 
 <p align="center">
   本地优先、无需账号的 Agent Skill 管理工具。<br />
