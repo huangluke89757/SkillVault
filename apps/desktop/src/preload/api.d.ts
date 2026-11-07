@@ -222,6 +222,17 @@ declare global {
         isOfficial?: boolean
       }[]
     >
+    fetchLeaderboard: () => Promise<
+      {
+        id: string
+        skillId: string
+        name: string
+        installs: number
+        source: string
+        isOfficial?: boolean
+        weeklyInstalls?: number[]
+      }[]
+    >
     fetchSkillContent: (
       source: string,
       skillId: string,

@@ -12,6 +12,8 @@ export interface TrendingSkill {
   installs: number
   source: string
   isOfficial?: boolean
+  /** All-time leaderboard only: installs per week, oldest → newest. */
+  weeklyInstalls?: number[]
 }
 
 /** Single-row cache table holding the most recent trending payload. */
