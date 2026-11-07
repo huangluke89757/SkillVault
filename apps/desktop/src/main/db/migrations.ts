@@ -107,6 +107,18 @@ const MIGRATIONS: Migration[] = [
       INSERT OR IGNORE INTO schema_version VALUES (5);
     `,
   },
+  {
+    version: 6,
+    up: `
+      CREATE TABLE IF NOT EXISTS leaderboard_cache (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        fetched_at TEXT NOT NULL,
+        payload    TEXT NOT NULL
+      );
+
+      INSERT OR IGNORE INTO schema_version VALUES (6);
+    `,
+  },
 ]
 
 function getCurrentVersion(db: Database.Database): number {

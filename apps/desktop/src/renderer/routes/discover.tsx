@@ -41,6 +41,11 @@ import {
   looksChinese,
   saveIntroZhCache,
 } from "../lib/skill-intro"
+import {
+  latestWeekInstalls,
+  rankByCumulative,
+  rankByWeeklySurge,
+} from "../lib/skill-ranking"
 
 // 市场技能收藏键：复用本地收藏表，加命名空间前缀避免与本地技能名冲突
 const MARKET_FAVORITE_PREFIX = "market:"
@@ -63,13 +68,27 @@ interface CatalogSkill {
   isOfficial?: boolean
   // Category for quick-filter tabs (e.g. "开发", "写作", "设计", "数据", "效率").
   category?: string
+  // All-time leaderboard only: installs per week, oldest → newest.
+  weeklyInstalls?: number[]
 }
+
+// 热门排行内的榜单切换：保留原有「热门」，新增「累计高星」与「本周飙升」。
+const RANK_TABS = [
+  { key: "trending", label: "热门" },
+  { key: "cumulative", label: "累计高星" },
+  { key: "weekly", label: "本周飙升" },
+] as const
+
+type RankTab = (typeof RANK_TABS)[number]["key"]
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
 function formatInstalls(installs: number): string {
+  if (installs >= 1_000_000) {
+    return `${(installs / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`
+  }
   if (installs >= 1000) {
     return `${(installs / 1000).toFixed(1).replace(/\.0$/, "")}k`
   }
@@ -449,6 +468,8 @@ interface SkillCardProps {
   installedState: InstalledMarketplaceState
   // 已选安装目标的展示名，用于生成「带目标」的安装口令
   favoriteAgents: string[]
+  // 榜单指标覆盖：本周飙升榜展示上周安装量，而不是累计安装量
+  metric?: { value: number; label: string }
 }
 
 const SkillCard = memo(function SkillCard({
@@ -456,6 +477,7 @@ const SkillCard = memo(function SkillCard({
   onSelect,
   installedState,
   favoriteAgents,
+  metric,
 }: SkillCardProps) {
   const isInstalled = isMarketplaceSkillInstalled(installedState, skill)
 
@@ -483,12 +505,21 @@ const SkillCard = memo(function SkillCard({
             installed
           </span>
         )}
-        {skill.installs > 0 && (
+        {metric && metric.value > 0 ? (
+          <span
+            title={metric.label}
+            className="flex-shrink-0 flex items-center gap-1 text-[11px] font-mono text-muted ml-auto"
+          >
+            <InstallsIcon />
+            <span>{metric.label}</span>
+            {formatInstalls(metric.value)}
+          </span>
+        ) : skill.installs > 0 ? (
           <span className="flex-shrink-0 flex items-center gap-1 text-[11px] font-mono text-muted ml-auto">
             <InstallsIcon />
             {formatInstalls(skill.installs)}
           </span>
-        )}
+        ) : null}
       </div>
 
       {/* Source + affordance row (single compact line) */}
@@ -1661,6 +1692,11 @@ export function Discover() {
   const [hasMore, setHasMore] = useState(false)
   const [trending, setTrending] = useState<CatalogSkill[]>([])
   const [isLoadingTrending, setIsLoadingTrending] = useState(true)
+  // 热门排行内的榜单：默认保留原有「热门」，切换后再按需拉取全量累计榜。
+  const [rankTab, setRankTab] = useState<RankTab>("trending")
+  const [leaderboard, setLeaderboard] = useState<CatalogSkill[]>([])
+  const [isLoadingLeaderboard, setIsLoadingLeaderboard] = useState(false)
+  const [leaderboardError, setLeaderboardError] = useState<string | null>(null)
   const [officialOnly, setOfficialOnly] = useState(false)
   const [page, setPage] = useState(1)
   const [showBackToTop, setShowBackToTop] = useState(false)
@@ -1681,6 +1717,7 @@ export function Discover() {
   const contentCacheRef = useRef(new Map<string, string | null>())
   const inFlightPageKeysRef = useRef(new Set<string>())
   const latestQueryRef = useRef("")
+  const leaderboardLoadingRef = useRef(false)
 
   function updateInstalledState(installed: InstalledSkill[]) {
     setInstalledState(createInstalledMarketplaceState(installed))
@@ -1764,6 +1801,35 @@ export function Discover() {
       cancelled = true
     }
   }, [])
+
+  // 累计榜按需加载：只在用户第一次切到「累计高星 / 本周飙升」时拉取，
+  // 避免默认的「热门」视图多付一次整页请求。主进程有 6 小时缓存。
+  const loadLeaderboard = useCallback(() => {
+    if (leaderboardLoadingRef.current) return
+    leaderboardLoadingRef.current = true
+    setIsLoadingLeaderboard(true)
+    setLeaderboardError(null)
+    electronAPI
+      .fetchLeaderboard()
+      .then((items) => {
+        setLeaderboard(items)
+      })
+      .catch((err) => {
+        const message = err instanceof Error ? err.message : String(err)
+        setLeaderboardError(message)
+        console.error("[discover] leaderboard load failed", err)
+      })
+      .finally(() => {
+        leaderboardLoadingRef.current = false
+        setIsLoadingLeaderboard(false)
+      })
+  }, [])
+
+  useEffect(() => {
+    if (rankTab === "trending") return
+    if (leaderboard.length > 0 || leaderboardError) return
+    loadLeaderboard()
+  }, [rankTab, leaderboard.length, leaderboardError, loadLeaderboard])
 
   async function fetchSkills(query: string, loaded: number) {
     const q = query.trim()
@@ -1855,10 +1921,10 @@ export function Discover() {
     return () => el.removeEventListener("scroll", onScroll)
   }, [])
 
-  // A new query or filter always lands on the first page.
+  // A new query, filter or leaderboard tab always lands on the first page.
   useEffect(() => {
     setPage(1)
-  }, [trimmedQuery, officialOnly])
+  }, [trimmedQuery, officialOnly, rankTab])
 
   async function handleInstall(source: string, skillId: string, agentNames: string[]) {
     console.log("[discover] starting install", { source, skillId, agentNames })
@@ -2013,9 +2079,27 @@ export function Discover() {
     activeQuery,
   ])
 
-  const totalPages = Math.max(1, Math.ceil(visibleSkills.length / PAGE_SIZE))
+  // 热门排行当前榜单：原有「热门」沿用 trending，新增两个榜单由累计榜
+  // 数据排序后得到。官方筛选与分类 Tab 对三个榜单一致生效。
+  const rankingSkills = useMemo(() => {
+    if (rankTab === "trending") return visibleSkills
+
+    let ranked =
+      rankTab === "cumulative"
+        ? rankByCumulative(leaderboard)
+        : rankByWeeklySurge(leaderboard)
+
+    if (officialOnly) ranked = ranked.filter((s) => s.isOfficial)
+    if (activeCategory !== "全部") {
+      ranked = ranked.filter((s) => categorize(s) === activeCategory)
+    }
+    return ranked
+  }, [rankTab, visibleSkills, leaderboard, officialOnly, activeCategory])
+
+  const displayedSkills = showSearchView ? visibleSkills : rankingSkills
+  const totalPages = Math.max(1, Math.ceil(displayedSkills.length / PAGE_SIZE))
   const currentPage = Math.min(page, totalPages)
-  const pageSkills = visibleSkills.slice(
+  const pageSkills = displayedSkills.slice(
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE,
   )
@@ -2028,7 +2112,7 @@ export function Discover() {
       if (
         isSearching &&
         hasMore &&
-        next * PAGE_SIZE > visibleSkills.length &&
+        next * PAGE_SIZE > displayedSkills.length &&
         activeQuery
       ) {
         await fetchSkills(activeQuery, skills.length)
@@ -2037,7 +2121,7 @@ export function Discover() {
       scrollRef.current?.scrollTo({ top: 0 })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isSearching, hasMore, visibleSkills.length, activeQuery, skills.length],
+    [isSearching, hasMore, displayedSkills.length, activeQuery, skills.length],
   )
 
   const canGoPrev = currentPage > 1
@@ -2048,6 +2132,12 @@ export function Discover() {
   const selectedInstallTask = selectedSkill
     ? installTasks[marketplaceKey(selectedSkill.source, selectedSkill.skillId)]
     : undefined
+
+  // 切到新榜单后的第一帧数据尚未返回，先按加载态渲染，避免闪一下空列表。
+  const isAwaitingLeaderboard =
+    rankTab !== "trending" && leaderboard.length === 0 && !leaderboardError
+  // 本周飙升榜在卡片上展示「上周」安装量；搜索结果与其它榜单仍显示累计量。
+  const showWeeklyMetric = !showSearchView && rankTab === "weekly"
 
   // 结果网格 + 分页：全屏搜索结果视图与热门排行共用同一份渲染逻辑
   const resultsGrid = (
@@ -2060,6 +2150,11 @@ export function Discover() {
             onSelect={setSelectedSkill}
             installedState={installedState}
             favoriteAgents={marketTargetNames}
+            metric={
+              showWeeklyMetric
+                ? { value: latestWeekInstalls(skill), label: "上周" }
+                : undefined
+            }
           />
         ))}
       </div>
@@ -2230,19 +2325,69 @@ export function Discover() {
               />
             </div>
 
-            {/* 下：热门排行 */}
+            {/* 下：热门排行（热门 / 累计高星 / 本周飙升） */}
             <div className="mt-10">
-              <p className="text-[12px] uppercase tracking-wider font-medium text-muted mb-3">
-                热门排行
-              </p>
-              {isLoadingTrending && visibleSkills.length === 0 ? (
+              <div className="flex items-center gap-2 flex-wrap mb-3">
+                <p className="text-[12px] uppercase tracking-wider font-medium text-muted">
+                  热门排行
+                </p>
+                <div className="flex items-center gap-1.5 ml-2">
+                  {RANK_TABS.map((tab) => (
+                    <button
+                      key={tab.key}
+                      type="button"
+                      onClick={() => setRankTab(tab.key)}
+                      aria-pressed={rankTab === tab.key}
+                      className={`skillbox-category-tab${rankTab === tab.key ? " is-active" : ""}`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+                {rankTab !== "trending" && (
+                  <span className="ml-auto text-[11px] text-muted">
+                    {rankTab === "cumulative"
+                      ? "按累计安装量倒序"
+                      : "按上周安装量倒序"}
+                  </span>
+                )}
+              </div>
+
+              {rankTab === "trending" ? (
+                isLoadingTrending && rankingSkills.length === 0 ? (
+                  <div className="flex items-center justify-center py-20">
+                    <div className="text-center">
+                      <SpinnerIcon />
+                      <p className="text-muted text-[12px] mt-3">正在载入热门技能...</p>
+                    </div>
+                  </div>
+                ) : rankingSkills.length === 0 ? (
+                  <EmptyHint>没有找到相关 Skill</EmptyHint>
+                ) : (
+                  resultsGrid
+                )
+              ) : (isLoadingLeaderboard || isAwaitingLeaderboard) &&
+                rankingSkills.length === 0 ? (
                 <div className="flex items-center justify-center py-20">
                   <div className="text-center">
                     <SpinnerIcon />
-                    <p className="text-muted text-[12px] mt-3">正在载入热门技能...</p>
+                    <p className="text-muted text-[12px] mt-3">正在载入榜单...</p>
                   </div>
                 </div>
-              ) : visibleSkills.length === 0 ? (
+              ) : leaderboardError && rankingSkills.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <p className="text-muted text-[12px]">
+                    榜单加载失败，请检查网络后重试。
+                  </p>
+                  <button
+                    type="button"
+                    onClick={loadLeaderboard}
+                    className="mt-3 px-3 py-1.5 rounded-lg text-[12px] border border-border text-foreground hover:bg-surface-hover transition-colors"
+                  >
+                    重试
+                  </button>
+                </div>
+              ) : rankingSkills.length === 0 ? (
                 <EmptyHint>没有找到相关 Skill</EmptyHint>
               ) : (
                 resultsGrid
