@@ -4,6 +4,7 @@ import {
   getAdaptedAgentNames,
   getAgentFilterNames,
   getSkillListAgentNames,
+  summarizeAgentAdaptation,
 } from "../src/renderer/lib/skill-agent-bindings"
 
 test("项目内的 Agent Skill 不冒充全局适配", () => {
@@ -60,4 +61,38 @@ test("直接读取通用目录的 Agent 可筛选，但不显示可取消的适�
 
   assert.deepEqual(getAgentFilterNames(skill), ["Zed", "通用 Skill 目录"])
   assert.deepEqual(getAdaptedAgentNames(skill), [])
+})
+
+test("批量适配汇总区分全部、部分与未适配", () => {
+  const adapted = {
+    scope: "global" as const,
+    agents: ["Claude Code"],
+    locations: [
+      { scope: "global" as const, agents: ["Claude Code"] },
+    ],
+  }
+  const notAdapted = {
+    scope: "global" as const,
+    agents: ["Codex CLI"],
+    locations: [
+      { scope: "global" as const, agents: ["Codex CLI"] },
+    ],
+  }
+
+  assert.deepEqual(
+    summarizeAgentAdaptation("Claude Code", [adapted, adapted]),
+    { adaptedCount: 2, total: 2, state: "all" },
+  )
+  assert.deepEqual(
+    summarizeAgentAdaptation("Claude Code", [adapted, notAdapted]),
+    { adaptedCount: 1, total: 2, state: "partial" },
+  )
+  assert.deepEqual(
+    summarizeAgentAdaptation("Claude Code", [notAdapted]),
+    { adaptedCount: 0, total: 1, state: "none" },
+  )
+  assert.deepEqual(
+    summarizeAgentAdaptation("Claude Code", []),
+    { adaptedCount: 0, total: 0, state: "none" },
+  )
 })
