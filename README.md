@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v1.3.3-4E6E76" alt="SkillVault v1.3.3" />
+  <img src="https://img.shields.io/badge/version-v1.3.4-4E6E76" alt="SkillVault v1.3.4" />
   <img src="https://img.shields.io/badge/Agent-42-4E6E76" alt="支持 42 个 Agent" />
   <img src="https://img.shields.io/badge/Skill%20Market-90%2C000%2B-4E6E76" alt="90,000+ Skill" />
   <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-11212D" alt="Windows、macOS、Linux" />
@@ -143,6 +143,14 @@ SkillVault 将本地 Skill 作为母本统一管理：一个 Skill 只保留一�
 此外，SkillVault 支持将 `~/.agents/skills` 作为跨 Agent 共用的 **通用 Skill 目录**。
 
 ## 更新日志
+
+### v1.3.4（更新安装与版本说明修复）
+
+- 修复自动更新把新版本装进 `安装目录\SkillVault` 嵌套目录、旧版本未被覆盖，导致「已是最新仍反复下载安装包」的根因：安装器读取被截断的 `InstallLocation`（如 `D:SkillVault`）时自动补全并写回注册表
+- 更新弹窗改为「当前版本」「最新版本」双区块，当前版本也能看到自己的更新介绍；已是最新时最新区块显示「您当前已装载最新版本👍，无需更新」并隐藏下载入口
+- 自动更新新增版本一致性护栏：可下载/已下载版本等于当前版本时不再进入下载流程；启动时清理已过期的更新缓存
+- 修复更新横幅在「有新版本但未下载」时误显示 Downloading 的文案
+- 关联 Issue #8、PR #9
 
 ### v1.3.3（热门榜单补全）
 
