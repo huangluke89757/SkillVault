@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v1.3.2-4E6E76" alt="SkillVault v1.3.2" />
+  <img src="https://img.shields.io/badge/version-v1.3.3-4E6E76" alt="SkillVault v1.3.3" />
   <img src="https://img.shields.io/badge/Agent-42-4E6E76" alt="支持 42 个 Agent" />
   <img src="https://img.shields.io/badge/Skill%20Market-90%2C000%2B-4E6E76" alt="90,000+ Skill" />
   <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-11212D" alt="Windows、macOS、Linux" />
@@ -143,6 +143,14 @@ SkillVault 将本地 Skill 作为母本统一管理：一个 Skill 只保留一�
 此外，SkillVault 支持将 `~/.agents/skills` 作为跨 Agent 共用的 **通用 Skill 目录**。
 
 ## 更新日志
+
+### v1.3.3（热门榜单补全）
+
+- 「发现」页热门排行新增两个榜单 Tab：**累计高下载 / 本周飙升**，默认仍为「热门」
+- 累计高下载按 skills.sh All Time 累计安装量倒序；本周飙升按最近一个完整周的安装量倒序，卡片显示「上周」安装量
+- 两个榜单与「仅官方」筛选、分类 Tab、分页共用交互；首次切换才拉取，主进程 6 小时缓存
+- 安装量格式化补充 `M` 单位（如 4.2M）
+- 关联 Issue #4、PR #5
 
 ### v1.3.2（批量操作补全）
 
