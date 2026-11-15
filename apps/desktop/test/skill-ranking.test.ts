@@ -17,7 +17,7 @@ test("本周飙升取最近一个完整周的安装量", () => {
   assert.equal(latestWeekInstalls({ weeklyInstalls: [10, -5] }), 0)
 })
 
-test("累计高星按累计安装量倒序，并保持稳定顺序", () => {
+test("累计下载榜单按累计安装量倒序，并保持稳定顺序", () => {
   const skills = [
     { id: "a/one", installs: 10 },
     { id: "b/two", installs: 30 },

@@ -2169,7 +2169,7 @@ export function registerIpcHandlers(): void {
     },
   )
 
-  // All-time leaderboard for the "累计高星" / "本周飙升" tabs. Served from a
+  // All-time leaderboard for the "累计高下载" / "本周飙升" tabs. Served from a
   // six-hour cache first; a cold fetch reads the all-time page payload, which
   // carries each skill's weekly install series for the weekly ranking.
   ipcMain.handle(

@@ -72,10 +72,10 @@ interface CatalogSkill {
   weeklyInstalls?: number[]
 }
 
-// 热门排行内的榜单切换：保留原有「热门」，新增「累计高星」与「本周飙升」。
+// 热门排行内的榜单切换：保留原有「热门」，新增「累计高下载」与「本周飙升」。
 const RANK_TABS = [
   { key: "trending", label: "热门" },
-  { key: "cumulative", label: "累计高星" },
+  { key: "cumulative", label: "累计高下载" },
   { key: "weekly", label: "本周飙升" },
 ] as const
 
@@ -1802,7 +1802,7 @@ export function Discover() {
     }
   }, [])
 
-  // 累计榜按需加载：只在用户第一次切到「累计高星 / 本周飙升」时拉取，
+  // 累计榜按需加载：只在用户第一次切到「累计高下载 / 本周飙升」时拉取，
   // 避免默认的「热门」视图多付一次整页请求。主进程有 6 小时缓存。
   const loadLeaderboard = useCallback(() => {
     if (leaderboardLoadingRef.current) return
@@ -2325,7 +2325,7 @@ export function Discover() {
               />
             </div>
 
-            {/* 下：热门排行（热门 / 累计高星 / 本周飙升） */}
+            {/* 下：热门排行（热门 / 累计高下载 / 本周飙升） */}
             <div className="mt-10">
               <div className="flex items-center gap-2 flex-wrap mb-3">
                 <p className="text-[12px] uppercase tracking-wider font-medium text-muted">
@@ -2347,8 +2347,8 @@ export function Discover() {
                 {rankTab !== "trending" && (
                   <span className="ml-auto text-[11px] text-muted">
                     {rankTab === "cumulative"
-                      ? "按累计安装量倒序"
-                      : "按上周安装量倒序"}
+                      ? "按累计下载量倒序"
+                      : "按上周下载量倒序"}
                   </span>
                 )}
               </div>
