@@ -17,6 +17,11 @@ import {
   saveTrendingCache,
   type TrendingSkill,
 } from "./db/trending-cache"
+import {
+  loadLeaderboardCache,
+  saveLeaderboardCache,
+} from "./db/leaderboard-cache"
+import { fetchLeaderboard } from "./market-leaderboard"
 import { testConnection, syncRemoteServer, readRemoteFile, writeRemoteFile } from "./db/ssh"
 import { planPush, applyPush } from "./db/push"
 import type { PushPreview } from "./db/push"
@@ -2160,6 +2165,23 @@ export function registerIpcHandlers(): void {
 
       const skills = await fetchTrending()
       saveTrendingCache(skills)
+      return skills
+    },
+  )
+
+  // All-time leaderboard for the "累计高星" / "本周飙升" tabs. Served from a
+  // six-hour cache first; a cold fetch reads the all-time page payload, which
+  // carries each skill's weekly install series for the weekly ranking.
+  ipcMain.handle(
+    "skills:fetch-leaderboard",
+    async (): Promise<TrendingSkill[]> => {
+      const cached = loadLeaderboardCache()
+      if (cached) return cached
+
+      const skills = await fetchLeaderboard(marketFetch, {
+        log: (message, error) => console.warn(message, error),
+      })
+      saveLeaderboardCache(skills)
       return skills
     },
   )
