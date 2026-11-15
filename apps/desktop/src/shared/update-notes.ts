@@ -116,10 +116,13 @@ function notesSection(notes: UpdateReleaseNotes, fallbackVersion: string): Updat
 export function buildUpdateNotesViewModel(input: UpdateNotesInput): UpdateNotesViewModel {
   const appVersion = normalizeVersion(input.appVersion) || input.appVersion
   const state = input.state ?? null
+  // 更新器状态优先：下载/可用版本比 GitHub notes 更接近真实目标；两者都缺失且已判定最新时回退到当前版本
+  const stateVersion =
+    normalizeVersion(state?.downloadedVersion) || normalizeVersion(state?.availableVersion)
   const latestVersion =
+    stateVersion ||
     normalizeVersion(input.latestNotes?.version) ||
-    normalizeVersion(state?.downloadedVersion) ||
-    normalizeVersion(state?.availableVersion)
+    (state?.status === "not-available" ? appVersion : "")
   const isUpToDate = versionsEqual(appVersion, latestVersion)
 
   const current = input.currentNotes

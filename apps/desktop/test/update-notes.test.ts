@@ -90,7 +90,7 @@ test("当前版本取不到 Release 时降级为「暂无该版本的更新说�
   assert.equal(view.latest.kind, "notes")
 })
 
-test("最新版本信息获取失败时不阻塞界面，给出可重试提示", () => {
+test("最新版本信息获取失败且更新器已判定最新时，直接显示 👍 提示", () => {
   const view = buildUpdateNotesViewModel({
     appVersion: "1.3.3",
     state: { status: "not-available" },
@@ -98,7 +98,24 @@ test("最新版本信息获取失败时不阻塞界面，给出可重试提示",
     latestNotes: null,
   })
 
+  assert.equal(view.isUpToDate, true)
+  assert.equal(view.showUpdateActions, false)
+  assert.equal(view.latest.kind, "up-to-date")
+  assert.equal(view.latest.message, UP_TO_DATE_MESSAGE)
+  assert.equal(view.current.kind, "notes")
+})
+
+test("有可用版本但最新版本 notes 获取失败时，仍保留下载操作并提示可重试", () => {
+  const view = buildUpdateNotesViewModel({
+    appVersion: "1.3.2",
+    state: { status: "available", availableVersion: "1.3.3" },
+    currentNotes: { ...currentNotes },
+    latestNotes: null,
+  })
+
   assert.equal(view.isUpToDate, false)
+  assert.equal(view.showUpdateActions, true)
+  assert.equal(view.latestVersion, "1.3.3")
   assert.equal(view.latest.kind, "empty")
   assert.equal(view.latest.message, "暂时无法获取最新版本信息，请稍后点击「检查更新」重试")
 })

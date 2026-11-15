@@ -6,6 +6,7 @@ import path from "node:path"
 import {
   extractVersionFromFileName,
   shouldCleanPendingUpdate,
+  UP_TO_DATE_MESSAGE,
   versionsEqual,
 } from "../shared/update-notes"
 
@@ -93,7 +94,7 @@ function cleanupStalePendingUpdate(): void {
 }
 
 /** 已是最新版本时统一收敛为 not-available，避免界面继续提示下载 */
-function settleAsUpToDate(message = "You are up to date"): void {
+function settleAsUpToDate(message = UP_TO_DATE_MESSAGE): void {
   setUpdateState({
     status: "not-available",
     availableVersion: undefined,
