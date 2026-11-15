@@ -335,12 +335,21 @@ declare global {
     updatesDownload: () => Promise<UpdateState>
     updatesInstall: () => Promise<void>
     updatesReleaseNotes: () => Promise<{
-      version: string
-      name: string
-      body: string
-      url: string
-      publishedAt: string
-    } | null>
+      current: {
+        version: string
+        name: string
+        body: string
+        url: string
+        publishedAt: string
+      } | null
+      latest: {
+        version: string
+        name: string
+        body: string
+        url: string
+        publishedAt: string
+      } | null
+    }>
     appGetVersion: () => Promise<string>
 
     onSkillsUpdated: (

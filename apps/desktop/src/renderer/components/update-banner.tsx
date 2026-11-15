@@ -47,10 +47,7 @@ export function UpdateBanner() {
     return (
       <div className="flex items-center justify-between px-4 py-2.5 bg-accent/10 border-b border-accent/20 text-[12px]">
         <span className="text-foreground">
-          Downloading update <strong>v{state.availableVersion}</strong>...
-          {state.progressPercent != null && (
-            <span className="text-muted ml-2">{Math.round(state.progressPercent)}%</span>
-          )}
+          Update <strong>v{state.availableVersion}</strong> is available.
         </span>
         <button
           onClick={() => setDismissed(true)}

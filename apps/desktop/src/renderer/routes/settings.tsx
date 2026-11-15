@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { electronAPI } from "../lib/electron-api"
 import { useLocalization, type AppLocale } from "../lib/localization"
+import { UP_TO_DATE_MESSAGE } from "../../shared/update-notes"
 
 // ---------------------------------------------------------------------------
 // Setting row components
@@ -291,7 +292,9 @@ export function Settings() {
                   Version {appVersion || "unknown"}
                 </p>
                 <p className="text-[12px] text-muted mt-2">
-                  {updateState?.message || "Check for updates from GitHub Releases."}
+                  {updateState?.status === "not-available"
+                    ? UP_TO_DATE_MESSAGE
+                    : updateState?.message || "Check for updates from GitHub Releases."}
                 </p>
                 {updateState?.availableVersion && (
                   <p className="text-[12px] text-foreground mt-1">

@@ -31,6 +31,7 @@ import {
   getUpdateState,
   quitAndInstallUpdate,
 } from "./auto-updater"
+import type { UpdateReleaseNotes } from "../shared/update-notes"
 import {
   agentRegistry,
   dirExists,
@@ -3180,34 +3181,47 @@ Add your skill instructions here.
     quitAndInstallUpdate()
   })
 
-  // Release notes for the update dialog. Fetched from the GitHub API in the
-  // main process (no CORS, no token needed for a public repo).
+  // Release notes for the update dialog: the installed version and the latest
+  // release are fetched separately so the dialog can show both sections.
+  // Fetched from the GitHub API in the main process (no CORS, no token needed
+  // for a public repo).
+  const fetchReleaseNotes = async (url: string): Promise<UpdateReleaseNotes | null> => {
+    try {
+      const res = await fetch(url, { headers: { Accept: "application/vnd.github+json" } })
+      if (!res.ok) throw new Error(`GitHub API HTTP ${res.status}`)
+      const data = (await res.json()) as {
+        tag_name?: string
+        name?: string
+        body?: string
+        html_url?: string
+        published_at?: string
+      }
+      return {
+        version: String(data.tag_name ?? "").replace(/^(desktop-v|v)/, ""),
+        name: String(data.name ?? data.tag_name ?? ""),
+        body: String(data.body ?? ""),
+        url: String(data.html_url ?? ""),
+        publishedAt: String(data.published_at ?? ""),
+      }
+    } catch {
+      return null
+    }
+  }
+
   ipcMain.handle(
     "updates:release-notes",
     async (): Promise<{
-      version: string
-      name: string
-      body: string
-      url: string
-      publishedAt: string
-    } | null> => {
-      try {
-        const res = await fetch(
-          "https://api.github.com/repos/huangluke89757/SkillVault/releases/latest",
-          { headers: { Accept: "application/vnd.github+json" } },
-        )
-        if (!res.ok) throw new Error(`GitHub API HTTP ${res.status}`)
-        const data = await res.json()
-        return {
-          version: String(data.tag_name ?? "").replace(/^(desktop-v|v)/, ""),
-          name: String(data.name ?? data.tag_name ?? ""),
-          body: String(data.body ?? ""),
-          url: String(data.html_url ?? ""),
-          publishedAt: String(data.published_at ?? ""),
-        }
-      } catch {
-        return null
-      }
+      current: UpdateReleaseNotes | null
+      latest: UpdateReleaseNotes | null
+    }> => {
+      const currentVersion = app.getVersion()
+      const [latest, current] = await Promise.all([
+        fetchReleaseNotes("https://api.github.com/repos/huangluke89757/SkillVault/releases/latest"),
+        fetchReleaseNotes(
+          `https://api.github.com/repos/huangluke89757/SkillVault/releases/tags/v${currentVersion}`,
+        ),
+      ])
+      return { current, latest }
     },
   )
 
