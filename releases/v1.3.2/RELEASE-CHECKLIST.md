@@ -15,10 +15,10 @@
 
 ## 二、打包与发版
 
-- [ ] 打包到 `release-132`（exe / blockmap / latest.yml）
-- [ ] 提交 + 推送（git 直连优先，失败走 `github-push-fallback` 的 `gh_push.py`）
-- [ ] 打 tag `v1.3.2`
-- [ ] `gh release create v1.3.2` 并上传三资产
+- [x] 打包到 `release-132`：`SkillVault-Setup-1.3.2.exe`（86.22 MB）/ blockmap / latest.yml
+- [x] 提交 + 推送：git 直连被 reset，走 `github-push-fallback` 的 `gh_push.py`；远端 main `1c5cc55`，tree 与本地一致
+- [x] 打 tag `v1.3.2` → `1c5cc55`
+- [x] `gh release create v1.3.2` 并上传三资产（2026-11-15 09:40 UTC）
 
 ## 三、发布后验证（需人工）
 
