@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v1.3.1-4E6E76" alt="SkillVault v1.3.1" />
+  <img src="https://img.shields.io/badge/version-v1.3.2-4E6E76" alt="SkillVault v1.3.2" />
   <img src="https://img.shields.io/badge/Agent-42-4E6E76" alt="支持 42 个 Agent" />
   <img src="https://img.shields.io/badge/Skill%20Market-90%2C000%2B-4E6E76" alt="90,000+ Skill" />
   <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-11212D" alt="Windows、macOS、Linux" />
@@ -143,6 +143,13 @@ SkillVault 将本地 Skill 作为母本统一管理：一个 Skill 只保留一�
 此外，SkillVault 支持将 `~/.agents/skills` 作为跨 Agent 共用的 **通用 Skill 目录**。
 
 ## 更新日志
+
+### v1.3.2（批量操作补全）
+
+- 「已安装」列表新增**批量调整 Agent 适配**：一次选中多个 Skill，按 Agent 汇总当前状态（全部 / 部分 / 未适配），勾选即批量启用、取消勾选即批量取消
+- 取消适配只移除该 Agent 下的适配副本，**不删除母本 Skill**；应用后自动重扫并提示新增 / 取消 / 失败数量
+- 批量收藏、批量加入集合沿用原有入口（本次一并核对可用）
+- 关联 Issue #6、PR #7
 
 ### v1.3.1（翻译链路优化）
 
