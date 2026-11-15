@@ -17,9 +17,9 @@
 
 - [x] 先清理 `apps/desktop/out` 再重新构建，避免旧 chunk 混入安装包（确认包内 discover chunk 唯一）
 - [x] 打包到 `release-133`：`SkillVault-Setup-1.3.3.exe`（90,249,994 字节 ≈ 86.07 MiB）/ blockmap（94,887 字节）/ `latest.yml`（version: 1.3.3）
-- [ ] 提交 + 推送：待执行
-- [ ] 打 tag `v1.3.3`：待执行
-- [ ] `gh release create v1.3.3` 并上传 exe / blockmap / latest.yml：待执行
+- [x] 提交 + 推送：远端 main `276c3a5`，远端 tree 与本地一致（`f684c87`）
+- [x] 打 tag `v1.3.3` → `276c3a5`
+- [x] `gh release create v1.3.3` 并上传三资产（2026-11-15 15:34 UTC）；远端 `latest.yml` 的 sha512 与本地一致
 
 ## 三、包内自检（已做）
 
