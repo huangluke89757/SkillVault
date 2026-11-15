@@ -16,6 +16,7 @@ import {
   getAdaptedAgentNames,
   getAgentFilterNames,
   getSkillListAgentNames,
+  summarizeAgentAdaptation,
 } from "../lib/skill-agent-bindings"
 import { useLocalization } from "../lib/localization"
 // 编辑器按需加载：CodeMirror 体积大，只在真正进入编辑时拉取（不进启动包）
@@ -658,8 +659,7 @@ interface MiddlePanelProps {
   onBulkAddToCollection: (collectionName: string) => void
   onBulkCreateCollection: () => void
   onBulkFavorite: () => Promise<void>
-  onBulkAdaptToAgent: (agent: DetectedAgent) => Promise<void>
-  bulkAgentBusy: string | null
+  onOpenBulkAdaptDialog: () => void
   onBulkDelete: () => void
   listRef: React.RefObject<HTMLDivElement | null>
 }
@@ -705,15 +705,12 @@ function MiddlePanel({
   onBulkAddToCollection,
   onBulkCreateCollection,
   onBulkFavorite,
-  onBulkAdaptToAgent,
-  bulkAgentBusy,
+  onOpenBulkAdaptDialog,
   onBulkDelete,
   listRef,
 }: MiddlePanelProps) {
   const [showCollectionDropdown, setShowCollectionDropdown] = useState(false)
-  const [showAgentDropdown, setShowAgentDropdown] = useState(false)
   const collectionDropdownRef = useRef<HTMLDivElement>(null)
-  const agentDropdownRef = useRef<HTMLDivElement>(null)
   // 复选框仅在显式选择模式中显示。
   const isMultiSelectActive = selectionMode
   const hasSelection = multiSelected.size > 0
@@ -753,28 +750,20 @@ function MiddlePanel({
     ],
   )
 
-  // Close bulk-action dropdowns when clicking outside
+  // Close the collection dropdown when clicking outside
   useEffect(() => {
-    if (!showCollectionDropdown && !showAgentDropdown) return
+    if (!showCollectionDropdown) return
     const handleClick = (e: MouseEvent) => {
       if (
-        showCollectionDropdown &&
         collectionDropdownRef.current &&
         !collectionDropdownRef.current.contains(e.target as Node)
       ) {
         setShowCollectionDropdown(false)
       }
-      if (
-        showAgentDropdown &&
-        agentDropdownRef.current &&
-        !agentDropdownRef.current.contains(e.target as Node)
-      ) {
-        setShowAgentDropdown(false)
-      }
     }
     document.addEventListener("mousedown", handleClick)
     return () => document.removeEventListener("mousedown", handleClick)
-  }, [showAgentDropdown, showCollectionDropdown])
+  }, [showCollectionDropdown])
 
   const viewTitle = selectedAgent || selectedCollection || (activeFilter === "favorites" ? "Favorites" : "All Skills")
   // Unique agents that actually carry skills, deduped by registry key. The
@@ -1042,55 +1031,18 @@ function MiddlePanel({
               <StarIcon size={12} filled={allSelectedFavorited} />
               <span>{allSelectedFavorited ? "已收藏" : "收藏"}</span>
             </button>
-            {/* Adapt to Agent */}
-            <div className="relative" ref={agentDropdownRef}>
-              <button
-                onClick={() => {
-                  setShowAgentDropdown(!showAgentDropdown)
-                  setShowCollectionDropdown(false)
-                }}
-                disabled={bulkAgentBusy !== null}
-                className="skillbox-bulk-action"
-              >
-                <span>{bulkAgentBusy ? "适配中" : "适配到 Agent"}</span>
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
-              {showAgentDropdown && (
-                <div className="skillbox-bulk-menu skillbox-bulk-agent-menu">
-                  {agents.filter((agent) =>
-                    agent.name !== "universal" && !agent.isSharedSkillDirectory
-                  ).map((agent) => {
-                    const adaptedCount = selectedSkills.filter((skill) =>
-                      getAdaptedAgentNames(skill).includes(agent.displayName),
-                    ).length
-                    const allAdapted = adaptedCount === selectedSkills.length
-                    return (
-                      <button
-                        key={agent.name}
-                        disabled={allAdapted}
-                        onClick={() => {
-                          setShowAgentDropdown(false)
-                          void onBulkAdaptToAgent(agent)
-                        }}
-                      >
-                        <AgentLogo name={agent.displayName} size={19} />
-                        <span data-no-localize>{agent.displayName}</span>
-                        <small>{allAdapted ? "已适配" : `${adaptedCount}/${selectedSkills.length}`}</small>
-                      </button>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
+            {/* Adjust Agent adaptation for every selected skill */}
+            <button
+              onClick={onOpenBulkAdaptDialog}
+              className="skillbox-bulk-action"
+              title="批量启用或取消所选 Skill 的 Agent 适配"
+            >
+              <span>调整适配</span>
+            </button>
             {/* Add to Collection */}
             <div className="relative" ref={collectionDropdownRef}>
               <button
-                onClick={() => {
-                  setShowCollectionDropdown(!showCollectionDropdown)
-                  setShowAgentDropdown(false)
-                }}
+                onClick={() => setShowCollectionDropdown(!showCollectionDropdown)}
                 className="skillbox-bulk-action"
               >
                 <span>Collection</span>
@@ -1254,8 +1206,191 @@ function BulkDeleteDialog({
   )
 }
 
-type ExportScope = "selected" | "all" | "global" | "project"
+interface BulkAdaptChange {
+  agent: DetectedAgent
+  enable: boolean
+}
 
+// --------------------------------------------------------------------------
+// Bulk Agent Adaptation Dialog
+// --------------------------------------------------------------------------
+
+function BulkAdaptAgentsDialog({
+  agents,
+  selectedSkills,
+  onApply,
+  onCancel,
+}: {
+  agents: DetectedAgent[]
+  selectedSkills: InstalledSkill[]
+  onApply: (changes: BulkAdaptChange[]) => Promise<void>
+  onCancel: () => void
+}) {
+  const adaptableAgents = useMemo(
+    () => agents.filter((agent) =>
+      agent.name !== "universal" && !agent.isSharedSkillDirectory,
+    ),
+    [agents],
+  )
+  const summaries = useMemo(
+    () => adaptableAgents.map((agent) => ({
+      agent,
+      ...summarizeAgentAdaptation(agent.displayName, selectedSkills),
+    })),
+    [adaptableAgents, selectedSkills],
+  )
+  // 初始勾选状态等于当前适配状态，仅把用户改过的 Agent 计入变更。
+  const [targets, setTargets] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(summaries.map(({ agent, state }) => [agent.name, state === "all"])),
+  )
+  const [touched, setTouched] = useState<Set<string>>(new Set())
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const changes = useMemo(
+    () => summaries.flatMap(({ agent, state }): BulkAdaptChange[] => {
+      if (!touched.has(agent.name)) return []
+      const target = targets[agent.name] === true
+      if (target && state !== "all") return [{ agent, enable: true }]
+      if (!target && state !== "none") return [{ agent, enable: false }]
+      return []
+    }),
+    [summaries, targets, touched],
+  )
+
+  const toggleAgent = (agentName: string) => {
+    if (busy) return
+    setTargets((current) => ({ ...current, [agentName]: !current[agentName] }))
+    setTouched((current) => new Set(current).add(agentName))
+  }
+
+  const apply = async () => {
+    if (busy || changes.length === 0) return
+    setBusy(true)
+    setError(null)
+    try {
+      await onApply(changes)
+      onCancel()
+    } catch (applyError) {
+      setError(applyError instanceof Error ? applyError.message : "调整适配失败，请重试。")
+      setBusy(false)
+    }
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !busy) {
+        event.stopPropagation()
+        onCancel()
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown, true)
+    return () => window.removeEventListener("keydown", handleKeyDown, true)
+  }, [busy, onCancel])
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="bulk-adapt-title"
+        aria-describedby="bulk-adapt-description"
+        className="bg-surface border border-border rounded-xl shadow-lg w-full max-w-md mx-4 p-5 animate-slide-down"
+      >
+        <h2 id="bulk-adapt-title" className="text-[14px] font-semibold text-foreground mb-1">
+          批量调整 Agent 适配
+        </h2>
+        <p id="bulk-adapt-description" className="text-[12px] leading-5 text-muted mb-4">
+          已选择 {selectedSkills.length} 个 Skill。勾选表示将这些 Skill 全部适配到该 Agent；
+          取消勾选会移除该 Agent 下的适配副本，不会删除 Skill 文件。
+        </p>
+        {error && (
+          <p role="alert" className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-[12px] text-red-600">
+            {error}
+          </p>
+        )}
+        <div className="max-h-72 overflow-y-auto rounded-lg border border-border divide-y divide-border">
+          {summaries.length === 0 ? (
+            <p className="px-3 py-6 text-center text-[12px] text-muted">
+              没有可调整的 Agent。
+            </p>
+          ) : (
+            summaries.map(({ agent, adaptedCount, total, state }) => {
+              const hasTarget = touched.has(agent.name)
+              const target = targets[agent.name] === true
+              const checked = hasTarget ? target : state === "all"
+              const mixed = !hasTarget && state === "partial"
+              const pending = hasTarget && target !== (state === "all")
+              return (
+                <button
+                  key={agent.name}
+                  type="button"
+                  role="checkbox"
+                  aria-checked={mixed ? "mixed" : checked}
+                  disabled={busy}
+                  onClick={() => toggleAgent(agent.name)}
+                  className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded border transition-colors ${
+                      checked
+                        ? "border-accent bg-accent text-white"
+                        : mixed
+                          ? "border-accent bg-accent/15 text-accent"
+                          : "border-border bg-surface"
+                    }`}
+                  >
+                    {checked ? (
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    ) : mixed ? (
+                      <span className="h-[2px] w-2 rounded bg-current" />
+                    ) : null}
+                  </span>
+                  <AgentLogo name={agent.displayName} size={20} />
+                  <span data-no-localize className="flex-1 truncate text-[12px] text-foreground">
+                    {agent.displayName}
+                  </span>
+                  <small className={`whitespace-nowrap font-mono text-[11px] ${pending ? "text-accent" : "text-muted"}`}>
+                    {pending
+                      ? target
+                        ? "将全部适配"
+                        : "将取消适配"
+                      : state === "all"
+                        ? "全部已适配"
+                        : state === "none"
+                          ? "未适配"
+                          : `${adaptedCount}/${total}`}
+                  </small>
+                </button>
+              )
+            })
+          )}
+        </div>
+        <div className="mt-4 flex items-center justify-end gap-2">
+          <button
+            onClick={onCancel}
+            disabled={busy}
+            className="min-h-9 whitespace-nowrap rounded-lg px-4 text-[12px] text-muted outline-2 outline-offset-2 transition-colors hover:bg-surface-hover hover:text-foreground focus-visible:outline-accent active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            取消
+          </button>
+          <button
+            onClick={() => void apply()}
+            disabled={busy || changes.length === 0}
+            className="min-h-9 whitespace-nowrap rounded-lg bg-accent px-4 text-[12px] font-medium text-[var(--accent-contrast)] outline-2 outline-offset-2 transition-colors hover:brightness-110 focus-visible:outline-accent active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {busy ? "应用中…" : changes.length > 0 ? `应用调整（${changes.length}）` : "应用调整"}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+type ExportScope = "selected" | "all" | "global" | "project"
 type MigrationDialogState =
   | {
       mode: "export"
@@ -2434,12 +2569,12 @@ export function Home() {
   const [selectionMode, setSelectionMode] = useState(false)
   const [lastMultiSelectIndex, setLastMultiSelectIndex] = useState<number | null>(null)
   const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false)
+  const [showBulkAdaptDialog, setShowBulkAdaptDialog] = useState(false)
   const [pendingBulkCollection, setPendingBulkCollection] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
   const [migrationBusy, setMigrationBusy] = useState<"import" | "export" | null>(null)
   const [migrationDialog, setMigrationDialog] = useState<MigrationDialogState | null>(null)
   const [migrationProgress, setMigrationProgress] = useState<MigrationProgress | null>(null)
-  const [bulkAgentBusy, setBulkAgentBusy] = useState<string | null>(null)
   const [showScanSources, setShowScanSources] = useState(false)
   const skillListRef = useRef<HTMLDivElement>(null)
   const contentCacheRef = useRef(new Map<string, string | null>())
@@ -2479,6 +2614,10 @@ export function Home() {
     return coverage
   }, [skills])
   const selectedSkillForDisplay = selectedSkill
+  const bulkSelectedSkills = useMemo(
+    () => skills.filter((skill) => multiSelected.has(skill.canonicalPath)),
+    [skills, multiSelected],
+  )
 
   useEffect(() => {
     if (selectedSkillPath && selectedSkill && selectedSkill.canonicalPath !== selectedSkillPath) {
@@ -3155,37 +3294,47 @@ export function Home() {
     }
   }, [multiSelected, skills])
 
-  const handleBulkAdaptToAgent = useCallback(async (agent: DetectedAgent) => {
+  const handleApplyBulkAgentAdaptation = useCallback(async (changes: BulkAdaptChange[]) => {
     const selectedSkills = skills.filter((skill) => multiSelected.has(skill.canonicalPath))
-    const toAdapt = selectedSkills.filter((skill) =>
-      !getAdaptedAgentNames(skill).includes(agent.displayName),
-    )
-    if (toAdapt.length === 0) return
+    if (selectedSkills.length === 0 || changes.length === 0) return
 
-    setBulkAgentBusy(agent.name)
     let adapted = 0
+    let removed = 0
     let failed = 0
-    try {
-      for (const skill of toAdapt) {
+
+    for (const { agent, enable } of changes) {
+      for (const skill of selectedSkills) {
+        const isAdapted = getAdaptedAgentNames(skill).includes(agent.displayName)
+        if (enable === isAdapted) continue
         try {
-          await electronAPI.addToAgent(skill.name, skill.canonicalPath, agent.name)
-          adapted += 1
+          if (enable) {
+            await electronAPI.addToAgent(skill.name, skill.canonicalPath, agent.name)
+            adapted += 1
+          } else {
+            await electronAPI.removeFromAgent(createSkillRemovalRequest(skill), agent.name)
+            removed += 1
+          }
         } catch (error) {
           failed += 1
-          console.error(`Failed to adapt ${skill.name} to ${agent.displayName}:`, error)
+          console.error(
+            `Failed to ${enable ? "adapt" : "unadapt"} ${skill.name} ${enable ? "to" : "from"} ${agent.displayName}:`,
+            error,
+          )
         }
       }
-      const installedSkills = await electronAPI.rescanSkills()
-      setSkills(installedSkills)
-      setDragToast({
-        type: failed > 0 && adapted === 0 ? "error" : "success",
-        message: failed > 0
-          ? `已适配 ${adapted} 个 Skill，${failed} 个失败`
-          : `已将 ${adapted} 个 Skill 适配到 ${agent.displayName}`,
-      })
-    } finally {
-      setBulkAgentBusy(null)
     }
+
+    const installedSkills = await electronAPI.rescanSkills()
+    setSkills(installedSkills)
+
+    const summary: string[] = []
+    if (adapted > 0) summary.push(`新增 ${adapted} 个适配`)
+    if (removed > 0) summary.push(`取消 ${removed} 个适配`)
+    if (failed > 0) summary.push(`${failed} 个失败`)
+    setDragToast({
+      type: failed > 0 ? "error" : "success",
+      message: summary.length > 0 ? summary.join("，") : "适配状态没有变化",
+    })
   }, [multiSelected, skills])
 
   // Extend handleCollectionDialogSubmit to also handle pending bulk adds
@@ -3411,8 +3560,7 @@ export function Home() {
         onBulkAddToCollection={handleBulkAddToCollection}
         onBulkCreateCollection={handleBulkCreateCollection}
         onBulkFavorite={handleBulkFavorite}
-        onBulkAdaptToAgent={handleBulkAdaptToAgent}
-        bulkAgentBusy={bulkAgentBusy}
+        onOpenBulkAdaptDialog={() => setShowBulkAdaptDialog(true)}
         onBulkDelete={handleBulkDelete}
         listRef={skillListRef}
       />
@@ -3492,6 +3640,15 @@ export function Home() {
           onConfirm={handleBulkDeleteConfirm}
           onRemoveFromAgent={handleBulkRemoveFromAgent}
           onCancel={() => setShowBulkDeleteDialog(false)}
+        />
+      )}
+
+      {showBulkAdaptDialog && (
+        <BulkAdaptAgentsDialog
+          agents={agents}
+          selectedSkills={bulkSelectedSkills}
+          onApply={handleApplyBulkAgentAdaptation}
+          onCancel={() => setShowBulkAdaptDialog(false)}
         />
       )}
 
