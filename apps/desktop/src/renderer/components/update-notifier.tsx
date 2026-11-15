@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 import { marked } from "marked"
 import { electronAPI } from "../lib/electron-api"
+import {
+  buildUpdateNotesViewModel,
+  UP_TO_DATE_MESSAGE,
+  type UpdateNotesSection,
+  type UpdateReleaseNotes,
+} from "../../shared/update-notes"
 
 marked.setOptions({ async: false, breaks: true, gfm: true })
 
@@ -16,12 +22,9 @@ function sanitizeHtml(html: string): string {
   return clean
 }
 
-interface ReleaseNotes {
-  version: string
-  name: string
-  body: string
-  url: string
-  publishedAt: string
+interface ReleaseNotesPayload {
+  current: UpdateReleaseNotes | null
+  latest: UpdateReleaseNotes | null
 }
 
 function UpdateIcon() {
@@ -75,14 +78,61 @@ async function copyText(text: string): Promise<boolean> {
   }
 }
 
+function UpdateNotesBlock({
+  section,
+  loading,
+}: {
+  section: UpdateNotesSection
+  loading: boolean
+}) {
+  if (loading) {
+    return <p className="mt-2 text-[12px] text-muted">正在载入更新内容…</p>
+  }
+  if (section.kind === "up-to-date") {
+    return (
+      <div className="mt-2.5 rounded-[10px] border border-accent/40 bg-accent/5 px-4 py-3.5">
+        <p className="text-[13px] font-medium leading-6 text-foreground">{section.message}</p>
+      </div>
+    )
+  }
+  if (section.kind === "empty") {
+    return <p className="mt-2 text-[12px] leading-5 text-muted">{section.message}</p>
+  }
+  const publishedAt = section.publishedAt ? formatPublishedAt(section.publishedAt) : ""
+  return (
+    <>
+      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted">
+        {publishedAt && <span>发布于 {publishedAt}</span>}
+        {section.url && (
+          <a
+            href={section.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-accent hover:underline"
+          >
+            查看 Release
+          </a>
+        )}
+      </div>
+      <div
+        className="skillbox-release-notes skillbox-release-notes--compact mt-2.5 max-h-44 overflow-y-auto text-[12px] text-foreground"
+        dangerouslySetInnerHTML={{
+          __html: sanitizeHtml(marked.parse(section.body) as string),
+        }}
+      />
+    </>
+  )
+}
+
 export function UpdateNotifier() {
   const [state, setState] = useState<UpdateState | null>(null)
   const [appVersion, setAppVersion] = useState("")
   const [open, setOpen] = useState(false)
-  const [notes, setNotes] = useState<ReleaseNotes | null>(null)
+  const [notes, setNotes] = useState<ReleaseNotesPayload | null>(null)
   const [notesLoading, setNotesLoading] = useState(false)
   const [copyStatus, setCopyStatus] = useState<"idle" | "success" | "error">("idle")
   const announcedVersion = useRef("")
+  const notesRequested = useRef(false)
 
   useEffect(() => {
     electronAPI.updatesGetState().then(setState).catch(() => {})
@@ -94,8 +144,18 @@ export function UpdateNotifier() {
     state?.status === "available" ||
     state?.status === "downloading" ||
     state?.status === "downloaded"
+
+  const view = buildUpdateNotesViewModel({
+    appVersion,
+    state,
+    currentNotes: notes?.current ?? null,
+    latestNotes: notes?.latest ?? null,
+  })
   const targetVersion =
-    state?.downloadedVersion || state?.availableVersion || notes?.version
+    state?.downloadedVersion ||
+    state?.availableVersion ||
+    view.latestVersion ||
+    notes?.latest?.version
 
   useEffect(() => {
     if (!hasUpdate || !targetVersion || announcedVersion.current === targetVersion) return
@@ -103,23 +163,23 @@ export function UpdateNotifier() {
     setOpen(true)
   }, [hasUpdate, targetVersion])
 
+  // 弹窗打开时同时取「当前版本 / 最新版本」两份更新介绍；已是最新版本时也要能看当前版本说明
   useEffect(() => {
-    if (!open || !hasUpdate || notes || notesLoading) return
+    if (!open || notesRequested.current) return
+    notesRequested.current = true
     setNotesLoading(true)
     electronAPI
       .updatesReleaseNotes()
       .then((result) => setNotes(result))
       .catch(() => setNotes(null))
       .finally(() => setNotesLoading(false))
-  }, [open, hasUpdate, notes, notesLoading])
+  }, [open])
 
   const releaseUrl =
-    notes?.url ||
+    notes?.latest?.url ||
     (targetVersion
       ? `https://github.com/huangluke89757/SkillVault/releases/tag/v${targetVersion}`
       : "https://github.com/huangluke89757/SkillVault/releases")
-  const publishedAt = notes?.publishedAt ? formatPublishedAt(notes.publishedAt) : ""
-  const releaseTitle = notes?.name || "更可靠地发现并同步 Skill"
 
   const handleCopyUpdateRequest = async () => {
     if (!targetVersion) return
@@ -143,6 +203,7 @@ export function UpdateNotifier() {
 
   const primaryLabel = (() => {
     if (state?.status === "checking") return "检查中…"
+    if (view.isUpToDate) return "检查更新"
     if (state?.status === "available") return "立即下载更新"
     if (state?.status === "downloading") {
       return `下载中 ${Math.round(state.progressPercent ?? 0)}%`
@@ -180,11 +241,19 @@ export function UpdateNotifier() {
             <header className="flex items-start justify-between gap-5 border-b border-border px-6 py-5">
               <div>
                 <p className="text-[11px] font-semibold text-accent">版本更新</p>
-                <h2 id="skillbox-update-title" className="mt-2 text-[21px] font-semibold leading-tight text-foreground">
-                  SkillVault {versionText(targetVersion) || "更新"}
+                <h2
+                  id="skillbox-update-title"
+                  className="mt-2 text-[21px] font-semibold leading-tight text-foreground"
+                >
+                  {view.isUpToDate
+                    ? "SkillVault 已是最新版本"
+                    : `SkillVault ${versionText(targetVersion) || "更新"}`}
                 </h2>
                 <p className="mt-1.5 text-[11px] text-muted">
-                  {publishedAt ? `发布于 ${publishedAt} · ` : ""}当前版本 {versionText(appVersion) || "…"}
+                  当前版本 {versionText(view.currentVersion) || "…"}
+                  {view.latestVersion && !view.isUpToDate
+                    ? ` · 最新版本 ${versionText(view.latestVersion)}`
+                    : ""}
                 </p>
               </div>
               <button
@@ -197,32 +266,34 @@ export function UpdateNotifier() {
               </button>
             </header>
 
-            {hasUpdate && (
-              <div className="px-6 pb-1 pt-5">
-                <h3 className="text-[15px] font-semibold leading-6 text-foreground">{releaseTitle}</h3>
-                {notesLoading ? (
-                  <p className="mt-2 text-[12px] text-muted">正在载入更新内容…</p>
-                ) : notes?.body ? (
-                  <div
-                    className="skillbox-release-notes skillbox-release-notes--compact mt-3 max-h-48 overflow-y-auto text-[12px] text-foreground"
-                    dangerouslySetInnerHTML={{
-                      __html: sanitizeHtml(marked.parse(notes.body) as string),
-                    }}
-                  />
-                ) : (
-                  <p className="mt-2 text-[12px] leading-5 text-muted">
-                    本次更新修复了项目级 Skill 扫描、同名条目与独立副本同步问题，并新增 3 个 Agent 适配。
-                  </p>
-                )}
-              </div>
-            )}
+            <div className="space-y-5 px-6 pb-1 pt-5">
+              <section>
+                <h3 className="text-[13px] font-semibold leading-6 text-foreground">
+                  当前版本 {versionText(view.currentVersion)} · 更新介绍
+                </h3>
+                <UpdateNotesBlock section={view.current} loading={notesLoading && !notes} />
+              </section>
+
+              <section className="border-t border-border pt-4">
+                <h3 className="text-[13px] font-semibold leading-6 text-foreground">
+                  {view.isUpToDate
+                    ? "最新版本"
+                    : `最新版本 ${versionText(view.latestVersion)} · 更新介绍`}
+                </h3>
+                <UpdateNotesBlock section={view.latest} loading={notesLoading && !notes} />
+              </section>
+            </div>
 
             <div className="mx-6 mt-4 rounded-[10px] border border-border bg-background px-3 py-2.5">
               {state?.status === "downloading" ? (
                 <div>
                   <div className="flex items-center justify-between gap-3 text-[11px]">
-                    <span className="text-foreground">正在下载 SkillVault {versionText(targetVersion)}…</span>
-                    <span className="whitespace-nowrap text-muted">{Math.round(state.progressPercent ?? 0)}%</span>
+                    <span className="text-foreground">
+                      正在下载 SkillVault {versionText(targetVersion)}…
+                    </span>
+                    <span className="whitespace-nowrap text-muted">
+                      {Math.round(state.progressPercent ?? 0)}%
+                    </span>
                   </div>
                   <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-hover">
                     <div
@@ -234,12 +305,16 @@ export function UpdateNotifier() {
               ) : (
                 <div className="flex items-center justify-between gap-3 text-[11px]">
                   <span className="text-foreground">
-                    {state?.status === "available" && `${versionText(targetVersion)} 已准备就绪，可立即下载。`}
-                    {state?.status === "downloaded" && `${versionText(targetVersion)} 已下载完成，重启后即可生效。`}
+                    {state?.status === "available" &&
+                      `${versionText(targetVersion)} 已准备就绪，可立即下载。`}
+                    {state?.status === "downloaded" &&
+                      `${versionText(targetVersion)} 已下载完成，重启后即可生效。`}
                     {state?.status === "checking" && "正在检查更新…"}
-                    {state?.status === "not-available" && "当前已是最新版本。"}
-                    {state?.status === "error" && `检查更新失败：${state.message ?? "请稍后重试"}`}
-                    {(!state || state.status === "idle") && "启动时会自动检查更新，也可以手动检查。"}
+                    {state?.status === "not-available" && UP_TO_DATE_MESSAGE}
+                    {state?.status === "error" &&
+                      `检查更新失败：${state.message ?? "请稍后重试"}`}
+                    {(!state || state.status === "idle") &&
+                      "启动时会自动检查更新，也可以手动检查。"}
                   </span>
                   <span className="whitespace-nowrap text-muted">
                     {state?.status === "available" && "等待下载"}
@@ -254,7 +329,7 @@ export function UpdateNotifier() {
                 更新不会更改现有 Skill、Agent 适配关系或独立副本。
               </p>
               <div className="flex shrink-0 gap-2">
-                {hasUpdate && targetVersion && (
+                {view.showUpdateActions && targetVersion && (
                   <button
                     type="button"
                     onClick={() => void handleCopyUpdateRequest()}
